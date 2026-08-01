@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DREAM TOUCHING HOSTEL</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Green buttons that turn RED when pressed/active */
+    .btn-green-to-red {
+      background-color: #059669; /* Emerald 600 */
+      color: #ffffff;
+      transition: background-color 0.15s ease-in-out, transform 0.1s;
+    }
+    .btn-green-to-red:active, .btn-green-to-red:focus-visible {
+      background-color: #dc2626 !important; /* Red 600 on press */
+    }
+
+    /* Slow Moving Marquee Animation */
+    .marquee-wrapper {
+      overflow: hidden;
+      white-space: nowrap;
+      background: linear-gradient(90deg, #0f172a, #1e293b, #0f172a);
+      color: #f8fafc;
+      padding: 10px 0;
+      border-bottom: 2px solid #10b981;
+    }
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee-slow 35s linear infinite;
+    }
+    @keyframes marquee-slow {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    /* 1 Second Smooth Transition Animation for Sign In & Log Out */
+    .auth-transition {
+      transition: opacity 1.0s ease-in-out, transform 1.0s ease-in-out;
+    }
+
+    /* Blinking / Reflecting Message Box Animation */
+    @keyframes reflect-blink {
+      0%, 100% { opacity: 1; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+      50% { opacity: 0.6; box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
+    }
+    .reflect-message {
+      animation: reflect-blink 2s infinite;
+    }
+
+    /* Print styling */
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background-color: #ffffff !important; color: #000000 !important; }
+      .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans min-h-screen flex flex-col justify-between text-gray-800">
+
+  <!-- SECTION 1: TOP MARQUEE HEADER (Slow Moving Text) -->
+  <div class="marquee-wrapper no-print text-xs md:text-sm font-medium">
+    <div class="marquee-content flex items-center gap-2">
+      <i class="fa-solid fa-graduation-cap text-amber-400 text-base"></i>
+      <i class="fa-solid fa-book-open text-emerald-400 text-base mr-2"></i>
+      <span>This Website Made by Hredoy Roy, Phone: +088 01518 411872; +880 1345 409887, Email: 100pc.net@gmail.com, Address: Krishnabila, Gangnalia-7610, Magura Sadar, Magura.</span>
+    </div>
+  </div>
+
+  <!-- SECTION 2: TOP NAVIGATION / LANGUAGE & ACTION BAR -->
+  <header class="bg-white shadow-sm border-b px-4 py-3 flex justify-between items-center no-print">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-graduation-cap text-emerald-600 text-2xl"></i>
+      <span class="font-bold text-gray-700 text-sm md:text-base hidden sm:inline" data-bn="ছাত্র মেস ডিজিটাল হিসাব" data-en="Student Hostel Digital Ledger">ছাত্র মেস ডিজিটাল হিসাব</span>
+    </div>
+    
+    <!-- Header Buttons -->
+    <div class="flex items-center gap-2">
+      <!-- Save Button -->
+      <button id="header-save-btn" onclick="manualSaveData()" class="hidden btn-green-to-red px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow">
+        <i class="fa-solid fa-floppy-disk"></i> <span data-bn="সেভ" data-en="Save">সেভ</span>
+      </button>
+
+      <!-- Language Change Tab -->
+      <button onclick="toggleLanguage()" class="btn-green-to-red px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow">
+        <i class="fa-solid fa-language"></i> <span id="lang-btn-text">English</span>
+      </button>
+
+      <!-- Logout Tab -->
+      <button id="header-logout-btn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
+        <i class="fa-solid fa-right-from-bracket"></i> <span data-bn="লগ আউট" data-en="Log Out">লগ আউট</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container mx-auto px-3 md:px-6 py-6 flex-grow">
+
+    <!-- SECTION 3 & 4: HOMEPAGE / AUTHENTICATION PANEL -->
+    <section id="auth-section" class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-8 border-t-8 border-emerald-600 auth-transition">
+      
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-3 shadow-inner">
+          <i class="fa-solid fa-user-graduate text-3xl"></i>
+        </div>
+        
+        <h1 class="text-2xl md:text-3xl font-black text-emerald-800 tracking-wider uppercase mb-1">
+          DREAM TOUCHING HOSTEL
+        </h1>
+        <p class="text-xs text-gray-500 font-medium italic flex items-center justify-center gap-1" data-bn="🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚" data-en="🎓 Education & Hostel Life - Accurate Mess Accounting 📚">
+          🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚
+        </p>
+      </div>
+
+      <!-- Auth Switcher Tabs -->
+      <div class="flex border-b mb-6 text-sm font-bold">
+        <button id="tab-signin-btn" onclick="switchAuthTab('signin')" class="flex-1 py-2.5 text-center text-emerald-600 border-b-2 border-emerald-600 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i> <span data-bn="সাইন ইন" data-en="Sign In">সাইন ইন</span>
+        </button>
+        <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 text-center text-gray-400 hover:text-emerald-600 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> <span data-bn="সাইন আপ" data-en="Sign Up">সাইন আপ</span>
+        </button>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>
+          <div class="relative">
+            <i class="fa-solid fa-id-badge absolute left-3 top-3 text-gray-400"></i>
+            <input type="text" id="signin-userid" required class="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" placeholder="User ID">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</label>
+          <div class="relative">
+            <i class="fa-solid fa-key absolute left-3 top-3 text-gray-400"></i>
+            <input type="password" id="signin-pass" required class="w-full pl-10 pr-10 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" placeholder="Password">
+            <button type="button" onclick="togglePasswordVisibility('signin-pass', 'signin-eye')" class="absolute right-3 top-2.5 text-gray-500 hover:text-emerald-600 focus:outline-none">
+              <i id="signin-eye" class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full btn-green-to-red py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i> <span data-bn="সাইন ইন করুন" data-en="Sign In">সাইন ইন করুন</span>
+        </button>
+
+        <div class="text-right mt-1">
+          <button type="button" onclick="openForgetModal()" class="text-xs font-bold text-emerald-600 hover:underline" data-bn="ফরগেট পাসওয়ার্ড?" data-en="Forgot Password?">
+            <i class="fa-solid fa-circle-question mr-1"></i>ফরগেট পাসওয়ার্ড?
+          </button>
+        </div>
+      </form>
+
+      <!-- SIGN UP FORM -->
+      <form id="form-signup" onsubmit="handleSignUp(event)" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>
+          <input type="text" id="signup-userid" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="e.g. rohim123">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>
+          <input type="tel" id="signup-mobile" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="01700000000">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="জন্ম তারিখ (দিন-মাস-বছর)" data-en="Date of Birth (DD-MM-YYYY)">জন্ম তারিখ (দিন-মাস-বছর)</label>
+          <input type="text" id="signup-dob" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</label>
+          <div class="relative">
+            <input type="password" id="signup-pass" required class="w-full pl-3 pr-10 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="Password">
+            <button type="button" onclick="togglePasswordVisibility('signup-pass', 'signup-eye')" class="absolute right-3 top-2.5 text-gray-500 hover:text-emerald-600 focus:outline-none">
+              <i id="signup-eye" class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full btn-green-to-red py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2 mt-2">
+          <i class="fa-solid fa-user-plus"></i> <span data-bn="সাইন আপ করুন" data-en="Sign Up">সাইন আপ করুন</span>
+        </button>
+      </form>
+
+      <hr class="my-6 border-gray-200">
+
+      <div class="text-center">
+        <button onclick="openAdminModal()" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-xl font-bold text-xs md:text-sm shadow-md flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-calculator text-amber-400"></i>
+          <span data-bn="আমি হিসাব দেখতে চাই" data-en="I Want to View Accounts">আমি হিসাব দেখতে চাই</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- SECTION 5: MAIN DASHBOARD PANEL -->
+    <section id="dashboard-section" class="hidden space-y-6 auth-transition">
+
+      <!-- ADMIN MESSAGE BANNER -->
+      <div id="user-message-banner" class="hidden reflect-message bg-red-50 border-l-4 border-red-600 p-4 rounded-r-2xl">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-envelope-open-text text-red-600 text-xl animate-bounce"></i>
+            <div>
+              <p class="text-xs font-bold text-red-700" data-bn="অ্যাডমিন বার্তা:" data-en="Admin Message:">অ্যাডমিন বার্তা:</p>
+              <p id="user-message-text" class="text-sm font-semibold text-gray-800"></p>
+            </div>
+          </div>
+          <button onclick="deleteUserMessage()" class="text-red-600 hover:text-red-800 p-2 rounded-lg text-sm font-bold">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- OVERVIEW SUMMARY CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="ক্যাশ ইন হ্যান্ড" data-en="Cash In Hand">ক্যাশ ইন হ্যান্ড</p>
+            <h2 class="text-2xl md:text-3xl font-black mt-1">৳ <span id="dash-cash-in-hand">0</span></h2>
+            <p class="text-[10px] mt-1 opacity-90" data-bn="(মোট জমা − মোট খরচ)" data-en="(Total Deposit − Total Expense)">(মোট জমা − মোট খরচ)</p>
+          </div>
+          <i class="fa-solid fa-wallet text-4xl opacity-40"></i>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট জমা" data-en="Total Deposit">সর্বমোট জমা</p>
+            <h2 class="text-2xl md:text-3xl font-black mt-1">৳ <span id="dash-total-deposit">0</span></h2>
+          </div>
+          <i class="fa-solid fa-piggy-bank text-4xl opacity-40"></i>
+        </div>
+
+        <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট খরচ" data-en="Total Expense">সর্বমোট খরচ</p>
+            <h2 class="text-2xl md:text-3xl font-black mt-1">৳ <span id="dash-total-expense">0</span></h2>
+          </div>
+          <i class="fa-solid fa-receipt text-4xl opacity-40"></i>
+        </div>
+
+        <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট মিল" data-en="Total Meals">সর্বমোট মিল</p>
+            <h2 class="text-2xl md:text-3xl font-black mt-1"><span id="dash-total-meals">0</span> টি</h2>
+          </div>
+          <i class="fa-solid fa-utensils text-4xl opacity-40"></i>
+        </div>
+      </div>
+
+      <!-- MEMBER ENTRY & CARDS -->
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-6">
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-users text-emerald-600"></i>
+            <span data-bn="সদস্য এন্ট্রি ও জমা হিসাব" data-en="Member Entry & Deposits">সদস্য এন্ট্রি ও জমা হিসাব</span>
+          </h3>
+        </div>
+
+        <form onsubmit="handleAddMember(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-gray-200">
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্যের নাম" data-en="Member Name">সদস্যের নাম</label>
+            <input type="text" id="member-input-name" required placeholder="নাম লিখুন" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>
+            <input type="tel" id="member-input-phone" required placeholder="01700000000" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="গ্যাস ব্যবহার করেন কিনা?" data-en="Uses Gas?">গ্যাস ব্যবহার করেন কিনা?</label>
+            <select id="member-input-gas" class="w-full px-3 py-2 border rounded-lg text-sm">
+              <option value="yes" data-bn="হ্যাঁ (গ্যাস ব্যবহার করেন)" data-en="Yes">হ্যাঁ (গ্যাস ব্যবহার করেন)</option>
+              <option value="no" data-bn="না (গ্যাস ব্যবহার করেন না)" data-en="No">না (গ্যাস ব্যবহার করেন না)</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
+              <i class="fa-solid fa-user-plus"></i> <span data-bn="সদস্য যুক্ত করুন" data-en="Add Member">সদস্য যুক্ত করুন</span>
+            </button>
+          </div>
+        </form>
+
+        <div>
+          <div id="members-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          <div class="mt-4 text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm md:text-base">
+            <i class="fa-solid fa-sack-dollar text-emerald-600 mr-1"></i>
+            <span data-bn="সর্বমোট জমা টাকার পরিমাণ:" data-en="Total Deposit Amount:">সর্বমোট জমা টাকার পরিমাণ:</span> 
+            ৳ <span id="section-total-deposit">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIXED EXPENSE SECTION -->
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+          <i class="fa-solid fa-building-columns text-emerald-600"></i>
+          <span data-bn="স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)" data-en="Fixed Expenses (Shared Equally)">স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)</span>
+        </h3>
+
+        <div class="flex flex-wrap gap-2 text-xs font-bold">
+          <button type="button" onclick="setFixedCategory('বিদ্যুৎ')" class="fixed-cat-btn bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-300">বিদ্যুৎ</button>
+          <button type="button" onclick="setFixedCategory('পানি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">পানি</button>
+          <button type="button" onclick="setFixedCategory('ময়লা')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ময়লা</button>
+          <button type="button" onclick="setFixedCategory('ইন্টারনেট')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ইন্টারনেট</button>
+          <button type="button" onclick="setFixedCategory('রাধুনি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">রাধুনি</button>
+          <button type="button" onclick="setFixedCategory('অন্যান্য')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">অন্যান্য</button>
+        </div>
+
+        <form onsubmit="handleAddFixedExpense(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl">
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="খাত" data-en="Category">খাত</label>
+            <input type="text" id="fixed-cat-input" required value="বিদ্যুৎ" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="টাকার পরিমাণ" data-en="Amount">টাকার পরিমাণ</label>
+            <input type="number" id="fixed-amt-input" required min="1" placeholder="৳" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+            <input type="text" id="fixed-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
+              <i class="fa-solid fa-plus"></i> <span data-bn="যোগ করুন" data-en="Add Expense">যোগ করুন</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b text-gray-700">
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">খাত</th>
+                <th class="p-2">টাকা</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="fixed-expense-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
+          <span data-bn="সর্বমোট স্থায়ী খরচ:" data-en="Total Fixed Expense:">সর্বমোট স্থায়ী খরচ:</span> ৳ <span id="section-total-fixed">0</span>
+        </div>
+      </div>
+
+      <!-- GAS EXPENSE SECTION -->
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+          <i class="fa-solid fa-fire-burner text-emerald-600"></i>
+          <span data-bn="গ্যাস খরচ (শুধু ব্যবহারকারী গনের মধ্যে সমান ভাগ)" data-en="Gas Expense (Only Gas Users)">গ্যাস খরচ (শুধু ব্যবহারকারী গনের মধ্যে সমান ভাগ)</span>
+        </h3>
+
+        <form onsubmit="handleAddGasExpense(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl">
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="টাকার পরিমাণ" data-en="Amount">টাকার পরিমাণ</label>
+            <input type="number" id="gas-amt-input" required min="1" placeholder="৳" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+            <input type="text" id="gas-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
+              <i class="fa-solid fa-plus"></i> <span data-bn="গ্যাস খরচ যোগ করুন" data-en="Add Gas Expense">গ্যাস খরচ যোগ করুন</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b text-gray-700">
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">টাকা</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="gas-expense-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
+          <span data-bn="সর্বমোট গ্যাস খরচ:" data-en="Total Gas Expense:">সর্বমোট গ্যাস খরচ:</span> ৳ <span id="section-total-gas">0</span>
+        </div>
+      </div>
+
+      <!-- BAZAAR EXPENSE SECTION -->
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+          <i class="fa-solid fa-cart-shopping text-emerald-600"></i>
+          <span data-bn="বাজার খরচ এন্ট্রি" data-en="Bazaar Expense Entry">বাজার খরচ এন্ট্রি</span>
+        </h3>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 space-y-3">
+          <p class="text-xs font-bold text-gray-700 uppercase" data-bn="কি কি বাজার হলো (টিক দিন):" data-en="Items Bought (Select All):">কি কি বাজার হলো (টিক দিন):</p>
+          <div id="bazaar-items-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 text-xs"></div>
+
+          <hr class="my-2 border-gray-200">
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="কে কে করল (সদস্য বেছে নিন):" data-en="Who Bought:">কে কে করল (সদস্য বেছে নিন):</label>
+              <div id="shopper-checkbox-list" class="flex flex-wrap gap-2 text-xs max-h-24 overflow-y-auto p-1 bg-white border rounded"></div>
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="কত টাকার করল (৳):" data-en="Amount Spent (৳):">কত টাকার করল (৳):</label>
+              <input type="number" id="bazaar-amt-input" required min="1" placeholder="৳" class="w-full px-3 py-2 border rounded-lg text-sm">
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর):" data-en="Date (DD-MM-YYYY):">তারিখ (দিন-মাস-বছর):</label>
+              <input type="text" id="bazaar-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">
+            </div>
+          </div>
+
+          <button onclick="handleSaveBazaar()" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1 mt-2">
+            <i class="fa-solid fa-check"></i> <span data-bn="বাজার খরচ সেভ করুন" data-en="Save Bazaar Expense">বাজার খরচ সেভ করুন</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b text-gray-700">
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">আইটেম</th>
+                <th class="p-2">কে করেছে</th>
+                <th class="p-2">টাকা</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="bazaar-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
+          <span data-bn="সর্বমোট বাজার খরচ:" data-en="Total Bazaar Expense:">সর্বমোট বাজার খরচ:</span> ৳ <span id="section-total-bazaar">0</span>
+        </div>
+      </div>
+
+      <!-- DAILY MEAL ENTRY SECTION -->
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+          <i class="fa-solid fa-utensils text-emerald-600"></i>
+          <span data-bn="দৈনিক মিল এন্ট্রি (সকাল, দুপুর, রাত)" data-en="Daily Meal Entry">দৈনিক মিল এন্ট্রি (সকাল, দুপুর, রাত)</span>
+        </h3>
+
+        <form onsubmit="handleSaveMeal(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3 bg-slate-50 p-4 rounded-xl">
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্য" data-en="Member">সদস্য</label>
+            <select id="meal-member-select" required class="w-full px-3 py-2 border rounded-lg text-sm"></select>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+            <input type="text" id="meal-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সকাল" data-en="Morning">সকাল</label>
+            <input type="number" id="meal-m-input" step="0.5" min="0" placeholder="0/0.5/1" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="দুপুর" data-en="Noon">দুপুর</label>
+            <input type="number" id="meal-n-input" step="0.5" min="0" placeholder="0/0.5/1" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="রাত" data-en="Night">রাত</label>
+            <input type="number" id="meal-nt-input" step="0.5" min="0" placeholder="0/0.5/1" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+
+          <div class="flex items-end">
+            <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
+              <i class="fa-solid fa-plus"></i> <span data-bn="মিল সেভ" data-en="Save Meal">মিল সেভ</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b text-gray-700">
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">সদস্য</th>
+                <th class="p-2">সকাল</th>
+                <th class="p-2">দুপুর</th>
+                <th class="p-2">রাত</th>
+                <th class="p-2">মোট মিল</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="meal-table-body"></tbody>
+          </table>
+        </div>
+
+        <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
+          <span data-bn="সর্বমোট মিল সংখ্যা:" data-en="Total Meals Count:">সর্বমোট মিল সংখ্যা:</span> <span id="section-total-meals">0</span> টি
+        </div>
+      </div>
+
+      <!-- FINAL SUMMARY LEDGER BREAKDOWN & PRINT REPORT -->
+      <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-6">
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="text-xl font-black text-emerald-800 flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-emerald-600"></i>
+            <span data-bn="চূড়ান্ত হিসাব ও মাসের পুরো হিসেব" data-en="Final Ledger & Monthly Summary">চূড়ান্ত হিসাব ও মাসের পুরো হিসেব</span>
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-gray-200">
+          <div class="p-2 bg-white rounded border">
+            <span class="text-gray-500 block">মিল চার্জ (Per Meal Rate):</span>
+            <b class="text-emerald-700 text-sm">৳ <span id="calc-meal-rate">0.00</span></b>
+          </div>
+          <div class="p-2 bg-white rounded border">
+            <span class="text-gray-500 block">প্রতি সদস্যের স্থায়ী চার্জ:</span>
+            <b class="text-emerald-700 text-sm">৳ <span id="calc-fixed-rate">0.00</span></b>
+          </div>
+          <div class="p-2 bg-white rounded border">
+            <span class="text-gray-500 block">প্রতি ইউজারের গ্যাস চার্জ:</span>
+            <b class="text-emerald-700 text-sm">৳ <span id="calc-gas-rate">0.00</span></b>
+          </div>
+          <div class="p-2 bg-white rounded border">
+            <span class="text-gray-500 block">মোট বাজার খরচ:</span>
+            <b class="text-emerald-700 text-sm">৳ <span id="calc-tot-bazaar">0</span></b>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border border-gray-200 rounded-lg">
+            <thead class="bg-emerald-700 text-white font-bold">
+              <tr>
+                <th class="p-2.5">সদস্যের নাম</th>
+                <th class="p-2.5">মোট জমা (৳)</th>
+                <th class="p-2.5">মোট মিল</th>
+                <th class="p-2.5">মিল খরচ (৳)</th>
+                <th class="p-2.5">স্থায়ী খরচ (৳)</th>
+                <th class="p-2.5">গ্যাস খরচ (৳)</th>
+                <th class="p-2.5">সর্বমোট খরচ (৳)</th>
+                <th class="p-2.5">অবস্থা (পাবো/দিবো)</th>
+              </tr>
+            </thead>
+            <tbody id="final-summary-table-body" class="divide-y"></tbody>
+          </table>
+        </div>
+
+        <div class="flex flex-wrap justify-between items-center gap-4 pt-4 border-t no-print">
+          <button onclick="window.print()" class="btn-green-to-red px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2">
+            <i class="fa-solid fa-print"></i> <span data-bn="প্রিন্ট / PDF ডাউনলোড করুন" data-en="Print / Download PDF">প্রিন্ট / PDF ডাউনলোড করুন</span>
+          </button>
+
+          <button onclick="handleResetLedger()" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2 transition">
+            <i class="fa-solid fa-rotate-right"></i> <span data-bn="হিসাব রিসেট করুন" data-en="Reset Ledger">হিসাব রিসেট করুন</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ADMIN MODAL -->
+  <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-amber-500"></i> Admin Panel (হিসাব দেখুন)
+        </h3>
+        <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="admin-login-view" class="space-y-3">
+        <p class="text-xs text-gray-500">প্রোফাইল দেখার জন্য Admin Credentials (id: admin & pass: admin) দিয়ে প্রবেশ করুন:</p>
+        <input type="text" id="admin-id-input" placeholder="Admin ID (admin)" class="w-full px-3 py-2 border rounded-xl text-sm">
+        <input type="password" id="admin-pass-input" placeholder="Password (admin)" class="w-full px-3 py-2 border rounded-xl text-sm">
+        <button onclick="verifyAdminLogin()" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
+          প্রবেশ করুন
+        </button>
+      </div>
+
+      <div id="admin-panel-view" class="hidden space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">সকল ইউজার আইডি বেছে নিন:</label>
+          <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"></select>
+        </div>
+
+        <div id="admin-user-data-preview" class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1">
+          <p class="font-bold text-emerald-800">ইউজার প্রোফাইল তথ্য:</p>
+          <div id="admin-user-details-content">ইউজার নির্বাচন করুন...</div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">এই ইউজারের জন্য কমেন্ট / বার্তা পাঠ্য করুন:</label>
+          <textarea id="admin-comment-text" rows="2" placeholder="বার্তা লিখুন (ইউজারের ড্যাশবোর্ডে রিফ্লেক্স করতে থাকবে)..." class="w-full p-2 border rounded-xl text-sm"></textarea>
+          <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2 rounded-xl text-xs font-bold shadow mt-1">
+            বার্তা পাঠাও
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORGET PASSWORD MODAL -->
+  <div id="forget-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-600">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-bold text-gray-800" data-bn="পাসওয়ার্ড পুনরুদ্ধার" data-en="Recover Password">পাসওয়ার্ড পুনরুদ্ধার</h3>
+        <button onclick="closeForgetModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3">
+        <input type="tel" id="forget-mobile-input" placeholder="মোবাইল নম্বর" class="w-full px-3 py-2 border rounded-xl text-sm">
+        <input type="text" id="forget-dob-input" placeholder="জন্ম তারিখ (DD-MM-YYYY)" class="w-full px-3 py-2 border rounded-xl text-sm">
+        
+        <div id="forget-result-msg" class="text-xs font-bold p-2 rounded hidden"></div>
+
+        <button onclick="handleRecoverPassword()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow">
+          পাসওয়ার্ড দেখুন
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APP LOGIC & FIREBASE INTEGRATION -->
+  <script type="module">
+    // 1. Firebase JS SDK Imports (v10 Modular)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Firebase Configurations
+    const firebaseConfig = {
+      apiKey: "AIzaSyAScujJv7tJnrWA_V3JB_GnW233WEwMsCg",
+      authDomain: "messhredoy.firebaseapp.com",
+      databaseURL: "https://messhredoy-default-rtdb.firebaseio.com",
+      projectId: "messhredoy",
+      storageBucket: "messhredoy.firebasestorage.app",
+      messagingSenderId: "131642255528",
+      appId: "1:131642255528:web:d8ac3483b595acfa82fa9d",
+      measurementId: "G-JCESLG21LH"
+    };
+
+    // Firebase Initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Global App States
+    window.currentLang = 'bn';
+    window.currentUser = null;
+    window.selectedFixedCategory = 'বিদ্যুৎ';
+
+    window.defaultBazaarItems = [
+      "আলু", "পেঁয়াজ", "রসুন", "আদা", "কাঁচামরিচ", "টমেটো", "বেগুন", "পটল",
+      "ঢ্যাঁড়শ", "শসা", "গাজর", "ফুলকপি/বাঁধাকপি", "মাছ", "মুরগির মাংস", "ডিম",
+      "চাল", "ডাল", "তেল", "লবণ", "চিনি", "হলুদ গুঁড়ো", "মরিচ গুঁড়ো", 
+      "জিরে গুঁড়ো", "ধনিয়া গুঁড়ো", "গরম মসলা", "তেজপাতা", "পাঁচফোড়ন", 
+      "হারপিক", "ভিম", "সাবান", "অন্যান্য"
+    ];
+
+    window.hostelData = {
+      users: [],
+      members: [],
+      deposits: [],
+      fixedExpenses: [],
+      gasExpenses: [],
+      bazaarExpenses: [],
+      meals: [],
+      comments: {}
+    };
+
+    // Realtime Database Sync
+    const masterLedgerRef = ref(db, 'hostel_records/master_ledger');
+    
+    // Listening for updates from Firebase Database
+    onValue(masterLedgerRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        window.hostelData = {
+          users: data.users || [],
+          members: data.members || [],
+          deposits: data.deposits || [],
+          fixedExpenses: data.fixedExpenses || [],
+          gasExpenses: data.gasExpenses || [],
+          bazaarExpenses: data.bazaarExpenses || [],
+          meals: data.meals || [],
+          comments: data.comments || {}
+        };
+        localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
+        if (window.currentUser) {
+          renderDashboard();
+        }
+      }
+    });
+
+    window.syncMasterData = function() {
+      localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
+      set(masterLedgerRef, window.hostelData)
+        .catch(err => console.error('Firebase Realtime Sync Error:', err));
+      renderDashboard();
+    };
+
+    window.manualSaveData = function() {
+      syncMasterData();
+      alert(window.currentLang === 'bn' ? 'সকল তথ্য ফায়ারবেজে সফলভাবে সেভ করা হয়েছে!' : 'Data Saved to Firebase Successfully!');
+    };
+
+    // Helper functions
+    window.getTodayDDMMYYYY = function() {
+      const d = new Date();
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    window.onload = function() {
+      renderBazaarChecklist();
+      setInitialDates();
+      const local = localStorage.getItem('dream_touching_hostel_db');
+      if (local) {
+        window.hostelData = JSON.parse(local);
+      }
+    };
+
+    window.setInitialDates = function() {
+      const today = getTodayDDMMYYYY();
+      ['fixed-date-input', 'gas-date-input', 'bazaar-date-input', 'meal-date-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.value) el.value = today;
+      });
+    };
+
+    window.togglePasswordVisibility = function(inputId, eyeId) {
+      const input = document.getElementById(inputId);
+      const eye = document.getElementById(eyeId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        eye.className = 'fa-solid fa-eye-slash';
+      } else {
+        input.type = 'password';
+        eye.className = 'fa-solid fa-eye';
+      }
+    };
+
+    window.toggleLanguage = function() {
+      window.currentLang = window.currentLang === 'bn' ? 'en' : 'bn';
+      document.getElementById('lang-btn-text').innerText = window.currentLang === 'bn' ? 'English' : 'বাংলা';
+      document.querySelectorAll('[data-bn]').forEach(el => {
+        el.innerText = el.getAttribute(`data-${window.currentLang}`);
+      });
+    };
+
+    window.switchAuthTab = function(tab) {
+      if (tab === 'signin') {
+        document.getElementById('form-signin').classList.remove('hidden');
+        document.getElementById('form-signup').classList.add('hidden');
+        document.getElementById('tab-signin-btn').className = "flex-1 py-2.5 text-center text-emerald-600 border-b-2 border-emerald-600 flex items-center justify-center gap-2";
+        document.getElementById('tab-signup-btn').className = "flex-1 py-2.5 text-center text-gray-400 hover:text-emerald-600 flex items-center justify-center gap-2";
+      } else {
+        document.getElementById('form-signin').classList.add('hidden');
+        document.getElementById('form-signup').classList.remove('hidden');
+        document.getElementById('tab-signup-btn').className = "flex-1 py-2.5 text-center text-emerald-600 border-b-2 border-emerald-600 flex items-center justify-center gap-2";
+        document.getElementById('tab-signin-btn').className = "flex-1 py-2.5 text-center text-gray-400 hover:text-emerald-600 flex items-center justify-center gap-2";
+      }
+    };
+
+    window.handleSignUp = function(e) {
+      e.preventDefault();
+      const userId = document.getElementById('signup-userid').value.trim();
+      const mobile = document.getElementById('signup-mobile').value.trim();
+      const dob = document.getElementById('signup-dob').value.trim();
+      const pass = document.getElementById('signup-pass').value;
+
+      if (window.hostelData.users.some(u => u.userId === userId)) {
+        alert(window.currentLang === 'bn' ? 'এই ইউজার আইডিটি আগেই ব্যবহৃত হয়েছে!' : 'User ID already exists!');
+        return;
+      }
+
+      window.hostelData.users.push({ userId, mobile, dob, pass });
+      syncMasterData();
+      alert(window.currentLang === 'bn' ? 'সাইন আপ সফল হয়েছে! এখন সাইন ইন করুন।' : 'Sign Up Successful! Please Sign In.');
+      switchAuthTab('signin');
+    };
+
+    window.handleSignIn = function(e) {
+      e.preventDefault();
+      const userId = document.getElementById('signin-userid').value.trim();
+      const pass = document.getElementById('signin-pass').value;
+
+      const user = window.hostelData.users.find(u => (u.userId === userId || u.mobile === userId) && u.pass === pass);
+      if (user) {
+        window.currentUser = user;
+        trigger1SecTransition(true);
+      } else {
+        alert(window.currentLang === 'bn' ? 'ভুল ইউজার আইডি বা পাসওয়ার্ড!' : 'Invalid User ID or Password!');
+      }
+    };
+
+    window.trigger1SecTransition = function(isLogin) {
+      const authSec = document.getElementById('auth-section');
+      const dashSec = document.getElementById('dashboard-section');
+
+      if (isLogin) {
+        authSec.style.opacity = '0';
+        authSec.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          authSec.classList.add('hidden');
+          dashSec.classList.remove('hidden');
+          dashSec.style.opacity = '1';
+          dashSec.style.transform = 'scale(1)';
+          document.getElementById('header-save-btn').classList.remove('hidden');
+          document.getElementById('header-logout-btn').classList.remove('hidden');
+          checkUserAdminComments();
+          renderDashboard();
+        }, 1000);
+      } else {
+        dashSec.style.opacity = '0';
+        dashSec.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          dashSec.classList.add('hidden');
+          authSec.classList.remove('hidden');
+          authSec.style.opacity = '1';
+          authSec.style.transform = 'scale(1)';
+          document.getElementById('header-save-btn').classList.add('hidden');
+          document.getElementById('header-logout-btn').classList.add('hidden');
+          window.currentUser = null;
+        }, 1000);
+      }
+    };
+
+    window.logout = function() {
+      trigger1SecTransition(false);
+    };
+
+    window.checkUserAdminComments = function() {
+      if (window.currentUser && window.hostelData.comments[window.currentUser.userId]) {
+        document.getElementById('user-message-text').innerText = window.hostelData.comments[window.currentUser.userId];
+        document.getElementById('user-message-banner').classList.remove('hidden');
+      } else {
+        document.getElementById('user-message-banner').classList.add('hidden');
+      }
+    };
+
+    window.deleteUserMessage = function() {
+      if (window.currentUser && window.hostelData.comments[window.currentUser.userId]) {
+        delete window.hostelData.comments[window.currentUser.userId];
+        syncMasterData();
+        document.getElementById('user-message-banner').classList.add('hidden');
+      }
+    };
+
+    window.isEditable = function(entry) {
+      const fiveMinutesMs = 5 * 60 * 1000;
+      const timePassed = Date.now() - entry.timestamp;
+      const timesEdited = entry.editCount || 0;
+      return (timePassed <= fiveMinutesMs) && (timesEdited < 1);
+    };
+
+    window.handleAddMember = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('member-input-name').value.trim();
+      const phone = document.getElementById('member-input-phone').value.trim();
+      const useGas = document.getElementById('member-input-gas').value;
+
+      window.hostelData.members.push({
+        id: 'MEM_' + Date.now(),
+        name,
+        phone,
+        useGas
+      });
+      document.getElementById('member-input-name').value = '';
+      document.getElementById('member-input-phone').value = '';
+      syncMasterData();
+    };
+
+    window.addDepositForMember = function(memberId) {
+      const amtInput = document.getElementById(`dep-amt-${memberId}`);
+      const dateInput = document.getElementById(`dep-date-${memberId}`);
+      const amount = parseFloat(amtInput.value);
+      const date = dateInput.value.trim() || getTodayDDMMYYYY();
+
+      if (!amount || amount <= 0) return;
+
+      window.hostelData.deposits.push({
+        id: 'DEP_' + Date.now(),
+        memberId,
+        amount,
+        date,
+        timestamp: Date.now(),
+        editCount: 0
+      });
+      amtInput.value = '';
+      syncMasterData();
+    };
+
+    window.leaveMemberAction = function(memberId) {
+      const pass = prompt(window.currentLang === 'bn' ? 'সদস্য মুছে ফেলতে আপনার সাইন ইন পাসওয়ার্ড প্রবেশ করুন:' : 'Enter password to confirm leave:');
+      if (window.currentUser && window.currentUser.pass === pass) {
+        window.hostelData.members = window.hostelData.members.filter(m => m.id !== memberId);
+        window.hostelData.deposits = window.hostelData.deposits.filter(d => d.memberId !== memberId);
+        window.hostelData.meals = window.hostelData.meals.filter(m => m.memberId !== memberId);
+        syncMasterData();
+        alert(window.currentLang === 'bn' ? 'সদস্য সফলভাবে লিভ পেয়েছেন!' : 'Member deleted successfully!');
+      } else if (pass !== null) {
+        alert(window.currentLang === 'bn' ? 'ভুল পাসওয়ার্ড!' : 'Incorrect Password!');
+      }
+    };
+
+    window.setFixedCategory = function(cat) {
+      window.selectedFixedCategory = cat;
+      document.getElementById('fixed-cat-input').value = cat;
+    };
+
+    window.handleAddFixedExpense = function(e) {
+      e.preventDefault();
+      const cat = document.getElementById('fixed-cat-input').value.trim();
+      const amount = parseFloat(document.getElementById('fixed-amt-input').value);
+      const date = document.getElementById('fixed-date-input').value.trim();
+
+      window.hostelData.fixedExpenses.push({
+        id: 'FIX_' + Date.now(),
+        category: cat,
+        amount,
+        date,
+        timestamp: Date.now(),
+        editCount: 0
+      });
+      document.getElementById('fixed-amt-input').value = '';
+      syncMasterData();
+    };
+
+    window.handleAddGasExpense = function(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('gas-amt-input').value);
+      const date = document.getElementById('gas-date-input').value.trim();
+
+      window.hostelData.gasExpenses.push({
+        id: 'GAS_' + Date.now(),
+        amount,
+        date,
+        timestamp: Date.now(),
+        editCount: 0
+      });
+      document.getElementById('gas-amt-input').value = '';
+      syncMasterData();
+    };
+
+    window.renderBazaarChecklist = function() {
+      const grid = document.getElementById('bazaar-items-grid');
+      grid.innerHTML = window.defaultBazaarItems.map(item => `
+        <label class="flex items-center gap-1 bg-white p-1 rounded border cursor-pointer hover:bg-emerald-50">
+          <input type="checkbox" value="${item}" class="bazaar-chk rounded text-emerald-600">
+          <span>${item}</span>
+        </label>
+      `).join('');
+    };
+
+    window.handleSaveBazaar = function() {
+      const checkedItems = Array.from(document.querySelectorAll('.bazaar-chk:checked')).map(cb => cb.value);
+      const checkedShoppers = Array.from(document.querySelectorAll('.shopper-chk:checked')).map(cb => cb.value);
+      const amount = parseFloat(document.getElementById('bazaar-amt-input').value);
+      const date = document.getElementById('bazaar-date-input').value.trim();
+
+      if (!amount || amount <= 0 || checkedShoppers.length === 0) {
+        alert('অনুগ্রহ করে টাকার পরিমাণ এবং ক্রেতা সদস্য সিলেক্ট করুন!');
+        return;
+      }
+
+      window.hostelData.bazaarExpenses.push({
+        id: 'BAZ_' + Date.now(),
+        items: checkedItems,
+        shoppers: checkedShoppers,
+        amount,
+        date,
+        timestamp: Date.now(),
+        editCount: 0
+      });
+      document.getElementById('bazaar-amt-input').value = '';
+      syncMasterData();
+    };
+
+    window.handleSaveMeal = function(e) {
+      e.preventDefault();
+      const memberId = document.getElementById('meal-member-select').value;
+      const date = document.getElementById('meal-date-input').value.trim();
+      const m = parseFloat(document.getElementById('meal-m-input').value) || 0;
+      const n = parseFloat(document.getElementById('meal-n-input').value) || 0;
+      const nt = parseFloat(document.getElementById('meal-nt-input').value) || 0;
+
+      if (!memberId) return;
+
+      window.hostelData.meals.push({
+        id: 'MEL_' + Date.now(),
+        memberId,
+        date,
+        morning: m,
+        noon: n,
+        night: nt,
+        total: (m + n + nt),
+        timestamp: Date.now(),
+        editCount: 0
+      });
+      document.getElementById('meal-m-input').value = '';
+      document.getElementById('meal-n-input').value = '';
+      document.getElementById('meal-nt-input').value = '';
+      syncMasterData();
+    };
+
+    window.editTransaction = function(listName, id) {
+      const list = window.hostelData[listName];
+      const item = list.find(x => x.id === id);
+      if (!item) return;
+
+      if (!isEditable(item)) {
+        alert(window.currentLang === 'bn' ? 'সতর্কতা: ১ বার এডিট করা হয়ে গেছে অথবা ৫ মিনিট অতিবাহিত হওয়ায় এডিট করা যাবে না!' : 'Cannot edit: Limit reached or 5 minutes elapsed!');
+        return;
+      }
+
+      const newAmt = prompt('নতুন টাকার পরিমাণ দিন:', item.amount);
+      if (newAmt && !isNaN(newAmt)) {
+        item.amount = parseFloat(newAmt);
+        item.editCount = (item.editCount || 0) + 1;
+        syncMasterData();
+      }
+    };
+
+    window.renderDashboard = function() {
+      const membersContainer = document.getElementById('members-cards-container');
+      const mealSelect = document.getElementById('meal-member-select');
+      const shopperList = document.getElementById('shopper-checkbox-list');
+
+      membersContainer.innerHTML = '';
+      mealSelect.innerHTML = '<option value="">সদস্য নির্বাচন করুন</option>';
+      shopperList.innerHTML = '';
+
+      const totalMembersCount = window.hostelData.members.length || 1;
+      const gasUsersCount = window.hostelData.members.filter(m => m.useGas === 'yes').length || 1;
+
+      const totFixed = window.hostelData.fixedExpenses.reduce((acc, curr) => acc + curr.amount, 0);
+      const totGas = window.hostelData.gasExpenses.reduce((acc, curr) => acc + curr.amount, 0);
+      const totBazaar = window.hostelData.bazaarExpenses.reduce((acc, curr) => acc + curr.amount, 0);
+      const totMealsAll = window.hostelData.meals.reduce((acc, curr) => acc + curr.total, 0) || 1;
+
+      const perMealRate = totBazaar / totMealsAll;
+      const perFixedCharge = totFixed / totalMembersCount;
+      const perGasCharge = totGas / gasUsersCount;
+
+      let sectionTotalDepositSum = 0;
+
+      window.hostelData.members.forEach(m => {
+        mealSelect.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+        shopperList.innerHTML += `
+          <label class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded border">
+            <input type="checkbox" value="${m.name}" class="shopper-chk"> <span>${m.name}</span>
+          </label>
+        `;
+
+        const memberDeposits = window.hostelData.deposits.filter(d => d.memberId === m.id);
+        const myDepositSum = memberDeposits.reduce((acc, curr) => acc + curr.amount, 0);
+        sectionTotalDepositSum += myDepositSum;
+
+        const myMealsSum = window.hostelData.meals.filter(ml => ml.memberId === m.id).reduce((acc, curr) => acc + curr.total, 0);
+
+        const myMealCost = myMealsSum * perMealRate;
+        const myFixedCost = perFixedCharge;
+        const myGasCost = m.useGas === 'yes' ? perGasCharge : 0;
+        const myTotalExpense = myMealCost + myFixedCost + myGasCost;
+
+        const netBalance = myDepositSum - myTotalExpense;
+
+        membersContainer.innerHTML += `
+          <div class="border rounded-2xl p-4 bg-slate-50 shadow-sm relative space-y-3">
+            <div class="flex justify-between items-center border-b pb-2">
+              <div>
+                <h4 class="font-black text-gray-800 text-base flex items-center gap-2">
+                  <i class="fa-solid fa-user-graduate text-emerald-600"></i> ${m.name}
+                </h4>
+                <p class="text-xs text-gray-500"><i class="fa-solid fa-phone text-xs mr-1"></i>${m.phone}</p>
+              </div>
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full ${m.useGas === 'yes' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700'}">
+                ${m.useGas === 'yes' ? 'গ্যাস ব্যবহারী' : 'গ্যাস নেই'}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs bg-white p-2.5 rounded-xl border">
+              <div>আমার মোট জমা: <b class="text-emerald-700">৳ ${myDepositSum}</b></div>
+              <div>মোট মিল: <b>${myMealsSum} টি</b></div>
+              <div>আমার মোট খরচ: <b class="text-rose-700">৳ ${myTotalExpense.toFixed(2)}</b></div>
+              <div class="font-bold ${netBalance >= 0 ? 'text-emerald-700' : 'text-red-600'}">
+                ${netBalance >= 0 ? 'পাবো: ৳ ' + netBalance.toFixed(2) : 'দিবো: ৳ ' + Math.abs(netBalance).toFixed(2)}
+              </div>
+            </div>
+
+            <details class="bg-white border rounded-xl p-2 text-xs">
+              <summary class="font-bold text-emerald-700 cursor-pointer flex justify-between items-center">
+                <span><i class="fa-solid fa-money-bill-transfer mr-1"></i>টাকা জমা দেওয়ার ড্রপডাউন</span>
+                <span class="text-[10px] text-gray-400">(ক্লিক করুন)</span>
+              </summary>
+              
+              <div class="mt-3 space-y-2">
+                <div class="flex gap-2">
+                  <input type="number" id="dep-amt-${m.id}" placeholder="টাকার পরিমাণ" class="w-full px-2 py-1 border rounded text-xs">
+                  <input type="text" id="dep-date-${m.id}" value="${getTodayDDMMYYYY()}" placeholder="DD-MM-YYYY" class="w-28 px-2 py-1 border rounded text-xs">
+                  <button onclick="addDepositForMember('${m.id}')" class="btn-green-to-red px-3 py-1 rounded font-bold text-xs">জমা</button>
+                </div>
+
+                <div class="max-h-24 overflow-y-auto divide-y text-[11px] pt-1">
+                  ${memberDeposits.map(d => `
+                    <div class="flex justify-between items-center py-1">
+                      <span>${d.date}: ৳${d.amount}</span>
+                      <button onclick="editTransaction('deposits', '${d.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </details>
+
+            <button onclick="leaveMemberAction('${m.id}')" class="w-full bg-red-600 hover:bg-red-700 text-white py-1.5 rounded-xl font-bold text-xs shadow transition flex items-center justify-center gap-1">
+              <i class="fa-solid fa-user-minus"></i> আমি লিভ নিতে চাই
+            </button>
+          </div>
+        `;
+      });
+
+      document.getElementById('section-total-deposit').innerText = sectionTotalDepositSum;
+
+      renderTables();
+
+      const totalAllDeposits = window.hostelData.deposits.reduce((a, c) => a + c.amount, 0);
+      const totalAllExpenses = totFixed + totGas + totBazaar;
+      const cashInHand = totalAllDeposits - totalAllExpenses;
+      const totalMealsCount = window.hostelData.meals.reduce((a, c) => a + c.total, 0);
+
+      document.getElementById('dash-cash-in-hand').innerText = cashInHand;
+      document.getElementById('dash-total-deposit').innerText = totalAllDeposits;
+      document.getElementById('dash-total-expense').innerText = totalAllExpenses;
+      document.getElementById('dash-total-meals').innerText = totalMealsCount;
+
+      document.getElementById('section-total-fixed').innerText = totFixed;
+      document.getElementById('section-total-gas').innerText = totGas;
+      document.getElementById('section-total-bazaar').innerText = totBazaar;
+      document.getElementById('section-total-meals').innerText = totalMealsCount;
+
+      document.getElementById('calc-meal-rate').innerText = perMealRate.toFixed(2);
+      document.getElementById('calc-fixed-rate').innerText = perFixedCharge.toFixed(2);
+      document.getElementById('calc-gas-rate').innerText = perGasCharge.toFixed(2);
+      document.getElementById('calc-tot-bazaar').innerText = totBazaar;
+
+      const finalSummaryTbody = document.getElementById('final-summary-table-body');
+      finalSummaryTbody.innerHTML = '';
+      window.hostelData.members.forEach(m => {
+        const dep = window.hostelData.deposits.filter(d => d.memberId === m.id).reduce((a, c) => a + c.amount, 0);
+        const mls = window.hostelData.meals.filter(ml => ml.memberId === m.id).reduce((a, c) => a + c.total, 0);
+        const mealExp = mls * perMealRate;
+        const fixExp = perFixedCharge;
+        const gasExp = m.useGas === 'yes' ? perGasCharge : 0;
+        const totExp = mealExp + fixExp + gasExp;
+        const bal = dep - totExp;
+
+        finalSummaryTbody.innerHTML += `
+          <tr class="hover:bg-slate-50">
+            <td class="p-2.5 font-bold text-gray-800">${m.name}</td>
+            <td class="p-2.5">৳ ${dep}</td>
+            <td class="p-2.5">${mls}</td>
+            <td class="p-2.5">৳ ${mealExp.toFixed(2)}</td>
+            <td class="p-2.5">৳ ${fixExp.toFixed(2)}</td>
+            <td class="p-2.5">৳ ${gasExp.toFixed(2)}</td>
+            <td class="p-2.5 font-bold text-rose-600">৳ ${totExp.toFixed(2)}</td>
+            <td class="p-2.5 font-bold ${bal >= 0 ? 'text-emerald-700' : 'text-red-600'}">
+              ${bal >= 0 ? 'পাবে: ৳ ' + bal.toFixed(2) : 'দিবে: ৳ ' + Math.abs(bal).toFixed(2)}
+            </td>
+          </tr>
+        `;
+      });
+    };
+
+    window.renderTables = function() {
+      const fixedBody = document.getElementById('fixed-expense-table-body');
+      fixedBody.innerHTML = window.hostelData.fixedExpenses.map(f => `
+        <tr class="border-b">
+          <td class="p-2">${f.date}</td>
+          <td class="p-2 font-semibold">${f.category}</td>
+          <td class="p-2">৳${f.amount}</td>
+          <td class="p-2 text-right">
+            <button onclick="editTransaction('fixedExpenses', '${f.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+          </td>
+        </tr>
+      `).join('');
+
+      const gasBody = document.getElementById('gas-expense-table-body');
+      gasBody.innerHTML = window.hostelData.gasExpenses.map(g => `
+        <tr class="border-b">
+          <td class="p-2">${g.date}</td>
+          <td class="p-2">৳${g.amount}</td>
+          <td class="p-2 text-right">
+            <button onclick="editTransaction('gasExpenses', '${g.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+          </td>
+        </tr>
+      `).join('');
+
+      const bazBody = document.getElementById('bazaar-table-body');
+      bazBody.innerHTML = window.hostelData.bazaarExpenses.map(b => `
+        <tr class="border-b">
+          <td class="p-2">${b.date}</td>
+          <td class="p-2 text-[10px] text-gray-600 max-w-xs">${b.items ? b.items.join(', ') : '-'}</td>
+          <td class="p-2 font-semibold">${b.shoppers ? b.shoppers.join(', ') : '-'}</td>
+          <td class="p-2">৳${b.amount}</td>
+          <td class="p-2 text-right">
+            <button onclick="editTransaction('bazaarExpenses', '${b.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+          </td>
+        </tr>
+      `).join('');
+
+      const mealBody = document.getElementById('meal-table-body');
+      mealBody.innerHTML = window.hostelData.meals.map(ml => {
+        const mem = window.hostelData.members.find(m => m.id === ml.memberId);
+        return `
+          <tr class="border-b">
+            <td class="p-2">${ml.date}</td>
+            <td class="p-2 font-bold">${mem ? mem.name : '-'}</td>
+            <td class="p-2">${ml.morning}</td>
+            <td class="p-2">${ml.noon}</td>
+            <td class="p-2">${ml.night}</td>
+            <td class="p-2 font-bold text-emerald-700">${ml.total}</td>
+            <td class="p-2 text-right">
+              <button onclick="editTransaction('meals', '${ml.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    };
+
+    window.handleResetLedger = function() {
+      const pass = prompt(window.currentLang === 'bn' ? 'সদস্যদের তথ্য বাদে পুরো হিসাব মুছে ফেলতে লগইন পাসওয়ার্ড লিখুন:' : 'Enter password to reset ledger:');
+      if (window.currentUser && window.currentUser.pass === pass) {
+        window.hostelData.deposits = [];
+        window.hostelData.fixedExpenses = [];
+        window.hostelData.gasExpenses = [];
+        window.hostelData.bazaarExpenses = [];
+        window.hostelData.meals = [];
+        syncMasterData();
+        alert(window.currentLang === 'bn' ? 'সদস্যের মৌলিক তথ্য বাদে পুরো হিসাব রিসেট করা হয়েছে!' : 'Ledger Reset Successfully!');
+      } else if (pass !== null) {
+        alert(window.currentLang === 'bn' ? 'ভুল পাসওয়ার্ড!' : 'Incorrect Password!');
+      }
+    };
+
+    window.openAdminModal = function() {
+      document.getElementById('admin-modal').classList.remove('hidden');
+    };
+    window.closeAdminModal = function() {
+      document.getElementById('admin-modal').classList.add('hidden');
+    };
+
+    window.verifyAdminLogin = function() {
+      const u = document.getElementById('admin-id-input').value.trim();
+      const p = document.getElementById('admin-pass-input').value;
+
+      if (u === 'admin' && p === 'admin') {
+        document.getElementById('admin-login-view').classList.add('hidden');
+        document.getElementById('admin-panel-view').classList.remove('hidden');
+        populateAdminUserSelector();
+      } else {
+        alert('ভুল Admin ID বা Password!');
+      }
+    };
+
+    window.populateAdminUserSelector = function() {
+      const sel = document.getElementById('admin-user-selector');
+      sel.innerHTML = '<option value="">ইউজার নির্বাচন করুন</option>';
+      window.hostelData.users.forEach(u => {
+        sel.innerHTML += `<option value="${u.userId}">${u.userId} (${u.mobile})</option>`;
+      });
+    };
+
+    window.loadAdminSelectedUser = function(userId) {
+      if (!userId) return;
+      const user = window.hostelData.users.find(u => u.userId === userId);
+      const detailsBox = document.getElementById('admin-user-details-content');
+      if (user) {
+        detailsBox.innerHTML = `
+          <div>ইউজার আইডি: <b>${user.userId}</b></div>
+          <div>মোবাইল: <b>${user.mobile}</b></div>
+          <div>জন্ম তারিখ: <b>${user.dob}</b></div>
+        `;
+      }
+    };
+
+    window.sendAdminComment = function() {
+      const userId = document.getElementById('admin-user-selector').value;
+      const comment = document.getElementById('admin-comment-text').value.trim();
+
+      if (!userId || !comment) {
+        alert('ইউজার এবং মন্তব্য বেছে নিন!');
+        return;
+      }
+
+      window.hostelData.comments[userId] = comment;
+      syncMasterData();
+      alert('কমেন্ট ইউজারের প্রোফাইলে পাঠানো হয়েছে!');
+      document.getElementById('admin-comment-text').value = '';
+      closeAdminModal();
+    };
+
+    window.openForgetModal = function() {
+      document.getElementById('forget-modal').classList.remove('hidden');
+    };
+    window.closeForgetModal = function() {
+      document.getElementById('forget-modal').classList.add('hidden');
+    };
+
+    window.handleRecoverPassword = function() {
+      const mobile = document.getElementById('forget-mobile-input').value.trim();
+      const dob = document.getElementById('forget-dob-input').value.trim();
+      const msgBox = document.getElementById('forget-result-msg');
+
+      const user = window.hostelData.users.find(u => u.mobile === mobile && u.dob === dob);
+      msgBox.classList.remove('hidden');
+      if (user) {
+        msgBox.className = "text-xs font-bold p-2.5 rounded bg-emerald-100 text-emerald-800";
+        msgBox.innerText = `আপনার পাসওয়ার্ড: ${user.pass}`;
+      } else {
+        msgBox.className = "text-xs font-bold p-2.5 rounded bg-red-100 text-red-800";
+        msgBox.innerText = `তথ্য মিলেনি! সঠিক মোবাইল নম্বর ও জন্ম তারিখ দিন।`;
+      }
+    };
+  </script>
+</body>
+</html>
