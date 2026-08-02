@@ -222,7 +222,7 @@
 
         <button onclick="triggerAdminAuth('admin_panel')" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-user-shield text-amber-400"></i>
-          <span data-bn="অ্যাডমিন প্যানেল (বার্তা পাঠাতে)" data-en="Admin Panel">অ্যাডমিন প্যানেল (বার্তা পাঠাতে)</span>
+          <span data-bn="অ্যাডমিন প্যানেল (বার্তা পাঠাতে ও অনুমোদন দিতে)" data-en="Admin Panel">অ্যাডমিন প্যানেল (বার্তা পাঠাতে ও অনুমোদন দিতে)</span>
         </button>
       </div>
 
@@ -764,9 +764,9 @@
     </div>
   </div>
 
-  <!-- MODAL 5: ADMIN PANEL MODAL -->
+  <!-- MODAL 5: ADMIN PANEL MODAL (UPDATED WITH EDIT APPROVAL SECTION) -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
           <i class="fa-solid fa-user-shield text-amber-500"></i> Admin Panel
@@ -774,7 +774,26 @@
         <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <div class="space-y-4">
+      <!-- EDIT APPROVAL SECTION -->
+      <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-3">
+        <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1">
+          <i class="fa-solid fa-clock-rotate-left text-amber-600"></i> এডিট পেন্ডিং লিস্ট (অনুমোদনের জন্য অপেক্ষমান)
+        </h4>
+        <div class="overflow-x-auto border bg-white rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-amber-100 text-amber-900 font-bold border-b">
+              <tr>
+                <th class="p-2">খাত</th>
+                <th class="p-2">বিবরণ</th>
+                <th class="p-2 text-center">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="pending-edits-table-body" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="space-y-4 border-t pt-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">সকল ইউজার আইডি বেছে নিন:</label>
           <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"></select>
@@ -884,6 +903,7 @@
       gasExpenses: [],
       bazaarExpenses: [],
       meals: [],
+      pendingEdits: [],
       comments: {}
     };
 
@@ -900,6 +920,7 @@
           gasExpenses: data.gasExpenses || [],
           bazaarExpenses: data.bazaarExpenses || [],
           meals: data.meals || [],
+          pendingEdits: data.pendingEdits || [],
           comments: data.comments || {}
         };
         localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
@@ -1257,11 +1278,69 @@
 
     window.openAdminPanelModal = function() {
       populateAdminUserSelector();
+      renderPendingEditsTable();
       document.getElementById('admin-modal').classList.remove('hidden');
     };
 
     window.closeAdminModal = function() {
       document.getElementById('admin-modal').classList.add('hidden');
+    };
+
+    /* RENDER & APPROVE PENDING EDITS IN ADMIN PANEL */
+    window.renderPendingEditsTable = function() {
+      const tbody = document.getElementById('pending-edits-table-body');
+      tbody.innerHTML = '';
+
+      if (!window.hostelData.pendingEdits || window.hostelData.pendingEdits.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-gray-500 font-semibold">কোনো এডিট রিকোয়েস্ট জমা নেই</td></tr>`;
+        return;
+      }
+
+      window.hostelData.pendingEdits.forEach(p => {
+        let desc = '';
+        if (p.listName === 'meals') {
+          desc = `সকাল: ${p.newData.morning}, দুপুর: ${p.newData.noon}, রাত: ${p.newData.night}`;
+        } else {
+          desc = `নতুন টাকা: ৳${p.newData.amount}`;
+        }
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-amber-50/50">
+            <td class="p-2 font-bold text-gray-700">${p.listName}</td>
+            <td class="p-2">${desc}</td>
+            <td class="p-2 text-center space-x-1">
+              <button onclick="approveEditRequest('${p.pendingId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+              <button onclick="rejectEditRequest('${p.pendingId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+            </td>
+          </tr>
+        `;
+      });
+    };
+
+    window.approveEditRequest = function(pendingId) {
+      const pIndex = window.hostelData.pendingEdits.findIndex(p => p.pendingId === pendingId);
+      if (pIndex !== -1) {
+        const req = window.hostelData.pendingEdits[pIndex];
+        const targetList = window.hostelData[req.listName];
+        const targetItem = targetList.find(x => x.id === req.targetId);
+
+        if (targetItem) {
+          Object.assign(targetItem, req.newData);
+          targetItem.editCount = (targetItem.editCount || 0) + 1;
+        }
+
+        window.hostelData.pendingEdits.splice(pIndex, 1);
+        syncMasterData();
+        renderPendingEditsTable();
+        alert('এডিট সফলভাবে অনুমোদন করা হয়েছে!');
+      }
+    };
+
+    window.rejectEditRequest = function(pendingId) {
+      window.hostelData.pendingEdits = window.hostelData.pendingEdits.filter(p => p.pendingId !== pendingId);
+      syncMasterData();
+      renderPendingEditsTable();
+      alert('এডিট রিকোয়েস্ট বাতিল করা হয়েছে!');
     };
 
     window.populateAdminUserSelector = function() {
@@ -1518,17 +1597,11 @@
       syncMasterData();
     };
 
-    /* UPDATED EDIT TRANSACTION FUNCTION (REQUIRES LOG IN PASSWORD & LIMIT 1 TIME EDIT) */
+    /* UPDATED EDIT TRANSACTION FUNCTION (LOGIN PASSWORD & ADMIN APPROVAL REQUIRED) */
     window.editTransaction = function(listName, id) {
       const list = window.hostelData[listName];
       const item = list.find(x => x.id === id);
       if (!item) return;
-
-      // Check if already edited once
-      if ((item.editCount || 0) >= 1) {
-        alert(window.currentLang === 'bn' ? 'সতর্কতা: এটি ইতোমধ্যে ১ বার এডিট করা হয়েছে! একাধিকবার এডিট করার সুযোগ নেই।' : 'Cannot edit: Record has already been edited once!');
-        return;
-      }
 
       // Password Prompt Verification
       const pass = prompt(window.currentLang === 'bn' ? 'এডিট করতে আপনার লগইন পাসওয়ার্ডটি প্রবেশ করুন:' : 'Enter login password to edit:');
@@ -1537,7 +1610,9 @@
         return;
       }
 
-      // Handle Meal Edit separately
+      if (!window.hostelData.pendingEdits) window.hostelData.pendingEdits = [];
+
+      // Handle Meal Edit
       if (listName === 'meals') {
         const m = prompt('সকালের মিল পরিবর্তন করুন:', item.morning);
         const n = prompt('দুপুরের মিল পরিবর্তন করুন:', item.noon);
@@ -1548,21 +1623,35 @@
           const nNum = parseFloat(n) || 0;
           const ntNum = parseFloat(nt) || 0;
 
-          item.morning = mNum;
-          item.noon = nNum;
-          item.night = ntNum;
-          item.total = mNum + nNum + ntNum;
-          item.editCount = (item.editCount || 0) + 1;
+          window.hostelData.pendingEdits.push({
+            pendingId: 'PED_' + Date.now(),
+            listName,
+            targetId: id,
+            newData: {
+              morning: mNum,
+              noon: nNum,
+              night: ntNum,
+              total: mNum + nNum + ntNum
+            }
+          });
+
           syncMasterData();
-          alert('মিল এন্ট্রি সফলভাবে ১ বার এডিট করা হয়েছে!');
+          alert('এডিট রিকোয়েস্ট সফলভাবে জমা দেওয়া হয়েছে! এডমিন প্যানেল থেকে অনুমোদন দিলে আপডেট হবে।');
         }
       } else { // Handle Expense & Deposit Amount Edits
         const newAmt = prompt('নতুন টাকার পরিমাণ দিন:', item.amount);
         if (newAmt && !isNaN(newAmt)) {
-          item.amount = parseFloat(newAmt);
-          item.editCount = (item.editCount || 0) + 1;
+          window.hostelData.pendingEdits.push({
+            pendingId: 'PED_' + Date.now(),
+            listName,
+            targetId: id,
+            newData: {
+              amount: parseFloat(newAmt)
+            }
+          });
+
           syncMasterData();
-          alert('তথ্য সফলভাবে ১ বার এডিট করা হয়েছে!');
+          alert('এডিট রিকোয়েস্ট সফলভাবে জমা দেওয়া হয়েছে! এডমিন প্যানেল থেকে অনুমোদন দিলে আপডেট হবে।');
         }
       }
     };
@@ -1810,6 +1899,7 @@
         window.hostelData.gasExpenses = [];
         window.hostelData.bazaarExpenses = [];
         window.hostelData.meals = [];
+        window.hostelData.pendingEdits = [];
         syncMasterData();
         alert(window.currentLang === 'bn' ? 'সদস্যের মৌলিক তথ্য বাদে পুরো হিসাব রিসেট করা হয়েছে!' : 'Ledger Reset Successfully!');
       } else if (pass !== null) {
