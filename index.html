@@ -20,6 +20,15 @@
       background-color: #dc2626 !important; /* Red 600 on press */
     }
 
+    /* Logo Icon Spin Animation */
+    .spin-icon {
+      animation: spin-once 0.8s ease-in-out;
+    }
+    @keyframes spin-once {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Slow Moving Marquee Animation */
     .marquee-wrapper {
       overflow: hidden;
@@ -39,9 +48,9 @@
       100% { transform: translate(-100%, 0); }
     }
 
-    /* 1 Second Smooth Transition Animation for Sign In & Log Out */
+    /* Transition Animation for Sign In & Log Out */
     .auth-transition {
-      transition: opacity 1.0s ease-in-out, transform 1.0s ease-in-out;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     }
 
     /* Blinking / Reflecting Message Box Animation */
@@ -110,12 +119,13 @@
     <!-- HOMEPAGE / AUTHENTICATION PANEL -->
     <section id="auth-section" class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-8 border-t-8 border-emerald-600 auth-transition">
       
-      <div class="text-center mb-6">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-3 shadow-inner">
-          <i class="fa-solid fa-user-graduate text-3xl"></i>
+      <!-- LOGO AREA WITH INTERACTIVE SPIN & MANAGEMENT PANEL TRIGGER -->
+      <div class="text-center mb-6 cursor-pointer select-none" onclick="triggerHostelLogoClick()" title="প্রেস করে ম্যানেজমেন্ট প্যানেল খুলুন">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-3 shadow-inner hover:bg-emerald-200 transition">
+          <i id="student-logo-icon" class="fa-solid fa-user-graduate text-3xl"></i>
         </div>
         
-        <h1 class="text-2xl md:text-3xl font-black text-emerald-800 tracking-wider uppercase mb-1">
+        <h1 class="text-2xl md:text-3xl font-black text-emerald-800 tracking-wider uppercase mb-1 hover:text-emerald-900 transition">
           DREAM TOUCHING HOSTEL
         </h1>
         <p class="text-xs text-gray-500 font-medium italic flex items-center justify-center gap-1" data-bn="🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚" data-en="🎓 Education & Hostel Life - Accurate Mess Accounting 📚">
@@ -165,8 +175,13 @@
         </div>
       </form>
 
-      <!-- SIGN UP FORM -->
+      <!-- SIGN UP FORM (Updated with Name field) -->
       <form id="form-signup" onsubmit="handleSignUp(event)" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম (Full Name)" data-en="Full Name">নাম (Full Name)</label>
+          <input type="text" id="signup-fullname" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="আপনার পূর্ণ নাম">
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>
           <input type="text" id="signup-userid" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="e.g. rohim123">
@@ -199,7 +214,6 @@
 
       <hr class="my-6 border-gray-200">
 
-      <!-- UPDATED BUTTONS FOR ADMIN AND VIEW LEDGER (BOTH REQUIRE ADMIN LOGIN) -->
       <div class="space-y-2">
         <button onclick="triggerAdminAuth('view_accounts')" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-xl font-bold text-xs md:text-sm shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-receipt text-amber-300"></i>
@@ -413,7 +427,7 @@
         </div>
       </div>
 
-      <!-- BAZAAR EXPENSE SECTION -->
+      <!-- BAZAAR EXPENSE SECTION (Updated with Manual Input) -->
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-cart-shopping text-emerald-600"></i>
@@ -423,6 +437,12 @@
         <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 space-y-3">
           <p class="text-xs font-bold text-gray-700 uppercase" data-bn="কি কি বাজার হলো (টিক দিন):" data-en="Items Bought (Select All):">কি কি বাজার হলো (টিক দিন):</p>
           <div id="bazaar-items-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 text-xs"></div>
+
+          <!-- Manual Bazaar Item Input Field -->
+          <div class="mt-2">
+            <label class="text-xs font-bold text-gray-700 mb-1 block">অন্যান্য বাজার (ম্যানুয়ালি নতুন জিনিস লিখতে চাইলে):</label>
+            <input type="text" id="bazaar-custom-items" placeholder="যেমন: মাখন, মসলা ইত্যাদি (কমা দিয়ে লিখুন)" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+          </div>
 
           <hr class="my-2 border-gray-200">
 
@@ -592,7 +612,7 @@
 
   </main>
 
-  <!-- MODAL 1: ADMIN LOGIN VERIFICATION MODAL (Shared for both tabs) -->
+  <!-- MODAL 1: ADMIN LOGIN VERIFICATION MODAL -->
   <div id="admin-auth-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
       <div class="flex justify-between items-center border-b pb-2">
@@ -613,7 +633,88 @@
     </div>
   </div>
 
-  <!-- MODAL 2: "এখানে প্রবেশ করে হিসাব দেখুন" MODAL (Select User to view complete start-to-end ledger) -->
+  <!-- MODAL 2: MANAGEMENT PANEL LOGIN MODAL (Triggered via Logo Click) -->
+  <div id="mgmt-login-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-800">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-black text-emerald-900 flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-amber-500"></i> ম্যানেজমেন্ট প্যানেল লগইন
+        </h3>
+        <button onclick="closeMgmtLoginModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3">
+        <p class="text-xs text-gray-500 font-semibold">ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:</p>
+        <input type="text" id="mgmt-auth-id" placeholder="ID: DTH01518411872" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        <input type="password" id="mgmt-auth-pass" placeholder="Password: 01518411872" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        <button onclick="verifyMgmtAuth()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
+          প্যানেলে প্রবেশ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD (Approve Signups & Delete Accounts) -->
+  <div id="mgmt-dashboard-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-3xl w-full p-6 space-y-6 shadow-2xl border-t-8 border-emerald-800 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-black text-emerald-900 flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-emerald-600"></i> হোস্টেল ম্যানেজমেন্ট প্যানেল
+        </h3>
+        <button onclick="closeMgmtDashboardModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Pending Signup Approvals Section -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <i class="fa-solid fa-user-clock text-amber-500"></i> নতুন সাইন-আপ রিকোয়েস্ট (অনুমোদনের জন্য অপেক্ষমান)
+        </h4>
+        <div class="overflow-x-auto border rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-amber-50 text-amber-900 font-bold border-b">
+              <tr>
+                <th class="p-2">নাম</th>
+                <th class="p-2">ইউজার আইডি</th>
+                <th class="p-2">মোবাইল</th>
+                <th class="p-2">জন্ম তারিখ</th>
+                <th class="p-2 text-center">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="pending-users-table-body" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Approved Registered Accounts & Delete Section -->
+      <div class="space-y-3 pt-2">
+        <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <i class="fa-solid fa-users-gear text-emerald-600"></i> সাইন আপকৃত সকল অ্যাকাউন্টের তালিকা ও তথ্য
+        </h4>
+        <div class="overflow-x-auto border rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-gray-700 font-bold border-b">
+              <tr>
+                <th class="p-2">নাম</th>
+                <th class="p-2">ইউজার আইডি</th>
+                <th class="p-2">মোবাইল</th>
+                <th class="p-2">পাসওয়ার্ড</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="approved-users-table-body" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="text-right border-t pt-3">
+        <button onclick="closeMgmtDashboardModal()" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
+          বন্ধ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: "এখানে প্রবেশ করে হিসাব দেখুন" MODAL (Updated with User Selection) -->
   <div id="view-accounts-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-4xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-700 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
@@ -623,15 +724,14 @@
         <button onclick="closeViewAccountsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- User Filter Selector -->
+      <!-- User Account Selection Dropdown -->
       <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row items-center gap-3">
         <label class="text-xs font-bold text-gray-700 whitespace-nowrap">ইউজার / সদস্য নির্বাচন করুন:</label>
         <select id="accounts-user-selector" onchange="renderViewAccountsTableForSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm font-bold bg-white text-emerald-800 focus:ring-2 focus:ring-emerald-500">
-          <!-- Dynamically populated -->
+          <!-- Dynamically Populated -->
         </select>
       </div>
 
-      <!-- Specific User Breakdown Table -->
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border border-gray-200 rounded-lg">
           <thead class="bg-emerald-800 text-white font-bold">
@@ -658,7 +758,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: ADMIN PANEL MODAL (For sending comments) -->
+  <!-- MODAL 5: ADMIN PANEL MODAL (For sending comments) -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
       <div class="flex justify-between items-center border-b pb-2">
@@ -759,7 +859,7 @@
     window.currentLang = 'bn';
     window.currentUser = null;
     window.selectedFixedCategory = 'বিদ্যুৎ';
-    window.targetAdminAction = null; // Stores target after admin auth ('view_accounts' or 'admin_panel')
+    window.targetAdminAction = null;
 
     window.defaultBazaarItems = [
       "আলু", "পেঁয়াজ", "রসুন", "আদা", "কাঁচামরিচ", "টমেটো", "বেগুন", "পটল",
@@ -839,6 +939,111 @@
       });
     };
 
+    /* Interactivity for Logo Spin & Management Panel Open */
+    window.triggerHostelLogoClick = function() {
+      const logoIcon = document.getElementById('student-logo-icon');
+      logoIcon.classList.add('spin-icon');
+      setTimeout(() => {
+        logoIcon.classList.remove('spin-icon');
+      }, 800);
+
+      document.getElementById('mgmt-auth-id').value = '';
+      document.getElementById('mgmt-auth-pass').value = '';
+      document.getElementById('mgmt-login-modal').classList.remove('hidden');
+    };
+
+    window.closeMgmtLoginModal = function() {
+      document.getElementById('mgmt-login-modal').classList.add('hidden');
+    };
+
+    window.verifyMgmtAuth = function() {
+      const id = document.getElementById('mgmt-auth-id').value.trim();
+      const pass = document.getElementById('mgmt-auth-pass').value.trim();
+
+      if (id === 'DTH01518411872' && pass === '01518411872') {
+        closeMgmtLoginModal();
+        openMgmtDashboardModal();
+      } else {
+        alert('ভুল আইডি বা পাসওয়ার্ড!');
+      }
+    };
+
+    window.openMgmtDashboardModal = function() {
+      renderMgmtUserTables();
+      document.getElementById('mgmt-dashboard-modal').classList.remove('hidden');
+    };
+
+    window.closeMgmtDashboardModal = function() {
+      document.getElementById('mgmt-dashboard-modal').classList.add('hidden');
+    };
+
+    /* Management Panel Logic: Approvals & Account Deletion */
+    window.renderMgmtUserTables = function() {
+      const pendingTbody = document.getElementById('pending-users-table-body');
+      const approvedTbody = document.getElementById('approved-users-table-body');
+      pendingTbody.innerHTML = '';
+      approvedTbody.innerHTML = '';
+
+      const pendingUsers = window.hostelData.users.filter(u => u.status === 'pending');
+      const approvedUsers = window.hostelData.users.filter(u => u.status !== 'pending');
+
+      if (pendingUsers.length === 0) {
+        pendingTbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-gray-500 font-semibold">কোনো অপেক্ষমান রিকোয়েস্ট নেই</td></tr>`;
+      } else {
+        pendingUsers.forEach(u => {
+          pendingTbody.innerHTML += `
+            <tr class="hover:bg-amber-50/50">
+              <td class="p-2 font-bold">${u.fullName || '-'}</td>
+              <td class="p-2 text-emerald-800 font-semibold">${u.userId}</td>
+              <td class="p-2">${u.mobile}</td>
+              <td class="p-2">${u.dob}</td>
+              <td class="p-2 text-center space-x-1">
+                <button onclick="approveUserStatus('${u.userId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+                <button onclick="deleteUserAccount('${u.userId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      if (approvedUsers.length === 0) {
+        approvedTbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-gray-500 font-semibold">কোনো নিবন্ধিত আইডি পাওয়া যায়নি</td></tr>`;
+      } else {
+        approvedUsers.forEach(u => {
+          approvedTbody.innerHTML += `
+            <tr class="hover:bg-slate-50">
+              <td class="p-2 font-bold">${u.fullName || '-'}</td>
+              <td class="p-2 text-emerald-800 font-semibold">${u.userId}</td>
+              <td class="p-2">${u.mobile}</td>
+              <td class="p-2 text-gray-600">${u.pass}</td>
+              <td class="p-2 text-right">
+                <button onclick="deleteUserAccount('${u.userId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-trash-can mr-1"></i>ডিলিট</button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+    };
+
+    window.approveUserStatus = function(userId) {
+      const user = window.hostelData.users.find(u => u.userId === userId);
+      if (user) {
+        user.status = 'approved';
+        syncMasterData();
+        renderMgmtUserTables();
+        alert(`ইউজার আইডি '${userId}' সফলভাবে অনুমোদন করা হয়েছে!`);
+      }
+    };
+
+    window.deleteUserAccount = function(userId) {
+      if (confirm(`আপনি কি নিশ্চিত যে ইউজার আইডি '${userId}' স্থায়ীভাবে ডিলিট করতে চান?`)) {
+        window.hostelData.users = window.hostelData.users.filter(u => u.userId !== userId);
+        syncMasterData();
+        renderMgmtUserTables();
+        alert('অ্যাকোউন্টটি ডিলিট করা হয়েছে!');
+      }
+    };
+
     window.togglePasswordVisibility = function(inputId, eyeId) {
       const input = document.getElementById(inputId);
       const eye = document.getElementById(eyeId);
@@ -873,8 +1078,10 @@
       }
     };
 
+    /* Sign Up Functionality */
     window.handleSignUp = function(e) {
       e.preventDefault();
+      const fullName = document.getElementById('signup-fullname').value.trim();
       const userId = document.getElementById('signup-userid').value.trim();
       const mobile = document.getElementById('signup-mobile').value.trim();
       const dob = document.getElementById('signup-dob').value.trim();
@@ -885,12 +1092,13 @@
         return;
       }
 
-      window.hostelData.users.push({ userId, mobile, dob, pass });
+      window.hostelData.users.push({ fullName, userId, mobile, dob, pass, status: 'pending' });
       syncMasterData();
-      alert(window.currentLang === 'bn' ? 'সাইন আপ সফল হয়েছে! এখন সাইন ইন করুন।' : 'Sign Up Successful! Please Sign In.');
+      alert(window.currentLang === 'bn' ? 'সাইন আপ রিকোয়েস্ট জমা হয়েছে! ম্যানেজমেন্ট প্যানেল থেকে অনুমোদন দিলে লগইন করতে পারবেন।' : 'Sign Up Request Sent! Please wait for Admin approval.');
       switchAuthTab('signin');
     };
 
+    /* Sign In Functionality */
     window.handleSignIn = function(e) {
       e.preventDefault();
       const userId = document.getElementById('signin-userid').value.trim();
@@ -898,6 +1106,10 @@
 
       const user = window.hostelData.users.find(u => (u.userId === userId || u.mobile === userId) && u.pass === pass);
       if (user) {
+        if (user.status === 'pending') {
+          alert('আপনার আইডিটি এখনো অনুমোদন করা হয়নি! ম্যানেজমেন্ট প্যানেলের অনুমোদনের জন্য অপেক্ষা করুন।');
+          return;
+        }
         window.currentUser = user;
         trigger1SecTransition(true);
       } else {
@@ -922,7 +1134,7 @@
           document.getElementById('header-logout-btn').classList.remove('hidden');
           checkUserAdminComments();
           renderDashboard();
-        }, 1000);
+        }, 500);
       } else {
         dashSec.style.opacity = '0';
         dashSec.style.transform = 'scale(0.95)';
@@ -935,7 +1147,7 @@
           document.getElementById('header-change-pass-btn').classList.add('hidden');
           document.getElementById('header-logout-btn').classList.add('hidden');
           window.currentUser = null;
-        }, 1000);
+        }, 500);
       }
     };
 
@@ -943,7 +1155,6 @@
       trigger1SecTransition(false);
     };
 
-    // UPDATE 1 LOGIC: Shared Admin Auth Verification (ID: admin, PASS: admin)
     window.triggerAdminAuth = function(action) {
       window.targetAdminAction = action;
       document.getElementById('admin-auth-id').value = '';
@@ -971,7 +1182,6 @@
       }
     };
 
-    // UPDATE 2 LOGIC: Open Accounts View Modal with User Filter
     window.openViewAccountsModal = function() {
       populateAccountsUserSelector();
       document.getElementById('view-accounts-modal').classList.remove('hidden');
@@ -983,7 +1193,7 @@
 
     window.populateAccountsUserSelector = function() {
       const sel = document.getElementById('accounts-user-selector');
-      sel.innerHTML = '<option value="ALL">সকল ইউজারের হিসাব একত্রে দেখুন</option>';
+      sel.innerHTML = '<option value="ALL">সকল ইউজার / সদস্যের হিসাব একত্রে দেখুন</option>';
       window.hostelData.members.forEach(m => {
         sel.innerHTML += `<option value="${m.id}">${m.name} (${m.phone})</option>`;
       });
@@ -1042,7 +1252,6 @@
       });
     };
 
-    // Open Admin Panel Modal
     window.openAdminPanelModal = function() {
       populateAdminUserSelector();
       document.getElementById('admin-modal').classList.remove('hidden');
@@ -1066,6 +1275,7 @@
       const detailsBox = document.getElementById('admin-user-details-content');
       if (user) {
         detailsBox.innerHTML = `
+          <div>নাম: <b>${user.fullName || '-'}</b></div>
           <div>ইউজার আইডি: <b>${user.userId}</b></div>
           <div>মোবাইল: <b>${user.mobile}</b></div>
           <div>জন্ম তারিখ: <b>${user.dob}</b></div>
@@ -1253,8 +1463,16 @@
       `).join('');
     };
 
+    /* Save Bazaar with Checkboxes and Custom Manual Input */
     window.handleSaveBazaar = function() {
       const checkedItems = Array.from(document.querySelectorAll('.bazaar-chk:checked')).map(cb => cb.value);
+      const customItemsInput = document.getElementById('bazaar-custom-items').value.trim();
+      
+      if (customItemsInput) {
+        const customArr = customItemsInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        checkedItems.push(...customArr);
+      }
+
       const checkedShoppers = Array.from(document.querySelectorAll('.shopper-chk:checked')).map(cb => cb.value);
       const amount = parseFloat(document.getElementById('bazaar-amt-input').value);
       const date = document.getElementById('bazaar-date-input').value.trim();
@@ -1274,6 +1492,7 @@
         editCount: 0
       });
       document.getElementById('bazaar-amt-input').value = '';
+      document.getElementById('bazaar-custom-items').value = '';
       syncMasterData();
     };
 
@@ -1562,7 +1781,7 @@
         msgBox.innerText = `আপনার পাসওয়ার্ড: ${user.pass}`;
       } else {
         msgBox.className = "text-xs font-bold p-2.5 rounded bg-red-100 text-red-800";
-        msgBox.innerText = `তথ্য মিলেনি! সঠিক মোবাইল নম্বর ও জন্ম তারিখ দিন।`;
+        msgBox.innerText = `তথ্য মilenি! সঠিক মোবাইল নম্বর ও জন্ম তারিখ দিন।`;
       }
     };
   </script>
