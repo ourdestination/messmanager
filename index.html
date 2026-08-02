@@ -175,7 +175,7 @@
         </div>
       </form>
 
-      <!-- SIGN UP FORM (Updated with Name field) -->
+      <!-- SIGN UP FORM -->
       <form id="form-signup" onsubmit="handleSignUp(event)" class="space-y-3 hidden">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম (Full Name)" data-en="Full Name">নাম (Full Name)</label>
@@ -427,7 +427,7 @@
         </div>
       </div>
 
-      <!-- BAZAAR EXPENSE SECTION (Updated with Manual Input) -->
+      <!-- BAZAAR EXPENSE SECTION -->
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-cart-shopping text-emerald-600"></i>
@@ -488,7 +488,7 @@
         </div>
       </div>
 
-      <!-- DAILY MEAL ENTRY SECTION -->
+      <!-- DAILY MEAL ENTRY SECTION (UPDATED WITH DATE DROPDOWN PANELS) -->
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-utensils text-emerald-600"></i>
@@ -527,6 +527,16 @@
             </button>
           </div>
         </form>
+
+        <!-- DATE DROPDOWN FILTER PANEL -->
+        <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 flex flex-col sm:flex-row items-center gap-3">
+          <label class="text-xs font-bold text-emerald-900 whitespace-nowrap">
+            <i class="fa-solid fa-calendar-days mr-1"></i>তারিখ নির্বাচন করুন (ড্রপ ডাউন প্যানেল):
+          </label>
+          <select id="meal-date-filter-selector" onchange="renderMealTableByDate(this.value)" class="w-full sm:w-auto px-3 py-1.5 border rounded-lg text-xs font-bold bg-white text-emerald-800 border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <!-- Dynamically populated -->
+          </select>
+        </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs border-collapse">
@@ -633,7 +643,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: MANAGEMENT PANEL LOGIN MODAL (Triggered via Logo Click) -->
+  <!-- MODAL 2: MANAGEMENT PANEL LOGIN MODAL -->
   <div id="mgmt-login-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-800">
       <div class="flex justify-between items-center border-b pb-2">
@@ -654,7 +664,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD (Approve Signups & Delete Accounts) -->
+  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD -->
   <div id="mgmt-dashboard-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-3xl w-full p-6 space-y-6 shadow-2xl border-t-8 border-emerald-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
@@ -664,7 +674,6 @@
         <button onclick="closeMgmtDashboardModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Pending Signup Approvals Section -->
       <div class="space-y-3">
         <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
           <i class="fa-solid fa-user-clock text-amber-500"></i> নতুন সাইন-আপ রিকোয়েস্ট (অনুমোদনের জন্য অপেক্ষমান)
@@ -685,7 +694,6 @@
         </div>
       </div>
 
-      <!-- Approved Registered Accounts & Delete Section -->
       <div class="space-y-3 pt-2">
         <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
           <i class="fa-solid fa-users-gear text-emerald-600"></i> সাইন আপকৃত সকল অ্যাকাউন্টের তালিকা ও তথ্য
@@ -714,7 +722,7 @@
     </div>
   </div>
 
-  <!-- MODAL 4: "এখানে প্রবেশ করে হিসাব দেখুন" MODAL (Updated with User Selection) -->
+  <!-- MODAL 4: VIEW ACCOUNTS MODAL -->
   <div id="view-accounts-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-4xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-700 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
@@ -724,11 +732,9 @@
         <button onclick="closeViewAccountsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- User Account Selection Dropdown -->
       <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row items-center gap-3">
         <label class="text-xs font-bold text-gray-700 whitespace-nowrap">ইউজার / সদস্য নির্বাচন করুন:</label>
         <select id="accounts-user-selector" onchange="renderViewAccountsTableForSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm font-bold bg-white text-emerald-800 focus:ring-2 focus:ring-emerald-500">
-          <!-- Dynamically Populated -->
         </select>
       </div>
 
@@ -758,7 +764,7 @@
     </div>
   </div>
 
-  <!-- MODAL 5: ADMIN PANEL MODAL (For sending comments) -->
+  <!-- MODAL 5: ADMIN PANEL MODAL -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
       <div class="flex justify-between items-center border-b pb-2">
@@ -860,6 +866,7 @@
     window.currentUser = null;
     window.selectedFixedCategory = 'বিদ্যুৎ';
     window.targetAdminAction = null;
+    window.selectedMealDateFilter = 'ALL';
 
     window.defaultBazaarItems = [
       "আলু", "পেঁয়াজ", "রসুন", "আদা", "কাঁচামরিচ", "টমেটো", "বেগুন", "পটল",
@@ -939,7 +946,6 @@
       });
     };
 
-    /* Interactivity for Logo Spin & Management Panel Open */
     window.triggerHostelLogoClick = function() {
       const logoIcon = document.getElementById('student-logo-icon');
       logoIcon.classList.add('spin-icon');
@@ -977,7 +983,6 @@
       document.getElementById('mgmt-dashboard-modal').classList.add('hidden');
     };
 
-    /* Management Panel Logic: Approvals & Account Deletion */
     window.renderMgmtUserTables = function() {
       const pendingTbody = document.getElementById('pending-users-table-body');
       const approvedTbody = document.getElementById('approved-users-table-body');
@@ -1078,7 +1083,6 @@
       }
     };
 
-    /* Sign Up Functionality */
     window.handleSignUp = function(e) {
       e.preventDefault();
       const fullName = document.getElementById('signup-fullname').value.trim();
@@ -1098,7 +1102,6 @@
       switchAuthTab('signin');
     };
 
-    /* Sign In Functionality */
     window.handleSignIn = function(e) {
       e.preventDefault();
       const userId = document.getElementById('signin-userid').value.trim();
@@ -1357,13 +1360,6 @@
       closeChangePasswordModal();
     };
 
-    window.isEditable = function(entry) {
-      const fiveMinutesMs = 5 * 60 * 1000;
-      const timePassed = Date.now() - entry.timestamp;
-      const timesEdited = entry.editCount || 0;
-      return (timePassed <= fiveMinutesMs) && (timesEdited < 1);
-    };
-
     window.handleAddMember = function(e) {
       e.preventDefault();
       const name = document.getElementById('member-input-name').value.trim();
@@ -1463,7 +1459,6 @@
       `).join('');
     };
 
-    /* Save Bazaar with Checkboxes and Custom Manual Input */
     window.handleSaveBazaar = function() {
       const checkedItems = Array.from(document.querySelectorAll('.bazaar-chk:checked')).map(cb => cb.value);
       const customItemsInput = document.getElementById('bazaar-custom-items').value.trim();
@@ -1523,21 +1518,52 @@
       syncMasterData();
     };
 
+    /* UPDATED EDIT TRANSACTION FUNCTION (REQUIRES LOG IN PASSWORD & LIMIT 1 TIME EDIT) */
     window.editTransaction = function(listName, id) {
       const list = window.hostelData[listName];
       const item = list.find(x => x.id === id);
       if (!item) return;
 
-      if (!isEditable(item)) {
-        alert(window.currentLang === 'bn' ? 'সতর্কতা: ১ বার এডিট করা হয়ে গেছে অথবা ৫ মিনিট অতিবাহিত হওয়ায় এডিট করা যাবে না!' : 'Cannot edit: Limit reached or 5 minutes elapsed!');
+      // Check if already edited once
+      if ((item.editCount || 0) >= 1) {
+        alert(window.currentLang === 'bn' ? 'সতর্কতা: এটি ইতোমধ্যে ১ বার এডিট করা হয়েছে! একাধিকবার এডিট করার সুযোগ নেই।' : 'Cannot edit: Record has already been edited once!');
         return;
       }
 
-      const newAmt = prompt('নতুন টাকার পরিমাণ দিন:', item.amount);
-      if (newAmt && !isNaN(newAmt)) {
-        item.amount = parseFloat(newAmt);
-        item.editCount = (item.editCount || 0) + 1;
-        syncMasterData();
+      // Password Prompt Verification
+      const pass = prompt(window.currentLang === 'bn' ? 'এডিট করতে আপনার লগইন পাসওয়ার্ডটি প্রবেশ করুন:' : 'Enter login password to edit:');
+      if (!window.currentUser || window.currentUser.pass !== pass) {
+        if (pass !== null) alert(window.currentLang === 'bn' ? 'ভুল পাসওয়ার্ড!' : 'Incorrect Password!');
+        return;
+      }
+
+      // Handle Meal Edit separately
+      if (listName === 'meals') {
+        const m = prompt('সকালের মিল পরিবর্তন করুন:', item.morning);
+        const n = prompt('দুপুরের মিল পরিবর্তন করুন:', item.noon);
+        const nt = prompt('রাতের মিল পরিবর্তন করুন:', item.night);
+
+        if (m !== null && n !== null && nt !== null) {
+          const mNum = parseFloat(m) || 0;
+          const nNum = parseFloat(n) || 0;
+          const ntNum = parseFloat(nt) || 0;
+
+          item.morning = mNum;
+          item.noon = nNum;
+          item.night = ntNum;
+          item.total = mNum + nNum + ntNum;
+          item.editCount = (item.editCount || 0) + 1;
+          syncMasterData();
+          alert('মিল এন্ট্রি সফলভাবে ১ বার এডিট করা হয়েছে!');
+        }
+      } else { // Handle Expense & Deposit Amount Edits
+        const newAmt = prompt('নতুন টাকার পরিমাণ দিন:', item.amount);
+        if (newAmt && !isNaN(newAmt)) {
+          item.amount = parseFloat(newAmt);
+          item.editCount = (item.editCount || 0) + 1;
+          syncMasterData();
+          alert('তথ্য সফলভাবে ১ বার এডিট করা হয়েছে!');
+        }
       }
     };
 
@@ -1691,6 +1717,50 @@
       });
     };
 
+    /* POPULATE DATE SELECTOR FOR MEALS */
+    window.populateMealDateFilter = function() {
+      const dateSel = document.getElementById('meal-date-filter-selector');
+      const uniqueDates = [...new Set(window.hostelData.meals.map(m => m.date))];
+
+      let optionsHTML = `<option value="ALL">সকল তারিখের মিল দেখুন</option>`;
+      uniqueDates.forEach(d => {
+        optionsHTML += `<option value="${d}" ${window.selectedMealDateFilter === d ? 'selected' : ''}>তারিখ: ${d}</option>`;
+      });
+      dateSel.innerHTML = optionsHTML;
+    };
+
+    window.renderMealTableByDate = function(selectedDate) {
+      window.selectedMealDateFilter = selectedDate;
+      const mealBody = document.getElementById('meal-table-body');
+      
+      let filteredMeals = window.hostelData.meals;
+      if (selectedDate !== 'ALL') {
+        filteredMeals = window.hostelData.meals.filter(ml => ml.date === selectedDate);
+      }
+
+      if (filteredMeals.length === 0) {
+        mealBody.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-gray-500 font-semibold">কোনো মিল তথ্য পাওয়া যায়নি</td></tr>`;
+        return;
+      }
+
+      mealBody.innerHTML = filteredMeals.map(ml => {
+        const mem = window.hostelData.members.find(m => m.id === ml.memberId);
+        return `
+          <tr class="border-b hover:bg-slate-50">
+            <td class="p-2 font-semibold text-emerald-800">${ml.date}</td>
+            <td class="p-2 font-bold">${mem ? mem.name : '-'}</td>
+            <td class="p-2">${ml.morning}</td>
+            <td class="p-2">${ml.noon}</td>
+            <td class="p-2">${ml.night}</td>
+            <td class="p-2 font-bold text-emerald-700">${ml.total}</td>
+            <td class="p-2 text-right">
+              <button onclick="editTransaction('meals', '${ml.id}')" class="text-emerald-600 hover:underline" title="পাসওয়ার্ড দিয়ে এডিট করুন"><i class="fa-solid fa-pen-to-square"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    };
+
     window.renderTables = function() {
       const fixedBody = document.getElementById('fixed-expense-table-body');
       fixedBody.innerHTML = window.hostelData.fixedExpenses.map(f => `
@@ -1728,23 +1798,8 @@
         </tr>
       `).join('');
 
-      const mealBody = document.getElementById('meal-table-body');
-      mealBody.innerHTML = window.hostelData.meals.map(ml => {
-        const mem = window.hostelData.members.find(m => m.id === ml.memberId);
-        return `
-          <tr class="border-b">
-            <td class="p-2">${ml.date}</td>
-            <td class="p-2 font-bold">${mem ? mem.name : '-'}</td>
-            <td class="p-2">${ml.morning}</td>
-            <td class="p-2">${ml.noon}</td>
-            <td class="p-2">${ml.night}</td>
-            <td class="p-2 font-bold text-emerald-700">${ml.total}</td>
-            <td class="p-2 text-right">
-              <button onclick="editTransaction('meals', '${ml.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
-            </td>
-          </tr>
-        `;
-      }).join('');
+      populateMealDateFilter();
+      renderMealTableByDate(window.selectedMealDateFilter);
     };
 
     window.handleResetLedger = function() {
@@ -1781,7 +1836,7 @@
         msgBox.innerText = `আপনার পাসওয়ার্ড: ${user.pass}`;
       } else {
         msgBox.className = "text-xs font-bold p-2.5 rounded bg-red-100 text-red-800";
-        msgBox.innerText = `তথ্য মilenি! সঠিক মোবাইল নম্বর ও জন্ম তারিখ দিন।`;
+        msgBox.innerText = `তথ্য মিলেনি! সঠিক মোবাইল নম্বর ও জন্ম তারিখ দিন।`;
       }
     };
   </script>
