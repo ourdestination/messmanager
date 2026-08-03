@@ -62,6 +62,15 @@
       animation: reflect-blink 2s infinite;
     }
 
+    /* Floating Widget Box */
+    .floating-box {
+      animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes bounce-in {
+      0% { transform: translateY(50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
     /* Print styling */
     @media print {
       .no-print { display: none !important; }
@@ -71,7 +80,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-100 font-sans min-h-screen flex flex-col justify-between text-gray-800">
+<body class="bg-slate-100 font-sans min-h-screen flex flex-col justify-between text-gray-800 relative">
 
   <!-- SECTION 1: TOP MARQUEE HEADER -->
   <div class="marquee-wrapper no-print text-xs md:text-sm font-medium">
@@ -86,29 +95,29 @@
   <header class="bg-white shadow-sm border-b px-4 py-3 flex justify-between items-center no-print">
     <div class="flex items-center gap-2">
       <i class="fa-solid fa-graduation-cap text-emerald-600 text-2xl"></i>
-      <span class="font-bold text-gray-700 text-sm md:text-base hidden sm:inline" data-bn="ছাত্র মেস ডিজিটাল হিসাব" data-en="Student Hostel Digital Ledger">ছাত্র মেস ডিজিটাল হিসাব</span>[cite: 1]
+      <span class="font-bold text-gray-700 text-sm md:text-base hidden sm:inline" data-bn="ছাত্র মেস ডিজিটাল হিসাব" data-en="Student Hostel Digital Ledger">ছাত্র মেস ডিজিটাল হিসাব</span>
     </div>
     
     <!-- Header Buttons -->
     <div class="flex items-center gap-2 flex-wrap justify-end">
       <!-- Save Button -->
       <button id="header-save-btn" onclick="manualSaveData()" class="hidden btn-green-to-red px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow">
-        <i class="fa-solid fa-floppy-disk"></i> <span data-bn="সেভ" data-en="Save">সেভ</span>[cite: 1]
+        <i class="fa-solid fa-floppy-disk"></i> <span data-bn="সেভ" data-en="Save">সেভ</span>
       </button>
 
       <!-- Change Password Button -->
       <button id="header-change-pass-btn" onclick="openChangePasswordModal()" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
-        <i class="fa-solid fa-key"></i> <span data-bn="পাসওয়ার্ড চেঞ্জ" data-en="Change Password">পাসওয়ার্ড চেঞ্জ</span>[cite: 1]
+        <i class="fa-solid fa-key"></i> <span data-bn="পাসওয়ার্ড চেঞ্জ" data-en="Change Password">পাসওয়ার্ড চেঞ্জ</span>
       </button>
 
       <!-- Language Change Tab -->
       <button onclick="toggleLanguage()" class="btn-green-to-red px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow">
-        <i class="fa-solid fa-language"></i> <span id="lang-btn-text">English</span>[cite: 1]
+        <i class="fa-solid fa-language"></i> <span id="lang-btn-text">English</span>
       </button>
 
       <!-- Logout Tab -->
       <button id="header-logout-btn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
-        <i class="fa-solid fa-right-from-bracket"></i> <span data-bn="লগ আউট" data-en="Log Out">লগ আউট</span>[cite: 1]
+        <i class="fa-solid fa-right-from-bracket"></i> <span data-bn="লগ আউট" data-en="Log Out">লগ আউট</span>
       </button>
     </div>
   </header>
@@ -120,95 +129,95 @@
     <section id="auth-section" class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-8 border-t-8 border-emerald-600 auth-transition">
       
       <!-- LOGO AREA WITH INTERACTIVE SPIN & MANAGEMENT PANEL TRIGGER -->
-      <div class="text-center mb-6 cursor-pointer select-none" onclick="triggerHostelLogoClick()" title="প্রেস করে ম্যানেজমেন্ট প্যানেল খুলুন">[cite: 1]
+      <div class="text-center mb-6 cursor-pointer select-none" onclick="triggerHostelLogoClick()" title="প্রেস করে ম্যানেজমেন্ট প্যানেল খুলুন">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-3 shadow-inner hover:bg-emerald-200 transition">
-          <i id="student-logo-icon" class="fa-solid fa-user-graduate text-3xl"></i>[cite: 1]
+          <i id="student-logo-icon" class="fa-solid fa-user-graduate text-3xl"></i>
         </div>
         
         <h1 class="text-2xl md:text-3xl font-black text-emerald-800 tracking-wider uppercase mb-1 hover:text-emerald-900 transition">
-          DREAM TOUCHING HOSTEL[cite: 1]
+          DREAM TOUCHING HOSTEL
         </h1>
         <p class="text-xs text-gray-500 font-medium italic flex items-center justify-center gap-1" data-bn="🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚" data-en="🎓 Education & Hostel Life - Accurate Mess Accounting 📚">
-          🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚[cite: 1]
+          🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚
         </p>
       </div>
 
       <!-- Auth Switcher Tabs -->
       <div class="flex border-b mb-6 text-sm font-bold">
         <button id="tab-signin-btn" onclick="switchAuthTab('signin')" class="flex-1 py-2.5 text-center text-emerald-600 border-b-2 border-emerald-600 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-right-to-bracket"></i> <span data-bn="সাইন ইন" data-en="Sign In">সাইন ইন</span>[cite: 1]
+          <i class="fa-solid fa-right-to-bracket"></i> <span data-bn="সাইন ইন" data-en="Sign In">সাইন ইন</span>
         </button>
         <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 text-center text-gray-400 hover:text-emerald-600 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-user-plus"></i> <span data-bn="সাইন আপ" data-en="Sign Up">সাইন আপ</span>[cite: 1]
+          <i class="fa-solid fa-user-plus"></i> <span data-bn="সাইন আপ" data-en="Sign Up">সাইন আপ</span>
         </button>
       </div>
 
-      <!-- SIGN IN FORM -->
+      <!-- SIGN IN FORM (Watermarks/Placeholders removed) -->
       <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>
           <div class="relative">
-            <i class="fa-solid fa-id-badge absolute left-3 top-3 text-gray-400"></i>[cite: 1]
-            <input type="text" id="signin-userid" required class="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" placeholder="User ID">[cite: 1]
+            <i class="fa-solid fa-id-badge absolute left-3 top-3 text-gray-400"></i>
+            <input type="text" id="signin-userid" required class="w-full pl-10 pr-3 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</label>[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</label>
           <div class="relative">
-            <i class="fa-solid fa-key absolute left-3 top-3 text-gray-400"></i>[cite: 1]
-            <input type="password" id="signin-pass" required class="w-full pl-10 pr-10 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm" placeholder="Password">[cite: 1]
+            <i class="fa-solid fa-key absolute left-3 top-3 text-gray-400"></i>
+            <input type="password" id="signin-pass" required class="w-full pl-10 pr-10 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none text-sm">
             <button type="button" onclick="togglePasswordVisibility('signin-pass', 'signin-eye')" class="absolute right-3 top-2.5 text-gray-500 hover:text-emerald-600 focus:outline-none">
-              <i id="signin-eye" class="fa-solid fa-eye"></i>[cite: 1]
+              <i id="signin-eye" class="fa-solid fa-eye"></i>
             </button>
           </div>
         </div>
 
         <button type="submit" class="w-full btn-green-to-red py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2">
-          <i class="fa-solid fa-right-to-bracket"></i> <span data-bn="সাইন ইন করুন" data-en="Sign In">সাইন ইন করুন</span>[cite: 1]
+          <i class="fa-solid fa-right-to-bracket"></i> <span data-bn="সাইন ইন করুন" data-en="Sign In">সাইন ইন করুন</span>
         </button>
 
         <div class="text-right mt-1">
           <button type="button" onclick="openForgetModal()" class="text-xs font-bold text-emerald-600 hover:underline" data-bn="ফরগেট পাসওয়ার্ড?" data-en="Forgot Password?">
-            <i class="fa-solid fa-circle-question mr-1"></i>ফরগেট পাসওয়ার্ড?[cite: 1]
+            <i class="fa-solid fa-circle-question mr-1"></i>ফরগেট পাসওয়ার্ড?
           </button>
         </div>
       </form>
 
-      <!-- SIGN UP FORM -->
+      <!-- SIGN UP FORM (Watermarks/Placeholders removed) -->
       <form id="form-signup" onsubmit="handleSignUp(event)" class="space-y-3 hidden">
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম (Full Name)" data-en="Full Name">নাম (Full Name)</label>[cite: 1]
-          <input type="text" id="signup-fullname" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="আপনার পূর্ণ নাম">[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম (Full Name)" data-en="Full Name">নাম (Full Name)</label>
+          <input type="text" id="signup-fullname" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>[cite: 1]
-          <input type="text" id="signup-userid" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="e.g. rohim123">[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>
+          <input type="text" id="signup-userid" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>[cite: 1]
-          <input type="tel" id="signup-mobile" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="01700000000">[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>
+          <input type="tel" id="signup-mobile" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="জন্ম তারিখ (দিন-মাস-বছর)" data-en="Date of Birth (DD-MM-YYYY)">জন্ম তারিখ (দিন-মাস-বছর)</label>[cite: 1]
-          <input type="text" id="signup-dob" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="জন্ম তারিখ (দিন-মাস-বছর)" data-en="Date of Birth (DD-MM-YYYY)">জন্ম তারিখ (দিন-মাস-বছর)</label>
+          <input type="text" id="signup-dob" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</label>[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="পাসওয়ার্ড" data-en="Password">পাসওয়ার্ড</label>
           <div class="relative">
-            <input type="password" id="signup-pass" required class="w-full pl-3 pr-10 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500" placeholder="Password">[cite: 1]
+            <input type="password" id="signup-pass" required class="w-full pl-3 pr-10 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
             <button type="button" onclick="togglePasswordVisibility('signup-pass', 'signup-eye')" class="absolute right-3 top-2.5 text-gray-500 hover:text-emerald-600 focus:outline-none">
-              <i id="signup-eye" class="fa-solid fa-eye"></i>[cite: 1]
+              <i id="signup-eye" class="fa-solid fa-eye"></i>
             </button>
           </div>
         </div>
 
         <button type="submit" class="w-full btn-green-to-red py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2 mt-2">
-          <i class="fa-solid fa-user-plus"></i> <span data-bn="সাইন আপ করুন" data-en="Sign Up">সাইন আপ করুন</span>[cite: 1]
+          <i class="fa-solid fa-user-plus"></i> <span data-bn="সাইন আপ করুন" data-en="Sign Up">সাইন আপ করুন</span>
         </button>
       </form>
 
@@ -217,12 +226,12 @@
       <div class="space-y-2">
         <button onclick="triggerAdminAuth('view_accounts')" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-xl font-bold text-xs md:text-sm shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-receipt text-amber-300"></i>
-          <span data-bn="এখানে প্রবেশ করে হিসাব দেখুন" data-en="Enter Here to View Accounts">এখানে প্রবেশ করে হিসাব দেখুন</span>[cite: 1]
+          <span data-bn="এখানে প্রবেশ করে হিসাব দেখুন" data-en="Enter Here to View Accounts">এখানে প্রবেশ করে হিসাব দেখুন</span>
         </button>
 
         <button onclick="triggerAdminAuth('admin_panel')" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-user-shield text-amber-400"></i>
-          <span data-bn="অ্যাডমিন প্যানেল (বার্তা পাঠাতে ও অনুমোদন দিতে)" data-en="Admin Panel">অ্যাডমিন প্যানেল (বার্তা পাঠাতে ও অনুমোদন দিতে)</span>[cite: 1]
+          <span data-bn="অ্যাডমিন প্যানেল (বার্তা পাঠাতে)" data-en="Admin Panel">অ্যাডমিন প্যানেল (বার্তা পাঠাতে)</span>
         </button>
       </div>
 
@@ -231,14 +240,14 @@
     <!-- MAIN DASHBOARD PANEL -->
     <section id="dashboard-section" class="hidden space-y-6 auth-transition">
 
-      <!-- ADMIN MESSAGE BANNER -->
-      <div id="user-message-banner" class="hidden reflect-message bg-red-50 border-l-4 border-red-600 p-4 rounded-r-2xl">
+      <!-- ADMIN MESSAGE BANNER WITH REPLY FEATURE -->
+      <div id="user-message-banner" class="hidden reflect-message bg-red-50 border-l-4 border-red-600 p-4 rounded-r-2xl space-y-3">
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-3">
             <i class="fa-solid fa-envelope-open-text text-red-600 text-xl animate-bounce"></i>
             <div>
               <p class="text-xs font-bold text-red-700">
-                <span data-bn="বার্তা প্রেরক:" data-en="Sender:">বার্তা প্রেরক:</span>[cite: 1] 
+                <span data-bn="বার্তা প্রেরক:" data-en="Sender:">বার্তা প্রেরক:</span> 
                 <span id="user-message-sender" class="underline"></span>
               </p>
               <p id="user-message-text" class="text-sm font-semibold text-gray-800 mt-0.5"></p>
@@ -248,22 +257,30 @@
             <i class="fa-solid fa-trash-can"></i>
           </button>
         </div>
+
+        <!-- REPLY INPUT BOX FOR USER -->
+        <div class="pt-2 border-t border-red-200 flex gap-2">
+          <input type="text" id="user-reply-input" placeholder="অ্যাডমিনকে উত্তর পাঠান..." class="flex-grow px-3 py-1.5 border border-red-300 rounded-xl text-xs focus:ring-2 focus:ring-red-500 focus:outline-none">
+          <button onclick="sendUserReply()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-xl text-xs font-bold shadow flex items-center gap-1">
+            <i class="fa-solid fa-paper-plane"></i> উত্তর দিন
+          </button>
+        </div>
       </div>
 
       <!-- OVERVIEW SUMMARY CARDS -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
           <div>
-            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="ক্যাশ ইন হ্যান্ড" data-en="Cash In Hand">ক্যাশ ইন হ্যান্ড</p>[cite: 1]
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="ক্যাশ ইন হ্যান্ড" data-en="Cash In Hand">ক্যাশ ইন হ্যান্ড</p>
             <h2 class="text-2xl md:text-3xl font-black mt-1">৳ <span id="dash-cash-in-hand">0</span></h2>
-            <p class="text-[10px] mt-1 opacity-90" data-bn="(মোট জমা − মোট খরচ)" data-en="(Total Deposit − Total Expense)">(মোট জমা − মোট খরচ)</p>[cite: 1]
+            <p class="text-[10px] mt-1 opacity-90" data-bn="(মোট জমা − মোট খরচ)" data-en="(Total Deposit − Total Expense)">(মোট জমা − মোট খরচ)</p>
           </div>
           <i class="fa-solid fa-wallet text-4xl opacity-40"></i>
         </div>
 
         <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
           <div>
-            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট জমা" data-en="Total Deposit">সর্বমোট জমা</p>[cite: 1]
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট জমা" data-en="Total Deposit">সর্বমোট জমা</p>
             <h2 class="text-2xl md:text-3xl font-black mt-1">৳ <span id="dash-total-deposit">0</span></h2>
           </div>
           <i class="fa-solid fa-piggy-bank text-4xl opacity-40"></i>
@@ -271,7 +288,7 @@
 
         <div class="bg-gradient-to-br from-rose-600 to-red-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
           <div>
-            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট খরচ" data-en="Total Expense">সর্বমোট খরচ</p>[cite: 1]
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট খরচ" data-en="Total Expense">সর্বমোট খরচ</p>
             <h2 class="text-2xl md:text-3xl font-black mt-1">৳ <span id="dash-total-expense">0</span></h2>
           </div>
           <i class="fa-solid fa-receipt text-4xl opacity-40"></i>
@@ -279,7 +296,7 @@
 
         <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
           <div>
-            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট মিল" data-en="Total Meals">সর্বমোট মিল</p>[cite: 1]
+            <p class="text-xs font-bold uppercase tracking-wider opacity-80" data-bn="সর্বমোট মিল" data-en="Total Meals">সর্বমোট মিল</p>
             <h2 class="text-2xl md:text-3xl font-black mt-1"><span id="dash-total-meals">0</span> টি</h2>
           </div>
           <i class="fa-solid fa-utensils text-4xl opacity-40"></i>
@@ -291,32 +308,32 @@
         <div class="flex justify-between items-center border-b pb-3">
           <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
             <i class="fa-solid fa-users text-emerald-600"></i>
-            <span data-bn="সদস্য এন্ট্রি ও জমা হিসাব" data-en="Member Entry & Deposits">সদস্য এন্ট্রি ও জমা হিসাব</span>[cite: 1]
+            <span data-bn="সদস্য এন্ট্রি ও জমা হিসাব" data-en="Member Entry & Deposits">সদস্য এন্ট্রি ও জমা হিসাব</span>
           </h3>
         </div>
 
         <form onsubmit="handleAddMember(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-gray-200">
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্যের নাম" data-en="Member Name">সদস্যের নাম</label>[cite: 1]
-            <input type="text" id="member-input-name" required placeholder="নাম লিখুন" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্যের নাম" data-en="Member Name">সদস্যের নাম</label>
+            <input type="text" id="member-input-name" required class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
 
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>[cite: 1]
-            <input type="tel" id="member-input-phone" required placeholder="01700000000" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>
+            <input type="tel" id="member-input-phone" required class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
 
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="গ্যাস ব্যবহার করেন কিনা?" data-en="Uses Gas?">গ্যাস ব্যবহার করেন কিনা?</label>[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="গ্যাস ব্যবহার করেন কিনা?" data-en="Uses Gas?">গ্যাস ব্যবহার করেন কিনা?</label>
             <select id="member-input-gas" class="w-full px-3 py-2 border rounded-lg text-sm">
-              <option value="yes" data-bn="হ্যাঁ (গ্যাস ব্যবহার করেন)" data-en="Yes">হ্যাঁ (গ্যাস ব্যবহার করেন)</option>[cite: 1]
-              <option value="no" data-bn="না (গ্যাস ব্যবহার করেন না)" data-en="No">না (গ্যাস ব্যবহার করেন না)</option>[cite: 1]
+              <option value="yes" data-bn="হ্যাঁ (গ্যাস ব্যবহার করেন)" data-en="Yes">হ্যাঁ (গ্যাস ব্যবহার করেন)</option>
+              <option value="no" data-bn="না (গ্যাস ব্যবহার করেন না)" data-en="No">না (গ্যাস ব্যবহার করেন না)</option>
             </select>
           </div>
 
           <div class="flex items-end">
             <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
-              <i class="fa-solid fa-user-plus"></i> <span data-bn="সদস্য যুক্ত করুন" data-en="Add Member">সদস্য যুক্ত করুন</span>[cite: 1]
+              <i class="fa-solid fa-user-plus"></i> <span data-bn="সদস্য যুক্ত করুন" data-en="Add Member">সদস্য যুক্ত করুন</span>
             </button>
           </div>
         </form>
@@ -325,7 +342,7 @@
           <div id="members-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
           <div class="mt-4 text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm md:text-base">
             <i class="fa-solid fa-sack-dollar text-emerald-600 mr-1"></i>
-            <span data-bn="সর্বমোট জমা টাকার পরিমাণ:" data-en="Total Deposit Amount:">সর্বমোট জমা টাকার পরিমাণ:</span>[cite: 1] 
+            <span data-bn="সর্বমোট জমা টাকার পরিমাণ:" data-en="Total Deposit Amount:">সর্বমোট জমা টাকার পরিমাণ:</span> 
             ৳ <span id="section-total-deposit">0</span>
           </div>
         </div>
@@ -335,34 +352,34 @@
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-building-columns text-emerald-600"></i>
-          <span data-bn="স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)" data-en="Fixed Expenses (Shared Equally)">স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)</span>[cite: 1]
+          <span data-bn="স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)" data-en="Fixed Expenses (Shared Equally)">স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)</span>
         </h3>
 
         <div class="flex flex-wrap gap-2 text-xs font-bold">
-          <button type="button" onclick="setFixedCategory('বিদ্যুৎ')" class="fixed-cat-btn bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-300">বিদ্যুৎ</button>[cite: 1]
-          <button type="button" onclick="setFixedCategory('পানি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">পানি</button>[cite: 1]
-          <button type="button" onclick="setFixedCategory('ময়লা')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ময়লা</button>[cite: 1]
-          <button type="button" onclick="setFixedCategory('ইন্টারনেট')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ইন্টারনেট</button>[cite: 1]
-          <button type="button" onclick="setFixedCategory('রাধুনি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">রাধুনি</button>[cite: 1]
-          <button type="button" onclick="setFixedCategory('অন্যান্য')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">অন্যান্য</button>[cite: 1]
+          <button type="button" onclick="setFixedCategory('বিদ্যুৎ')" class="fixed-cat-btn bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-300">বিদ্যুৎ</button>
+          <button type="button" onclick="setFixedCategory('পানি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">পানি</button>
+          <button type="button" onclick="setFixedCategory('ময়লা')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ময়লা</button>
+          <button type="button" onclick="setFixedCategory('ইন্টারনেট')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ইন্টারনেট</button>
+          <button type="button" onclick="setFixedCategory('রাধুনি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">রাধুনি</button>
+          <button type="button" onclick="setFixedCategory('অন্যান্য')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">অন্যান্য</button>
         </div>
 
         <form onsubmit="handleAddFixedExpense(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl">
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="খাত" data-en="Category">খাত</label>[cite: 1]
-            <input type="text" id="fixed-cat-input" required value="বিদ্যুৎ" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="খাত" data-en="Category">খাত</label>
+            <input type="text" id="fixed-cat-input" required value="বিদ্যুৎ" class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="টাকার পরিমাণ" data-en="Amount">টাকার পরিমাণ</label>[cite: 1]
-            <input type="number" id="fixed-amt-input" required min="1" placeholder="৳" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="টাকার পরিমাণ" data-en="Amount">টাকার পরিমাণ</label>
+            <input type="number" id="fixed-amt-input" required min="1" class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>[cite: 1]
-            <input type="text" id="fixed-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+            <input type="text" id="fixed-date-input" required class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
           <div class="flex items-end">
             <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
-              <i class="fa-solid fa-plus"></i> <span data-bn="যোগ করুন" data-en="Add Expense">যোগ করুন</span>[cite: 1]
+              <i class="fa-solid fa-plus"></i> <span data-bn="যোগ করুন" data-en="Add Expense">যোগ করুন</span>
             </button>
           </div>
         </form>
@@ -371,10 +388,10 @@
           <table class="w-full text-left text-xs border-collapse">
             <thead>
               <tr class="bg-slate-100 border-b text-gray-700">
-                <th class="p-2">তারিখ</th>[cite: 1]
-                <th class="p-2">খাত</th>[cite: 1]
-                <th class="p-2">টাকা</th>[cite: 1]
-                <th class="p-2 text-right">অ্যাকশন</th>[cite: 1]
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">খাত</th>
+                <th class="p-2">টাকা</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
               </tr>
             </thead>
             <tbody id="fixed-expense-table-body"></tbody>
@@ -382,7 +399,7 @@
         </div>
 
         <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
-          <span data-bn="সর্বমোট স্থায়ী খরচ:" data-en="Total Fixed Expense:">সর্বমোট স্থায়ী খরচ:</span> ৳ <span id="section-total-fixed">0</span>[cite: 1]
+          <span data-bn="সর্বমোট স্থায়ী খরচ:" data-en="Total Fixed Expense:">সর্বমোট স্থায়ী খরচ:</span> ৳ <span id="section-total-fixed">0</span>
         </div>
       </div>
 
@@ -390,21 +407,21 @@
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-fire-burner text-emerald-600"></i>
-          <span data-bn="গ্যাস খরচ (শুধু ব্যবহারকারী গনের মধ্যে সমান ভাগ)" data-en="Gas Expense (Only Gas Users)">গ্যাস খরচ (শুধু ব্যবহারকারী গনের মধ্যে সমান ভাগ)</span>[cite: 1]
+          <span data-bn="গ্যাস খরচ (শুধু ব্যবহারকারী গনের মধ্যে সমান ভাগ)" data-en="Gas Expense (Only Gas Users)">গ্যাস খরচ (শুধু ব্যবহারকারী গনের মধ্যে সমান ভাগ)</span>
         </h3>
 
         <form onsubmit="handleAddGasExpense(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl">
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="টাকার পরিমাণ" data-en="Amount">টাকার পরিমাণ</label>[cite: 1]
-            <input type="number" id="gas-amt-input" required min="1" placeholder="৳" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="টাকার পরিমাণ" data-en="Amount">টাকার পরিমাণ</label>
+            <input type="number" id="gas-amt-input" required min="1" class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>[cite: 1]
-            <input type="text" id="gas-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+            <input type="text" id="gas-date-input" required class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
           <div class="flex items-end">
             <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
-              <i class="fa-solid fa-plus"></i> <span data-bn="গ্যাস খরচ যোগ করুন" data-en="Add Gas Expense">গ্যাস খরচ যোগ করুন</span>[cite: 1]
+              <i class="fa-solid fa-plus"></i> <span data-bn="গ্যাস খরচ যোগ করুন" data-en="Add Gas Expense">গ্যাস খরচ যোগ করুন</span>
             </button>
           </div>
         </form>
@@ -413,9 +430,9 @@
           <table class="w-full text-left text-xs border-collapse">
             <thead>
               <tr class="bg-slate-100 border-b text-gray-700">
-                <th class="p-2">তারিখ</th>[cite: 1]
-                <th class="p-2">টাকা</th>[cite: 1]
-                <th class="p-2 text-right">অ্যাকশন</th>[cite: 1]
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">টাকা</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
               </tr>
             </thead>
             <tbody id="gas-expense-table-body"></tbody>
@@ -423,7 +440,7 @@
         </div>
 
         <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
-          <span data-bn="সর্বমোট গ্যাস খরচ:" data-en="Total Gas Expense:">সর্বমোট গ্যাস খরচ:</span> ৳ <span id="section-total-gas">0</span>[cite: 1]
+          <span data-bn="সর্বমোট গ্যাস খরচ:" data-en="Total Gas Expense:">সর্বমোট গ্যাস খরচ:</span> ৳ <span id="section-total-gas">0</span>
         </div>
       </div>
 
@@ -431,40 +448,40 @@
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-cart-shopping text-emerald-600"></i>
-          <span data-bn="বাজার খরচ এন্ট্রি" data-en="Bazaar Expense Entry">বাজার খরচ এন্ট্রি</span>[cite: 1]
+          <span data-bn="বাজার খরচ এন্ট্রি" data-en="Bazaar Expense Entry">বাজার খরচ এন্ট্রি</span>
         </h3>
 
         <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 space-y-3">
-          <p class="text-xs font-bold text-gray-700 uppercase" data-bn="কি কি বাজার হলো (টিক দিন):" data-en="Items Bought (Select All):">কি কি বাজার হলো (টিক দিন):</p>[cite: 1]
+          <p class="text-xs font-bold text-gray-700 uppercase" data-bn="কি কি বাজার হলো (টিক দিন):" data-en="Items Bought (Select All):">কি কি বাজার হলো (টিক দিন):</p>
           <div id="bazaar-items-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 text-xs"></div>
 
           <!-- Manual Bazaar Item Input Field -->
           <div class="mt-2">
-            <label class="text-xs font-bold text-gray-700 mb-1 block">অন্যান্য বাজার (ম্যানুয়ালি নতুন জিনিস লিখতে চাইলে):</label>[cite: 1]
-            <input type="text" id="bazaar-custom-items" placeholder="যেমন: মাখন, মসলা ইত্যাদি (কমা দিয়ে লিখুন)" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">[cite: 1]
+            <label class="text-xs font-bold text-gray-700 mb-1 block">অন্যান্য বাজার (ম্যানুয়ালি নতুন জিনিস লিখতে চাইলে):</label>
+            <input type="text" id="bazaar-custom-items" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
           </div>
 
           <hr class="my-2 border-gray-200">
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="কে কে করল (সদস্য বেছে নিন):" data-en="Who Bought:">কে কে করল (সদস্য বেছে নিন):</label>[cite: 1]
+              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="কে কে করল (সদস্য বেছে নিন):" data-en="Who Bought:">কে কে করল (সদস্য বেছে নিন):</label>
               <div id="shopper-checkbox-list" class="flex flex-wrap gap-2 text-xs max-h-24 overflow-y-auto p-1 bg-white border rounded"></div>
             </div>
 
             <div>
-              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="কত টাকার করল (৳):" data-en="Amount Spent (৳):">কত টাকার করল (৳):</label>[cite: 1]
-              <input type="number" id="bazaar-amt-input" required min="1" placeholder="৳" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="কত টাকার করল (৳):" data-en="Amount Spent (৳):">কত টাকার করল (৳):</label>
+              <input type="number" id="bazaar-amt-input" required min="1" class="w-full px-3 py-2 border rounded-lg text-sm">
             </div>
 
             <div>
-              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর):" data-en="Date (DD-MM-YYYY):">তারিখ (দিন-মাস-বছর):</label>[cite: 1]
-              <input type="text" id="bazaar-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+              <label class="text-xs font-bold text-gray-700 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর):" data-en="Date (DD-MM-YYYY):">তারিখ (দিন-মাস-বছর):</label>
+              <input type="text" id="bazaar-date-input" required class="w-full px-3 py-2 border rounded-lg text-sm">
             </div>
           </div>
 
           <button onclick="handleSaveBazaar()" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1 mt-2">
-            <i class="fa-solid fa-check"></i> <span data-bn="বাজার খরচ সেভ করুন" data-en="Save Bazaar Expense">বাজার খরচ সেভ করুন</span>[cite: 1]
+            <i class="fa-solid fa-check"></i> <span data-bn="বাজার খরচ সেভ করুন" data-en="Save Bazaar Expense">বাজার খরচ সেভ করুন</span>
           </button>
         </div>
 
@@ -472,11 +489,11 @@
           <table class="w-full text-left text-xs border-collapse">
             <thead>
               <tr class="bg-slate-100 border-b text-gray-700">
-                <th class="p-2">তারিখ</th>[cite: 1]
-                <th class="p-2">আইটেম</th>[cite: 1]
-                <th class="p-2">কে করেছে</th>[cite: 1]
-                <th class="p-2">টাকা</th>[cite: 1]
-                <th class="p-2 text-right">অ্যাকশন</th>[cite: 1]
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">আইটেম</th>
+                <th class="p-2">কে করেছে</th>
+                <th class="p-2">টাকা</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
               </tr>
             </thead>
             <tbody id="bazaar-table-body"></tbody>
@@ -484,46 +501,46 @@
         </div>
 
         <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
-          <span data-bn="সর্বমোট বাজার খরচ:" data-en="Total Bazaar Expense:">সর্বমোট বাজার খরচ:</span> ৳ <span id="section-total-bazaar">0</span>[cite: 1]
+          <span data-bn="সর্বমোট বাজার খরচ:" data-en="Total Bazaar Expense:">সর্বমোট বাজার খরচ:</span> ৳ <span id="section-total-bazaar">0</span>
         </div>
       </div>
 
-      <!-- DAILY MEAL ENTRY SECTION (UPDATED WITH DATE DROPDOWN PANELS) -->
+      <!-- DAILY MEAL ENTRY SECTION -->
       <div class="bg-white rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
           <i class="fa-solid fa-utensils text-emerald-600"></i>
-          <span data-bn="দৈনিক মিল এন্ট্রি (সকাল, দুপুর, রাত)" data-en="Daily Meal Entry">দৈনিক মিল এন্ট্রি (সকাল, দুপুর, রাত)</span>[cite: 1]
+          <span data-bn="দৈনিক মিল এন্ট্রি (সকাল, দুপুর, রাত)" data-en="Daily Meal Entry">দৈনিক মিল এন্ট্রি (সকাল, দুপুর, রাত)</span>
         </h3>
 
         <form onsubmit="handleSaveMeal(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3 bg-slate-50 p-4 rounded-xl">
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্য" data-en="Member">সদস্য</label>[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্য" data-en="Member">সদস্য</label>
             <select id="meal-member-select" required class="w-full px-3 py-2 border rounded-lg text-sm"></select>
           </div>
 
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>[cite: 1]
-            <input type="text" id="meal-date-input" required placeholder="DD-MM-YYYY" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+            <input type="text" id="meal-date-input" required class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
 
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সকাল" data-en="Morning">সকাল</label>[cite: 1]
-            <input type="number" id="meal-m-input" step="0.5" min="0" placeholder="0/0.5/1" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সকাল" data-en="Morning">সকাল</label>
+            <input type="number" id="meal-m-input" step="0.5" min="0" class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
 
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="দুপুর" data-en="Noon">দুপুর</label>[cite: 1]
-            <input type="number" id="meal-n-input" step="0.5" min="0" placeholder="0/0.5/1" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="দুপুর" data-en="Noon">দুপুর</label>
+            <input type="number" id="meal-n-input" step="0.5" min="0" class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
 
           <div>
-            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="রাত" data-en="Night">রাত</label>[cite: 1]
-            <input type="number" id="meal-nt-input" step="0.5" min="0" placeholder="0/0.5/1" class="w-full px-3 py-2 border rounded-lg text-sm">[cite: 1]
+            <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="রাত" data-en="Night">রাত</label>
+            <input type="number" id="meal-nt-input" step="0.5" min="0" class="w-full px-3 py-2 border rounded-lg text-sm">
           </div>
 
           <div class="flex items-end">
             <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
-              <i class="fa-solid fa-plus"></i> <span data-bn="মিল সেভ" data-en="Save Meal">মিল সেভ</span>[cite: 1]
+              <i class="fa-solid fa-plus"></i> <span data-bn="মিল সেভ" data-en="Save Meal">মিল সেভ</span>
             </button>
           </div>
         </form>
@@ -531,10 +548,9 @@
         <!-- DATE DROPDOWN FILTER PANEL -->
         <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 flex flex-col sm:flex-row items-center gap-3">
           <label class="text-xs font-bold text-emerald-900 whitespace-nowrap">
-            <i class="fa-solid fa-calendar-days mr-1"></i>তারিখ নির্বাচন করুন (ড্রপ ডাউন প্যানেল):[cite: 1]
+            <i class="fa-solid fa-calendar-days mr-1"></i>তারিখ নির্বাচন করুন (ড্রপ ডাউন প্যানেল):
           </label>
           <select id="meal-date-filter-selector" onchange="renderMealTableByDate(this.value)" class="w-full sm:w-auto px-3 py-1.5 border rounded-lg text-xs font-bold bg-white text-emerald-800 border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <!-- Dynamically populated -->
           </select>
         </div>
 
@@ -542,13 +558,13 @@
           <table class="w-full text-left text-xs border-collapse">
             <thead>
               <tr class="bg-slate-100 border-b text-gray-700">
-                <th class="p-2">তারিখ</th>[cite: 1]
-                <th class="p-2">সদস্য</th>[cite: 1]
-                <th class="p-2">সকাল</th>[cite: 1]
-                <th class="p-2">দুপুর</th>[cite: 1]
-                <th class="p-2">রাত</th>[cite: 1]
-                <th class="p-2">মোট মিল</th>[cite: 1]
-                <th class="p-2 text-right">অ্যাকশন</th>[cite: 1]
+                <th class="p-2">তারিখ</th>
+                <th class="p-2">সদস্য</th>
+                <th class="p-2">সকাল</th>
+                <th class="p-2">দুপুর</th>
+                <th class="p-2">রাত</th>
+                <th class="p-2">মোট মিল</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
               </tr>
             </thead>
             <tbody id="meal-table-body"></tbody>
@@ -556,7 +572,7 @@
         </div>
 
         <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
-          <span data-bn="সর্বমোট মিল সংখ্যা:" data-en="Total Meals Count:">সর্বমোট মিল সংখ্যা:</span> <span id="section-total-meals">0</span> টি[cite: 1]
+          <span data-bn="সর্বমোট মিল সংখ্যা:" data-en="Total Meals Count:">সর্বমোট মিল সংখ্যা:</span> <span id="section-total-meals">0</span> টি
         </div>
       </div>
 
@@ -565,25 +581,25 @@
         <div class="flex justify-between items-center border-b pb-3">
           <h3 class="text-xl font-black text-emerald-800 flex items-center gap-2">
             <i class="fa-solid fa-calculator text-emerald-600"></i>
-            <span data-bn="চূড়ান্ত হিসাব ও মাসের পুরো হিসেব" data-en="Final Ledger & Monthly Summary">চূড়ান্ত হিসাব ও মাসের পুরো হিসেব</span>[cite: 1]
+            <span data-bn="চূড়ান্ত হিসাব ও মাসের পুরো হিসেব" data-en="Final Ledger & Monthly Summary">চূড়ান্ত হিসাব ও মাসের পুরো হিসেব</span>
           </h3>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-gray-200">
           <div class="p-2 bg-white rounded border">
-            <span class="text-gray-500 block">মিল চার্জ (Per Meal Rate):</span>[cite: 1]
+            <span class="text-gray-500 block">মিল চার্জ (Per Meal Rate):</span>
             <b class="text-emerald-700 text-sm">৳ <span id="calc-meal-rate">0.00</span></b>
           </div>
           <div class="p-2 bg-white rounded border">
-            <span class="text-gray-500 block">প্রতি সদস্যের স্থায়ী চার্জ:</span>[cite: 1]
+            <span class="text-gray-500 block">প্রতি সদস্যের স্থায়ী চার্জ:</span>
             <b class="text-emerald-700 text-sm">৳ <span id="calc-fixed-rate">0.00</span></b>
           </div>
           <div class="p-2 bg-white rounded border">
-            <span class="text-gray-500 block">প্রতি ইউজারের গ্যাস চার্জ:</span>[cite: 1]
+            <span class="text-gray-500 block">প্রতি ইউজারের গ্যাস চার্জ:</span>
             <b class="text-emerald-700 text-sm">৳ <span id="calc-gas-rate">0.00</span></b>
           </div>
           <div class="p-2 bg-white rounded border">
-            <span class="text-gray-500 block">মোট বাজার খরচ:</span>[cite: 1]
+            <span class="text-gray-500 block">মোট বাজার খরচ:</span>
             <b class="text-emerald-700 text-sm">৳ <span id="calc-tot-bazaar">0</span></b>
           </div>
         </div>
@@ -592,14 +608,14 @@
           <table class="w-full text-left text-xs border border-gray-200 rounded-lg">
             <thead class="bg-emerald-700 text-white font-bold">
               <tr>
-                <th class="p-2.5">সদস্যের নাম</th>[cite: 1]
-                <th class="p-2.5">মোট জমা (৳)</th>[cite: 1]
-                <th class="p-2.5">মোট মিল</th>[cite: 1]
-                <th class="p-2.5">মিল খরচ (৳)</th>[cite: 1]
-                <th class="p-2.5">স্থায়ী খরচ (৳)</th>[cite: 1]
-                <th class="p-2.5">গ্যাস খরচ (৳)</th>[cite: 1]
-                <th class="p-2.5">সর্বমোট খরচ (৳)</th>[cite: 1]
-                <th class="p-2.5">অবস্থা (পাবো/দিবো)</th>[cite: 1]
+                <th class="p-2.5">সদস্যের নাম</th>
+                <th class="p-2.5">মোট জমা (৳)</th>
+                <th class="p-2.5">মোট মিল</th>
+                <th class="p-2.5">মিল খরচ (৳)</th>
+                <th class="p-2.5">স্থায়ী খরচ (৳)</th>
+                <th class="p-2.5">গ্যাস খরচ (৳)</th>
+                <th class="p-2.5">সর্বমোট খরচ (৳)</th>
+                <th class="p-2.5">অবস্থা (পাবো/দিবো)</th>
               </tr>
             </thead>
             <tbody id="final-summary-table-body" class="divide-y"></tbody>
@@ -608,11 +624,11 @@
 
         <div class="flex flex-wrap justify-between items-center gap-4 pt-4 border-t no-print">
           <button onclick="window.print()" class="btn-green-to-red px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2">
-            <i class="fa-solid fa-print"></i> <span data-bn="প্রিন্ট / PDF ডাউনলোড করুন" data-en="Print / Download PDF">প্রিন্ট / PDF ডাউনলোড করুন</span>[cite: 1]
+            <i class="fa-solid fa-print"></i> <span data-bn="প্রিন্ট / PDF ডাউনলোড করুন" data-en="Print / Download PDF">প্রিন্ট / PDF ডাউনলোড করুন</span>
           </button>
 
           <button onclick="handleResetLedger()" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2 transition">
-            <i class="fa-solid fa-rotate-right"></i> <span data-bn="হিসাব রিসেট করুন" data-en="Reset Ledger">হিসাব রিসেট করুন</span>[cite: 1]
+            <i class="fa-solid fa-rotate-right"></i> <span data-bn="হিসাব রিসেট করুন" data-en="Reset Ledger">হিসাব রিসেট করুন</span>
           </button>
         </div>
 
@@ -622,22 +638,25 @@
 
   </main>
 
+  <!-- FLOATING WIDGET FOR USER REPLIES (DISPLAYED ON HOMEPAGE AT BOTTOM RIGHT) -->
+  <div id="floating-replies-container" class="fixed bottom-4 right-4 z-40 max-w-xs w-full space-y-2 no-print"></div>
+
   <!-- MODAL 1: ADMIN LOGIN VERIFICATION MODAL -->
   <div id="admin-auth-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-base font-black text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-lock text-amber-500"></i> অ্যাডমিন ভেরিফিকেশন[cite: 1]
+          <i class="fa-solid fa-lock text-amber-500"></i> অ্যাডমিন ভেরিফিকেশন
         </h3>
         <button onclick="closeAdminAuthModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="space-y-3">
-        <p class="text-xs text-gray-500 font-semibold">প্রবেশ করতে আইডি ও পাসওয়ার্ড দিন (ID: admin & PASS: admin):</p>[cite: 1]
-        <input type="text" id="admin-auth-id" placeholder="Admin ID (admin)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">[cite: 1]
-        <input type="password" id="admin-auth-pass" placeholder="Password (admin)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">[cite: 1]
+        <p class="text-xs text-gray-500 font-semibold">প্রবেশ করতে আইডি ও পাসওয়ার্ড দিন:</p>
+        <input type="text" id="admin-auth-id" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        <input type="password" id="admin-auth-pass" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
         <button onclick="verifyAdminAuth()" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
-          প্রবেশ করুন[cite: 1]
+          প্রবেশ করুন
         </button>
       </div>
     </div>
@@ -648,45 +667,64 @@
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-800">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-base font-black text-emerald-900 flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-amber-500"></i> ম্যানেজমেন্ট প্যানেল লগইন[cite: 1]
+          <i class="fa-solid fa-user-shield text-amber-500"></i> ম্যানেজমেন্ট প্যানেল লগইন
         </h3>
         <button onclick="closeMgmtLoginModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="space-y-3">
-        <p class="text-xs text-gray-500 font-semibold">ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:</p>[cite: 1]
-        <input type="text" id="mgmt-auth-id" placeholder="ID: DTH01518411872" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">[cite: 1]
-        <input type="password" id="mgmt-auth-pass" placeholder="Password: 01518411872" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">[cite: 1]
+        <p class="text-xs text-gray-500 font-semibold">ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:</p>
+        <input type="text" id="mgmt-auth-id" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        <input type="password" id="mgmt-auth-pass" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
         <button onclick="verifyMgmtAuth()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
-          প্যানেলে প্রবেশ করুন[cite: 1]
+          প্যানেলে প্রবেশ করুন
         </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD -->
+  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD (UPDATED WITH EDIT APPROVAL SECTION) -->
   <div id="mgmt-dashboard-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-3xl w-full p-6 space-y-6 shadow-2xl border-t-8 border-emerald-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="text-lg font-black text-emerald-900 flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-emerald-600"></i> হোস্টেল ম্যানেজমেন্ট প্যানেল[cite: 1]
+          <i class="fa-solid fa-sliders text-emerald-600"></i> হোস্টেল ম্যানেজমেন্ট প্যানেল
         </h3>
         <button onclick="closeMgmtDashboardModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
+      <!-- EDIT APPROVAL SECTION (MOVED TO MANAGEMENT PANEL) -->
+      <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-3">
+        <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1">
+          <i class="fa-solid fa-clock-rotate-left text-amber-600"></i> এডিট পেন্ডিং লিস্ট (অনুমোদনের জন্য অপেক্ষমান)
+        </h4>
+        <div class="overflow-x-auto border bg-white rounded-lg">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-amber-100 text-amber-900 font-bold border-b">
+              <tr>
+                <th class="p-2">খাত</th>
+                <th class="p-2">বিবরণ</th>
+                <th class="p-2 text-center">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="pending-edits-table-body" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="space-y-3">
         <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-          <i class="fa-solid fa-user-clock text-amber-500"></i> নতুন সাইন-আপ রিকোয়েস্ট (অনুমোদনের জন্য অপেক্ষমান)[cite: 1]
+          <i class="fa-solid fa-user-clock text-amber-500"></i> নতুন সাইন-আপ রিকোয়েস্ট (অনুমোদনের জন্য অপেক্ষমান)
         </h4>
         <div class="overflow-x-auto border rounded-xl">
           <table class="w-full text-left text-xs">
             <thead class="bg-amber-50 text-amber-900 font-bold border-b">
               <tr>
-                <th class="p-2">নাম</th>[cite: 1]
-                <th class="p-2">ইউজার আইডি</th>[cite: 1]
-                <th class="p-2">মোবাইল</th>[cite: 1]
-                <th class="p-2">জন্ম তারিখ</th>[cite: 1]
-                <th class="p-2 text-center">অ্যাকশন</th>[cite: 1]
+                <th class="p-2">নাম</th>
+                <th class="p-2">ইউজার আইডি</th>
+                <th class="p-2">মোবাইল</th>
+                <th class="p-2">জন্ম তারিখ</th>
+                <th class="p-2 text-center">অ্যাকশন</th>
               </tr>
             </thead>
             <tbody id="pending-users-table-body" class="divide-y"></tbody>
@@ -696,17 +734,17 @@
 
       <div class="space-y-3 pt-2">
         <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-          <i class="fa-solid fa-users-gear text-emerald-600"></i> সাইন আপকৃত সকল অ্যাকাউন্টের তালিকা ও তথ্য[cite: 1]
+          <i class="fa-solid fa-users-gear text-emerald-600"></i> সাইন আপকৃত সকল অ্যাকাউন্টের তালিকা ও তথ্য
         </h4>
         <div class="overflow-x-auto border rounded-xl">
           <table class="w-full text-left text-xs">
             <thead class="bg-slate-100 text-gray-700 font-bold border-b">
               <tr>
-                <th class="p-2">নাম</th>[cite: 1]
-                <th class="p-2">ইউজার আইডি</th>[cite: 1]
-                <th class="p-2">মোবাইল</th>[cite: 1]
-                <th class="p-2">পাসওয়ার্ড</th>[cite: 1]
-                <th class="p-2 text-right">অ্যাকশন</th>[cite: 1]
+                <th class="p-2">নাম</th>
+                <th class="p-2">ইউজার আইডি</th>
+                <th class="p-2">মোবাইল</th>
+                <th class="p-2">পাসওয়ার্ড</th>
+                <th class="p-2 text-right">অ্যাকশন</th>
               </tr>
             </thead>
             <tbody id="approved-users-table-body" class="divide-y"></tbody>
@@ -716,7 +754,7 @@
 
       <div class="text-right border-t pt-3">
         <button onclick="closeMgmtDashboardModal()" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
-          বন্ধ করুন[cite: 1]
+          বন্ধ করুন
         </button>
       </div>
     </div>
@@ -727,13 +765,13 @@
     <div class="bg-white rounded-3xl max-w-4xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-700 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
         <h3 class="text-lg font-black text-emerald-800 flex items-center gap-2">
-          <i class="fa-solid fa-calculator text-emerald-600"></i> ইউজার ভিত্তিক একক সম্পূর্ণ হিসাব[cite: 1]
+          <i class="fa-solid fa-calculator text-emerald-600"></i> ইউজার ভিত্তিক একক সম্পূর্ণ হিসাব
         </h3>
         <button onclick="closeViewAccountsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row items-center gap-3">
-        <label class="text-xs font-bold text-gray-700 whitespace-nowrap">ইউজার / সদস্য নির্বাচন করুন:</label>[cite: 1]
+        <label class="text-xs font-bold text-gray-700 whitespace-nowrap">ইউজার / সদস্য নির্বাচন করুন:</label>
         <select id="accounts-user-selector" onchange="renderViewAccountsTableForSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm font-bold bg-white text-emerald-800 focus:ring-2 focus:ring-emerald-500">
         </select>
       </div>
@@ -742,14 +780,14 @@
         <table class="w-full text-left text-xs border border-gray-200 rounded-lg">
           <thead class="bg-emerald-800 text-white font-bold">
             <tr>
-              <th class="p-2.5">সদস্যের নাম</th>[cite: 1]
-              <th class="p-2.5">মোট জমা (৳)</th>[cite: 1]
-              <th class="p-2.5">মোট মিল</th>[cite: 1]
-              <th class="p-2.5">মিল খরচ (৳)</th>[cite: 1]
-              <th class="p-2.5">স্থায়ী খরচ (৳)</th>[cite: 1]
-              <th class="p-2.5">গ্যাস খরচ (৳)</th>[cite: 1]
-              <th class="p-2.5">সর্বমোট খরচ (৳)</th>[cite: 1]
-              <th class="p-2.5">অবস্থা (পাবে/দিবে)</th>[cite: 1]
+              <th class="p-2.5">সদস্যের নাম</th>
+              <th class="p-2.5">মোট জমা (৳)</th>
+              <th class="p-2.5">মোট মিল</th>
+              <th class="p-2.5">মিল খরচ (৳)</th>
+              <th class="p-2.5">স্থায়ী খরচ (৳)</th>
+              <th class="p-2.5">গ্যাস খরচ (৳)</th>
+              <th class="p-2.5">সর্বমোট খরচ (৳)</th>
+              <th class="p-2.5">অবস্থা (পাবে/দিবে)</th>
             </tr>
           </thead>
           <tbody id="view-accounts-table-body" class="divide-y"></tbody>
@@ -758,59 +796,40 @@
 
       <div class="text-right">
         <button onclick="closeViewAccountsModal()" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
-          বন্ধ করুন[cite: 1]
+          বন্ধ করুন
         </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 5: ADMIN PANEL MODAL (UPDATED WITH EDIT APPROVAL SECTION) -->
+  <!-- MODAL 5: ADMIN PANEL MODAL -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-amber-500"></i> Admin Panel[cite: 1]
+          <i class="fa-solid fa-user-shield text-amber-500"></i> Admin Panel
         </h3>
         <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- EDIT APPROVAL SECTION -->
-      <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-3">
-        <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1">
-          <i class="fa-solid fa-clock-rotate-left text-amber-600"></i> এডিট পেন্ডিং লিস্ট (অনুমোদনের জন্য অপেক্ষমান)[cite: 1]
-        </h4>
-        <div class="overflow-x-auto border bg-white rounded-lg">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-amber-100 text-amber-900 font-bold border-b">
-              <tr>
-                <th class="p-2">খাত</th>[cite: 1]
-                <th class="p-2">বিবরণ</th>[cite: 1]
-                <th class="p-2 text-center">অ্যাকশন</th>[cite: 1]
-              </tr>
-            </thead>
-            <tbody id="pending-edits-table-body" class="divide-y"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="space-y-4 border-t pt-3">
+      <div class="space-y-4 pt-1">
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">সকল ইউজার আইডি বেছে নিন:</label>[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1">সকল ইউজার আইডি বেছে নিন:</label>
           <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"></select>
         </div>
 
         <div id="admin-user-data-preview" class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1">
-          <p class="font-bold text-emerald-800">ইউজার প্রোফাইল তথ্য:</p>[cite: 1]
-          <div id="admin-user-details-content">ইউজার নির্বাচন করুন...</div>[cite: 1]
+          <p class="font-bold text-emerald-800">ইউজার প্রোফাইল তথ্য:</p>
+          <div id="admin-user-details-content">ইউজার নির্বাচন করুন...</div>
         </div>
 
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-gray-700 mb-1">এই ইউজারের জন্য কমেন্ট / বার্তা পাঠ্য করুন:</label>[cite: 1]
-          <input type="text" id="admin-commenter-name" value="Admin (Hredoy Roy)" placeholder="কমেন্টকারীর নাম লিখুন" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50">[cite: 1]
-          <textarea id="admin-comment-text" rows="2" placeholder="বার্তা লিখুন (ইউজারের ড্যাশবোর্ডে রিফ্লেক্স করতে থাকবে)..." class="w-full p-2 border rounded-xl text-sm"></textarea>[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1">এই ইউজারের জন্য কমেন্ট / বার্তা পাঠ্য করুন:</label>
+          <input type="text" id="admin-commenter-name" value="Admin (Hredoy Roy)" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50">
+          <textarea id="admin-comment-text" rows="2" class="w-full p-2 border rounded-xl text-sm"></textarea>
           
           <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2 rounded-xl text-xs font-bold shadow mt-1">
-            বার্তা পাঠাও[cite: 1]
+            বার্তা পাঠাও
           </button>
         </div>
       </div>
@@ -821,21 +840,21 @@
   <div id="change-pass-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-amber-600">
       <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-base font-bold text-gray-800" data-bn="পাসওয়ার্ড পরিবর্তন করুন" data-en="Change Password">পাসওয়ার্ড পরিবর্তন করুন</h3>[cite: 1]
+        <h3 class="text-base font-bold text-gray-800" data-bn="পাসওয়ার্ড পরিবর্তন করুন" data-en="Change Password">পাসওয়ার্ড পরিবর্তন করুন</h3>
         <button onclick="closeChangePasswordModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <form onsubmit="handleChangePassword(event)" class="space-y-3">
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">বর্তমান পাসওয়ার্ড</label>[cite: 1]
-          <input type="password" id="old-pass-input" required placeholder="বর্তমান পাসওয়ার্ড দিন" class="w-full px-3 py-2 border rounded-xl text-sm">[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1">বর্তমান পাসওয়ার্ড</label>
+          <input type="password" id="old-pass-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">নতুন পাসওয়ার্ড</label>[cite: 1]
-          <input type="password" id="new-pass-input" required placeholder="নতুন পাসওয়ার্ড দিন" class="w-full px-3 py-2 border rounded-xl text-sm">[cite: 1]
+          <label class="block text-xs font-bold text-gray-700 mb-1">নতুন পাসওয়ার্ড</label>
+          <input type="password" id="new-pass-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
         </div>
         <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow">
-          পাসওয়ার্ড সেভ করুন[cite: 1]
+          পাসওয়ার্ড সেভ করুন
         </button>
       </form>
     </div>
@@ -845,67 +864,18 @@
   <div id="forget-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-600">
       <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-base font-bold text-gray-800" data-bn="পাসওয়ার্ড পুনরুদ্ধার" data-en="Recover Password">পাসওয়ার্ড পুনরুদ্ধার</h3>[cite: 1]
+        <h3 class="text-base font-bold text-gray-800" data-bn="পাসওয়ার্ড পুনরুদ্ধার" data-en="Recover Password">পাসওয়ার্ড পুনরুদ্ধার</h3>
         <button onclick="closeForgetModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="space-y-3">
-        <input type="tel" id="forget-mobile-input" placeholder="মোবাইল নম্বর" class="w-full px-3 py-2 border rounded-xl text-sm">[cite: 1]
-        <input type="text" id="forget-dob-input" placeholder="জন্ম তারিখ (DD-MM-YYYY)" class="w-full px-3 py-2 border rounded-xl text-sm">[cite: 1]
+        <input type="tel" id="forget-mobile-input" class="w-full px-3 py-2 border rounded-xl text-sm">
+        <input type="text" id="forget-dob-input" class="w-full px-3 py-2 border rounded-xl text-sm">
         
         <div id="forget-result-msg" class="text-xs font-bold p-2 rounded hidden"></div>
 
         <button onclick="handleRecoverPassword()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow">
-          পাসওয়ার্ড দেখুন[cite: 1]
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- AI CHATBOT FLOATING WIDGET -->
-  <div id="ai-chat-widget" class="fixed bottom-5 right-5 z-50 no-print">
-    <!-- Chat Button Trigger -->
-    <button id="ai-chat-toggle" onclick="toggleAIChat()" class="bg-emerald-600 hover:bg-emerald-700 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-105">
-      <i class="fa-solid fa-robot"></i>
-    </button>
-
-    <!-- Chat Box Window -->
-    <div id="ai-chat-box" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-emerald-200 flex flex-col overflow-hidden transition-all duration-300" style="height: 480px;">
-      <!-- Header -->
-      <div class="bg-emerald-700 text-white p-3.5 flex justify-between items-center shadow">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-full bg-emerald-800 flex items-center justify-center text-amber-300 font-bold">
-            <i class="fa-solid fa-brain"></i>
-          </div>
-          <div>
-            <h4 class="text-xs font-bold">DTH Assistant (AI Bot)</h4>
-            <p class="text-[10px] text-emerald-200 flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse"></span> অনলাইন
-            </p>
-          </div>
-        </div>
-        <button onclick="toggleAIChat()" class="text-white hover:text-gray-200 text-lg font-bold">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- Messages Body -->
-      <div id="ai-chat-messages" class="flex-grow p-3 overflow-y-auto space-y-3 bg-slate-50 text-xs">
-        <div class="flex gap-2">
-          <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] flex-shrink-0">
-            <i class="fa-solid fa-robot"></i>
-          </div>
-          <div class="bg-white p-2.5 rounded-2xl shadow-sm border border-gray-100 max-w-[80%] text-gray-800">
-            আসসালামু আলাইকুম! 👋 আমি **DREAM TOUCHING HOSTEL**-এর AI অ্যাসিস্ট্যান্ট। মেসের হিসাব, ক্যাশ-ইন-হ্যান্ড বা যোগাযোগ সংক্রান্ত যেকোনো কিছু আমাকে জিজ্ঞাসা করুন!
-          </div>
-        </div>
-      </div>
-
-      <!-- Input Box -->
-      <div class="p-2.5 bg-white border-t flex items-center gap-2">
-        <input type="text" id="ai-chat-input" onkeypress="handleAIChatKeyPress(event)" placeholder="মেসের যেকোনো প্রশ্ন করুন..." class="flex-grow px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-        <button onclick="sendAIChatMessage()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center">
-          <i class="fa-solid fa-paper-plane"></i>
+          পাসওয়ার্ড দেখুন
         </button>
       </div>
     </div>
@@ -953,7 +923,8 @@
       bazaarExpenses: [],
       meals: [],
       pendingEdits: [],
-      comments: {}
+      comments: {},
+      replies: [] // Store user replies
     };
 
     const masterLedgerRef = ref(db, 'hostel_records/master_ledger');
@@ -970,9 +941,11 @@
           bazaarExpenses: data.bazaarExpenses || [],
           meals: data.meals || [],
           pendingEdits: data.pendingEdits || [],
-          comments: data.comments || {}
+          comments: data.comments || {},
+          replies: data.replies || []
         };
         localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
+        renderFloatingReplies();
         if (window.currentUser) {
           renderDashboard();
         }
@@ -984,6 +957,7 @@
       set(masterLedgerRef, window.hostelData)
         .catch(err => console.error('Firebase Realtime Sync Error:', err));
       renderDashboard();
+      renderFloatingReplies();
     };
 
     window.manualSaveData = function() {
@@ -1005,6 +979,7 @@
       const local = localStorage.getItem('dream_touching_hostel_db');
       if (local) {
         window.hostelData = JSON.parse(local);
+        renderFloatingReplies();
       }
     };
 
@@ -1046,11 +1021,69 @@
 
     window.openMgmtDashboardModal = function() {
       renderMgmtUserTables();
+      renderPendingEditsTable();
       document.getElementById('mgmt-dashboard-modal').classList.remove('hidden');
     };
 
     window.closeMgmtDashboardModal = function() {
       document.getElementById('mgmt-dashboard-modal').classList.add('hidden');
+    };
+
+    /* RENDER & APPROVE PENDING EDITS IN MANAGEMENT PANEL */
+    window.renderPendingEditsTable = function() {
+      const tbody = document.getElementById('pending-edits-table-body');
+      tbody.innerHTML = '';
+
+      if (!window.hostelData.pendingEdits || window.hostelData.pendingEdits.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-gray-500 font-semibold">কোনো এডিট রিকোয়েস্ট জমা নেই</td></tr>`;
+        return;
+      }
+
+      window.hostelData.pendingEdits.forEach(p => {
+        let desc = '';
+        if (p.listName === 'meals') {
+          desc = `সকাল: ${p.newData.morning}, দুপুর: ${p.newData.noon}, রাত: ${p.newData.night}`;
+        } else {
+          desc = `নতুন টাকা: ৳${p.newData.amount}`;
+        }
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-amber-50/50">
+            <td class="p-2 font-bold text-gray-700">${p.listName}</td>
+            <td class="p-2">${desc}</td>
+            <td class="p-2 text-center space-x-1">
+              <button onclick="approveEditRequest('${p.pendingId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+              <button onclick="rejectEditRequest('${p.pendingId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+            </td>
+          </tr>
+        `;
+      });
+    };
+
+    window.approveEditRequest = function(pendingId) {
+      const pIndex = window.hostelData.pendingEdits.findIndex(p => p.pendingId === pendingId);
+      if (pIndex !== -1) {
+        const req = window.hostelData.pendingEdits[pIndex];
+        const targetList = window.hostelData[req.listName];
+        const targetItem = targetList.find(x => x.id === req.targetId);
+
+        if (targetItem) {
+          Object.assign(targetItem, req.newData);
+          targetItem.editCount = (targetItem.editCount || 0) + 1;
+        }
+
+        window.hostelData.pendingEdits.splice(pIndex, 1);
+        syncMasterData();
+        renderPendingEditsTable();
+        alert('এডিট সফলভাবে অনুমোদন করা হয়েছে!');
+      }
+    };
+
+    window.rejectEditRequest = function(pendingId) {
+      window.hostelData.pendingEdits = window.hostelData.pendingEdits.filter(p => p.pendingId !== pendingId);
+      syncMasterData();
+      renderPendingEditsTable();
+      alert('এডিট রিকোয়েস্ট বাতিল করা হয়েছে!');
     };
 
     window.renderMgmtUserTables = function() {
@@ -1327,69 +1360,11 @@
 
     window.openAdminPanelModal = function() {
       populateAdminUserSelector();
-      renderPendingEditsTable();
       document.getElementById('admin-modal').classList.remove('hidden');
     };
 
     window.closeAdminModal = function() {
       document.getElementById('admin-modal').classList.add('hidden');
-    };
-
-    /* RENDER & APPROVE PENDING EDITS IN ADMIN PANEL */
-    window.renderPendingEditsTable = function() {
-      const tbody = document.getElementById('pending-edits-table-body');
-      tbody.innerHTML = '';
-
-      if (!window.hostelData.pendingEdits || window.hostelData.pendingEdits.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-gray-500 font-semibold">কোনো এডিট রিকোয়েস্ট জমা নেই</td></tr>`;
-        return;
-      }
-
-      window.hostelData.pendingEdits.forEach(p => {
-        let desc = '';
-        if (p.listName === 'meals') {
-          desc = `সকাল: ${p.newData.morning}, দুপুর: ${p.newData.noon}, রাত: ${p.newData.night}`;
-        } else {
-          desc = `নতুন টাকা: ৳${p.newData.amount}`;
-        }
-
-        tbody.innerHTML += `
-          <tr class="hover:bg-amber-50/50">
-            <td class="p-2 font-bold text-gray-700">${p.listName}</td>
-            <td class="p-2">${desc}</td>
-            <td class="p-2 text-center space-x-1">
-              <button onclick="approveEditRequest('${p.pendingId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
-              <button onclick="rejectEditRequest('${p.pendingId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
-            </td>
-          </tr>
-        `;
-      });
-    };
-
-    window.approveEditRequest = function(pendingId) {
-      const pIndex = window.hostelData.pendingEdits.findIndex(p => p.pendingId === pendingId);
-      if (pIndex !== -1) {
-        const req = window.hostelData.pendingEdits[pIndex];
-        const targetList = window.hostelData[req.listName];
-        const targetItem = targetList.find(x => x.id === req.targetId);
-
-        if (targetItem) {
-          Object.assign(targetItem, req.newData);
-          targetItem.editCount = (targetItem.editCount || 0) + 1;
-        }
-
-        window.hostelData.pendingEdits.splice(pIndex, 1);
-        syncMasterData();
-        renderPendingEditsTable();
-        alert('এডিট সফলভাবে অনুমোদন করা হয়েছে!');
-      }
-    };
-
-    window.rejectEditRequest = function(pendingId) {
-      window.hostelData.pendingEdits = window.hostelData.pendingEdits.filter(p => p.pendingId !== pendingId);
-      syncMasterData();
-      renderPendingEditsTable();
-      alert('এডিট রিকোয়েস্ট বাতিল করা হয়েছে!');
     };
 
     window.populateAdminUserSelector = function() {
@@ -1432,6 +1407,59 @@
       alert('কমেন্ট ইউজারের প্রোফাইলে পাঠানো হয়েছে!');
       document.getElementById('admin-comment-text').value = '';
       closeAdminModal();
+    };
+
+    /* USER REPLY TO ADMIN MESSAGE */
+    window.sendUserReply = function() {
+      const replyText = document.getElementById('user-reply-input').value.trim();
+      if (!replyText || !window.currentUser) return;
+
+      if (!window.hostelData.replies) window.hostelData.replies = [];
+
+      window.hostelData.replies.push({
+        id: 'RPL_' + Date.now(),
+        userId: window.currentUser.userId,
+        userName: window.currentUser.fullName || window.currentUser.userId,
+        text: replyText,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      document.getElementById('user-reply-input').value = '';
+      syncMasterData();
+      alert('আপনার উত্তরটি সফলভাবে হোম পেজে পোস্ট হয়েছে!');
+    };
+
+    /* RENDER FLOATING REPLIES AT BOTTOM RIGHT (HOMEPAGE) */
+    window.renderFloatingReplies = function() {
+      const container = document.getElementById('floating-replies-container');
+      container.innerHTML = '';
+
+      if (!window.hostelData.replies || window.hostelData.replies.length === 0) return;
+
+      window.hostelData.replies.forEach(r => {
+        container.innerHTML += `
+          <div id="reply-card-${r.id}" class="floating-box bg-slate-900 text-white p-3.5 rounded-2xl shadow-2xl border border-emerald-500/50 flex justify-between items-start gap-2">
+            <div class="space-y-1">
+              <div class="flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-user text-emerald-400 text-xs"></i>
+                <span class="font-bold text-xs text-emerald-300">${r.userName}</span>
+                <span class="text-[10px] text-gray-400">(${r.time})</span>
+              </div>
+              <p class="text-xs text-gray-200 font-medium leading-tight">${r.text}</p>
+            </div>
+            <button onclick="dismissFloatingReply('${r.id}')" class="text-gray-400 hover:text-red-400 text-sm font-bold transition">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        `;
+      });
+    };
+
+    window.dismissFloatingReply = function(replyId) {
+      const el = document.getElementById(`reply-card-${replyId}`);
+      if (el) el.remove();
+      window.hostelData.replies = window.hostelData.replies.filter(r => r.id !== replyId);
+      syncMasterData();
     };
 
     window.checkUserAdminComments = function() {
@@ -1646,13 +1674,12 @@
       syncMasterData();
     };
 
-    /* UPDATED EDIT TRANSACTION FUNCTION (LOGIN PASSWORD & ADMIN APPROVAL REQUIRED) */
+    /* EDIT TRANSACTION FUNCTION */
     window.editTransaction = function(listName, id) {
       const list = window.hostelData[listName];
       const item = list.find(x => x.id === id);
       if (!item) return;
 
-      // Password Prompt Verification
       const pass = prompt(window.currentLang === 'bn' ? 'এডিট করতে আপনার লগইন পাসওয়ার্ডটি প্রবেশ করুন:' : 'Enter login password to edit:');
       if (!window.currentUser || window.currentUser.pass !== pass) {
         if (pass !== null) alert(window.currentLang === 'bn' ? 'ভুল পাসওয়ার্ড!' : 'Incorrect Password!');
@@ -1661,7 +1688,6 @@
 
       if (!window.hostelData.pendingEdits) window.hostelData.pendingEdits = [];
 
-      // Handle Meal Edit
       if (listName === 'meals') {
         const m = prompt('সকালের মিল পরিবর্তন করুন:', item.morning);
         const n = prompt('দুপুরের মিল পরিবর্তন করুন:', item.noon);
@@ -1685,9 +1711,9 @@
           });
 
           syncMasterData();
-          alert('এডিট রিকোয়েস্ট সফলভাবে জমা দেওয়া হয়েছে! এডমিন প্যানেল থেকে অনুমোদন দিলে আপডেট হবে।');
+          alert('এডিট রিকোয়েস্ট জমা হয়েছে! ম্যানেজমেন্ট প্যানেল থেকে অনুমোদন দিলে আপডেট হবে।');
         }
-      } else { // Handle Expense & Deposit Amount Edits
+      } else {
         const newAmt = prompt('নতুন টাকার পরিমাণ দিন:', item.amount);
         if (newAmt && !isNaN(newAmt)) {
           window.hostelData.pendingEdits.push({
@@ -1700,7 +1726,7 @@
           });
 
           syncMasterData();
-          alert('এডিট রিকোয়েস্ট সফলভাবে জমা দেওয়া হয়েছে! এডমিন প্যানেল থেকে অনুমোদন দিলে আপডেট হবে।');
+          alert('এডিট রিকোয়েস্ট জমা হয়েছে! ম্যানেজমেন্ট প্যানেল থেকে অনুমোদন দিলে আপডেট হবে।');
         }
       }
     };
@@ -1780,8 +1806,8 @@
               
               <div class="mt-3 space-y-2">
                 <div class="flex gap-2">
-                  <input type="number" id="dep-amt-${m.id}" placeholder="টাকার পরিমাণ" class="w-full px-2 py-1 border rounded text-xs">
-                  <input type="text" id="dep-date-${m.id}" value="${getTodayDDMMYYYY()}" placeholder="DD-MM-YYYY" class="w-28 px-2 py-1 border rounded text-xs">
+                  <input type="number" id="dep-amt-${m.id}" class="w-full px-2 py-1 border rounded text-xs">
+                  <input type="text" id="dep-date-${m.id}" value="${getTodayDDMMYYYY()}" class="w-28 px-2 py-1 border rounded text-xs">
                   <button onclick="addDepositForMember('${m.id}')" class="btn-green-to-red px-3 py-1 rounded font-bold text-xs">জমা</button>
                 </div>
 
@@ -1855,7 +1881,6 @@
       });
     };
 
-    /* POPULATE DATE SELECTOR FOR MEALS */
     window.populateMealDateFilter = function() {
       const dateSel = document.getElementById('meal-date-filter-selector');
       const uniqueDates = [...new Set(window.hostelData.meals.map(m => m.date))];
@@ -1892,7 +1917,7 @@
             <td class="p-2">${ml.night}</td>
             <td class="p-2 font-bold text-emerald-700">${ml.total}</td>
             <td class="p-2 text-right">
-              <button onclick="editTransaction('meals', '${ml.id}')" class="text-emerald-600 hover:underline" title="পাসওয়ার্ড দিয়ে এডিট করুন"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="editTransaction('meals', '${ml.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
             </td>
           </tr>
         `;
@@ -1978,127 +2003,6 @@
         msgBox.innerText = `তথ্য মিলেনি! সঠিক মোবাইল নম্বর ও জন্ম তারিখ দিন।`;
       }
     };
-
-    /* =========================================================
-       AI CHATBOT LOGIC IMPLEMENTATION
-    ========================================================= */
-    window.toggleAIChat = function() {
-      const chatBox = document.getElementById('ai-chat-box');
-      chatBox.classList.toggle('hidden');
-    };
-
-    window.handleAIChatKeyPress = function(e) {
-      if (e.key === 'Enter') {
-        sendAIChatMessage();
-      }
-    };
-
-    window.sendAIChatMessage = function() {
-      const inputEl = document.getElementById('ai-chat-input');
-      const query = inputEl.value.trim();
-      if (!query) return;
-
-      appendAIChatMessage('user', query);
-      inputEl.value = '';
-
-      // Bot thinking indicator
-      const typingId = appendAIChatMessage('bot', 'প্রসেসিং হচ্ছে...');
-
-      setTimeout(() => {
-        const responseText = processAIResponse(query);
-        const typingEl = document.getElementById(typingId);
-        if (typingEl) {
-          typingEl.innerText = responseText;
-        }
-      }, 500);
-    };
-
-    function appendAIChatMessage(sender, text) {
-      const messagesContainer = document.getElementById('ai-chat-messages');
-      const msgId = 'ai-msg-' + Date.now();
-
-      if (sender === 'user') {
-        messagesContainer.innerHTML += `
-          <div class="flex justify-end">
-            <div class="bg-emerald-600 text-white p-2.5 rounded-2xl shadow-sm max-w-[80%]">
-              ${text}
-            </div>
-          </div>
-        `;
-      } else {
-        messagesContainer.innerHTML += `
-          <div class="flex gap-2">
-            <div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] flex-shrink-0">
-              <i class="fa-solid fa-robot"></i>
-            </div>
-            <div id="${msgId}" class="bg-white p-2.5 rounded-2xl shadow-sm border border-gray-100 max-w-[80%] text-gray-800 whitespace-pre-line">
-              ${text}
-            </div>
-          </div>
-        `;
-      }
-
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      return msgId;
-    }
-
-    function processAIResponse(query) {
-      const q = query.toLowerCase();
-
-      // Calculations
-      const totalFixed = window.hostelData.fixedExpenses.reduce((a, c) => a + c.amount, 0);
-      const totalGas = window.hostelData.gasExpenses.reduce((a, c) => a + c.amount, 0);
-      const totalBazaar = window.hostelData.bazaarExpenses.reduce((a, c) => a + c.amount, 0);
-      const totalDeposits = window.hostelData.deposits.reduce((a, c) => a + c.amount, 0);
-      const totalExpenses = totalFixed + totalGas + totalBazaar;
-      const cashInHand = totalDeposits - totalExpenses;
-      const totalMeals = window.hostelData.meals.reduce((a, c) => a + c.total, 0);
-      const perMealRate = totalMeals > 0 ? (totalBazaar / totalMeals).toFixed(2) : '0.00';
-
-      // Intent Matching Logic
-      if (q.includes('ক্যাশ') || q.includes('হাতে কত') || q.includes('cash')) {
-        return `현재 ক্যাশ ইন হ্যান্ড (Cash in hand) রয়েছে: ৳ ${cashInHand}\n(মোট জমা: ৳${totalDeposits} - মোট খরচ: ৳${totalExpenses})`;
-      } 
-      else if (q.includes('মিল রেট') || q.includes('meal rate') || q.includes('এক মিল')) {
-        return `বর্তমান মিল চার্জ (Per Meal Rate): ৳ ${perMealRate}\n(মোট বাজার খরচ: ৳${totalBazaar} / মোট মিল: ${totalMeals} টি)`;
-      } 
-      else if (q.includes('বাজার') || q.includes('bazaar')) {
-        return `সর্বমোট বাজার খরচ করা হয়েছে: ৳ ${totalBazaar}`;
-      } 
-      else if (q.includes('স্থায়ী') || q.includes('বিদ্যুৎ') || q.includes('ফিক্সড') || q.includes('fixed')) {
-        return `সর্বমোট স্থায়ী খরচ (বিদ্যুৎ, পানি, ঘর ভাড়া ইত্যাদি): ৳ ${totalFixed}`;
-      } 
-      else if (q.includes('গ্যাস') || q.includes('gas')) {
-        return `সর্বমোট গ্যাস খরচ হয়েছে: ৳ ${totalGas}`;
-      } 
-      else if (q.includes('সদস্য') || q.includes('মেম্বার') || q.includes('member') || q.includes('কতজন')) {
-        const memberNames = window.hostelData.members.map(m => m.name).join(', ');
-        return `মেসে মোট সদস্য সংখ্যা: ${window.hostelData.members.length} জন।\nসদস্যদের নাম: ${memberNames || 'কেউ নেই'}`;
-      } 
-      else if (q.includes('ডেভেলপার') || q.includes('তৈরি') || q.includes('বানাইছে') || q.includes('হৃদয়') || q.includes('হৃদয়') || q.includes('contact') || q.includes('developer')) {
-        return `এই ওয়েবসাইটটি তৈরি করেছেন **Hredoy Roy**।\n📱 ফোন: +088 01518 411872; +880 1345 409887\n📧 ইমেইল: 100pc.net@gmail.com\n🏠 ঠিকানা: কৃঞ্চবিলা, গংনালিয়া-৭৬১০, মাগুরা সদর, মাগুরা।`;
-      } 
-      else if (q.includes('অ্যাডমিন') || q.includes('পাসওয়ার্ড') || q.includes('admin') || q.includes('লগইন')) {
-        return `অ্যাডমিন ভেরিফিকেশন ইউজার আইডি: admin এবং পাসওয়ার্ড: admin।\nম্যানেজমেন্ট প্যানেল আইডি: DTH01518411872 এবং পাসওয়ার্ড: 01518411872।`;
-      } 
-      else if (q.includes('মোট জমা') || q.includes('deposit')) {
-        return `সকল সদস্যের সর্বমোট জমা টাকা: ৳ ${totalDeposits}`;
-      } 
-      else if (q.includes('মোট খরচ') || q.includes('expense')) {
-        return `সর্বমোট খরচ (বাজার, গ্যাস ও স্থায়ী খরচ মিলিয়ে): ৳ ${totalExpenses}`;
-      } 
-      else {
-        // Individual Member search
-        const foundMember = window.hostelData.members.find(m => q.includes(m.name.toLowerCase()));
-        if (foundMember) {
-          const mDep = window.hostelData.deposits.filter(d => d.memberId === foundMember.id).reduce((a, c) => a + c.amount, 0);
-          const mMeals = window.hostelData.meals.filter(ml => ml.memberId === foundMember.id).reduce((a, c) => a + c.total, 0);
-          return `সদস্য **${foundMember.name}**-এর হিসাব:\n• মোট জমা: ৳${mDep}\n• মোট মিল: ${mMeals} টি\n• গ্যাস ব্যবহার: ${foundMember.useGas === 'yes' ? 'হ্যাঁ' : 'না'}`;
-        }
-
-        return `দুঃখিত, আমি বিষয়টি বুঝতে পারিনি। আপনি নিচের বিষয়গুলো সম্পর্কে জানতে চাইতে পারেন:\n• ক্যাশ ইন হ্যান্ড\n• বর্তমান মিল রেট\n• বাজার খরচ\n• স্থায়ী/গ্যাস খরচ\n• মেম্বারের হিসাব (নাম দিয়ে খুঁজুন)\n• ডেভেলপারের তথ্য`;
-      }
-    }
   </script>
 </body>
 </html>
