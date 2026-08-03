@@ -793,7 +793,7 @@
     </div>
   </div>
 
-  <!-- MODAL 5: ADMIN PANEL MODAL (UPDATED LABEL AND DROPDOWN SELECTION) -->
+  <!-- MODAL 5: ADMIN PANEL MODAL (UPDATED SENDER DROPDOWN SELECTION) -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
@@ -804,7 +804,6 @@
       </div>
 
       <div class="space-y-4 pt-1">
-        <!-- 2. UPDATED LABEL & DROPDOWN -->
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label>
           <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold focus:ring-2 focus:ring-emerald-500">
@@ -819,7 +818,9 @@
 
         <div class="space-y-2">
           <label class="block text-xs font-bold text-gray-700 mb-1">প্রেরকের নাম:</label>
-          <input type="text" id="admin-commenter-name" value="Admin (Hredoy Roy)" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50">
+          <select id="admin-commenter-dropdown" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50 focus:ring-2 focus:ring-emerald-500">
+            <option value="">-- প্রেরকের নাম নির্বাচন করুন --</option>
+          </select>
           
           <label class="block text-xs font-bold text-gray-700 mb-1">বার্তার বিষয়বস্তু:</label>
           <textarea id="admin-comment-text" rows="3" placeholder="বার্তা লিখুন..." class="w-full p-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"></textarea>
@@ -1356,6 +1357,7 @@
 
     window.openAdminPanelModal = function() {
       populateAdminUserSelector();
+      populateAdminCommenterDropdown();
       document.getElementById('admin-modal').classList.remove('hidden');
     };
 
@@ -1369,6 +1371,16 @@
       sel.innerHTML = '<option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option>';
       window.hostelData.users.forEach(u => {
         sel.innerHTML += `<option value="${u.userId}">${u.fullName ? u.fullName + ' - ' : ''}${u.userId} (${u.mobile})</option>`;
+      });
+    };
+
+    /* POPULATE SENDER DROPDOWN IN ADMIN PANEL */
+    window.populateAdminCommenterDropdown = function() {
+      const commenterSel = document.getElementById('admin-commenter-dropdown');
+      commenterSel.innerHTML = '<option value="">-- প্রেরকের নাম নির্বাচন করুন --</option>';
+      commenterSel.innerHTML += '<option value="Admin (Hredoy Roy)">Admin (Hredoy Roy)</option>';
+      window.hostelData.members.forEach(m => {
+        commenterSel.innerHTML += `<option value="${m.name}">${m.name}</option>`;
       });
     };
 
@@ -1392,11 +1404,16 @@
     /* SEND MULTIPLE ADMIN COMMENTS/MESSAGES PER USER */
     window.sendAdminComment = function() {
       const userId = document.getElementById('admin-user-selector').value;
-      const commenterName = document.getElementById('admin-commenter-name').value.trim();
+      const commenterName = document.getElementById('admin-commenter-dropdown').value;
       const comment = document.getElementById('admin-comment-text').value.trim();
 
       if (!userId) {
         alert('বার্তা পাঠাতে দয়া করে বার্তাকারী ইউজার নির্বাচন করুন!');
+        return;
+      }
+
+      if (!commenterName) {
+        alert('বার্তা পাঠাতে দয়া করে প্রেরকের নাম নির্বাচন করুন!');
         return;
       }
 
@@ -1416,7 +1433,7 @@
 
       const msgObj = {
         id: 'MSG_' + Date.now(),
-        sender: commenterName || 'Admin',
+        sender: commenterName,
         text: comment,
         date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' (' + getTodayDDMMYYYY() + ')'
       };
