@@ -152,7 +152,7 @@
         </button>
       </div>
 
-      <!-- SIGN IN FORM (Watermarks/Placeholders removed) -->
+      <!-- SIGN IN FORM -->
       <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার আইডি" data-en="User ID">ইউজার আইডি</label>
@@ -184,7 +184,7 @@
         </div>
       </form>
 
-      <!-- SIGN UP FORM (Watermarks/Placeholders removed) -->
+      <!-- SIGN UP FORM -->
       <form id="form-signup" onsubmit="handleSignUp(event)" class="space-y-3 hidden">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম (Full Name)" data-en="Full Name">নাম (Full Name)</label>
@@ -240,23 +240,14 @@
     <!-- MAIN DASHBOARD PANEL -->
     <section id="dashboard-section" class="hidden space-y-6 auth-transition">
 
-      <!-- ADMIN MESSAGE BANNER WITH REPLY FEATURE -->
+      <!-- ADMIN MESSAGES BANNER WITH REPLY FEATURE (SHOWS ALL MESSAGES SENT TO USER) -->
       <div id="user-message-banner" class="hidden reflect-message bg-red-50 border-l-4 border-red-600 p-4 rounded-r-2xl space-y-3">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-3">
-            <i class="fa-solid fa-envelope-open-text text-red-600 text-xl animate-bounce"></i>
-            <div>
-              <p class="text-xs font-bold text-red-700">
-                <span data-bn="বার্তা প্রেরক:" data-en="Sender:">বার্তা প্রেরক:</span> 
-                <span id="user-message-sender" class="underline"></span>
-              </p>
-              <p id="user-message-text" class="text-sm font-semibold text-gray-800 mt-0.5"></p>
-            </div>
-          </div>
-          <button onclick="deleteUserMessage()" class="text-red-600 hover:text-red-800 p-2 rounded-lg text-sm font-bold">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
+        <div class="flex items-center gap-2 border-b border-red-200 pb-2">
+          <i class="fa-solid fa-envelope-open-text text-red-600 text-xl animate-bounce"></i>
+          <h4 class="font-bold text-sm text-red-800">অ্যাডমিন থেকে প্রাপ্ত বার্তা তালিকা:</h4>
         </div>
+
+        <div id="user-messages-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
 
         <!-- REPLY INPUT BOX FOR USER -->
         <div class="pt-2 border-t border-red-200 flex gap-2">
@@ -683,7 +674,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD (UPDATED WITH EDIT APPROVAL SECTION) -->
+  <!-- MODAL 3: MANAGEMENT PANEL DASHBOARD -->
   <div id="mgmt-dashboard-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-3xl w-full p-6 space-y-6 shadow-2xl border-t-8 border-emerald-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-3">
@@ -693,7 +684,7 @@
         <button onclick="closeMgmtDashboardModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- EDIT APPROVAL SECTION (MOVED TO MANAGEMENT PANEL) -->
+      <!-- EDIT APPROVAL SECTION -->
       <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-3">
         <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1">
           <i class="fa-solid fa-clock-rotate-left text-amber-600"></i> এডিট পেন্ডিং লিস্ট (অনুমোদনের জন্য অপেক্ষমান)
@@ -802,7 +793,7 @@
     </div>
   </div>
 
-  <!-- MODAL 5: ADMIN PANEL MODAL -->
+  <!-- MODAL 5: ADMIN PANEL MODAL (UPDATED LABEL AND DROPDOWN SELECTION) -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
@@ -813,9 +804,12 @@
       </div>
 
       <div class="space-y-4 pt-1">
+        <!-- 2. UPDATED LABEL & DROPDOWN -->
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">সকল ইউজার আইডি বেছে নিন:</label>
-          <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"></select>
+          <label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label>
+          <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold focus:ring-2 focus:ring-emerald-500">
+            <option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option>
+          </select>
         </div>
 
         <div id="admin-user-data-preview" class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1">
@@ -824,12 +818,14 @@
         </div>
 
         <div class="space-y-2">
-          <label class="block text-xs font-bold text-gray-700 mb-1">এই ইউজারের জন্য কমেন্ট / বার্তা পাঠ্য করুন:</label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">প্রেরকের নাম:</label>
           <input type="text" id="admin-commenter-name" value="Admin (Hredoy Roy)" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50">
-          <textarea id="admin-comment-text" rows="2" class="w-full p-2 border rounded-xl text-sm"></textarea>
           
-          <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2 rounded-xl text-xs font-bold shadow mt-1">
-            বার্তা পাঠাও
+          <label class="block text-xs font-bold text-gray-700 mb-1">বার্তার বিষয়বস্তু:</label>
+          <textarea id="admin-comment-text" rows="3" placeholder="বার্তা লিখুন..." class="w-full p-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"></textarea>
+          
+          <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow mt-1">
+            <i class="fa-solid fa-paper-plane mr-1"></i> বার্তা পাঠাও
           </button>
         </div>
       </div>
@@ -869,8 +865,8 @@
       </div>
 
       <div class="space-y-3">
-        <input type="tel" id="forget-mobile-input" class="w-full px-3 py-2 border rounded-xl text-sm">
-        <input type="text" id="forget-dob-input" class="w-full px-3 py-2 border rounded-xl text-sm">
+        <input type="tel" id="forget-mobile-input" placeholder="মোবাইল নম্বর" class="w-full px-3 py-2 border rounded-xl text-sm">
+        <input type="text" id="forget-dob-input" placeholder="জন্ম তারিখ (দিন-মাস-বছর)" class="w-full px-3 py-2 border rounded-xl text-sm">
         
         <div id="forget-result-msg" class="text-xs font-bold p-2 rounded hidden"></div>
 
@@ -923,8 +919,8 @@
       bazaarExpenses: [],
       meals: [],
       pendingEdits: [],
-      comments: {},
-      replies: [] // Store user replies
+      comments: {}, // Stores array of messages per user: { [userId]: [{id, sender, text, date}] }
+      replies: []
     };
 
     const masterLedgerRef = ref(db, 'hostel_records/master_ledger');
@@ -948,6 +944,7 @@
         renderFloatingReplies();
         if (window.currentUser) {
           renderDashboard();
+          checkUserAdminComments();
         }
       }
     });
@@ -1029,7 +1026,6 @@
       document.getElementById('mgmt-dashboard-modal').classList.add('hidden');
     };
 
-    /* RENDER & APPROVE PENDING EDITS IN MANAGEMENT PANEL */
     window.renderPendingEditsTable = function() {
       const tbody = document.getElementById('pending-edits-table-body');
       tbody.innerHTML = '';
@@ -1367,18 +1363,22 @@
       document.getElementById('admin-modal').classList.add('hidden');
     };
 
+    /* POPULATE DROPDOWN WITH MEMBERS / USERS IN ADMIN PANEL */
     window.populateAdminUserSelector = function() {
       const sel = document.getElementById('admin-user-selector');
-      sel.innerHTML = '<option value="">ইউজার নির্বাচন করুন</option>';
+      sel.innerHTML = '<option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option>';
       window.hostelData.users.forEach(u => {
-        sel.innerHTML += `<option value="${u.userId}">${u.userId} (${u.mobile})</option>`;
+        sel.innerHTML += `<option value="${u.userId}">${u.fullName ? u.fullName + ' - ' : ''}${u.userId} (${u.mobile})</option>`;
       });
     };
 
     window.loadAdminSelectedUser = function(userId) {
-      if (!userId) return;
-      const user = window.hostelData.users.find(u => u.userId === userId);
       const detailsBox = document.getElementById('admin-user-details-content');
+      if (!userId) {
+        detailsBox.innerHTML = 'ইউজার নির্বাচন করুন...';
+        return;
+      }
+      const user = window.hostelData.users.find(u => u.userId === userId);
       if (user) {
         detailsBox.innerHTML = `
           <div>নাম: <b>${user.fullName || '-'}</b></div>
@@ -1389,22 +1389,42 @@
       }
     };
 
+    /* SEND MULTIPLE ADMIN COMMENTS/MESSAGES PER USER */
     window.sendAdminComment = function() {
       const userId = document.getElementById('admin-user-selector').value;
       const commenterName = document.getElementById('admin-commenter-name').value.trim();
       const comment = document.getElementById('admin-comment-text').value.trim();
 
-      if (!userId || !comment) {
-        alert('ইউজার এবং বার্তা বেছে নিন!');
+      if (!userId) {
+        alert('বার্তা পাঠাতে দয়া করে বার্তাকারী ইউজার নির্বাচন করুন!');
         return;
       }
 
-      window.hostelData.comments[userId] = {
+      if (!comment) {
+        alert('অনুগ্রহ করে বার্তার বিষয়বস্তু লিখুন!');
+        return;
+      }
+
+      if (!window.hostelData.comments) {
+        window.hostelData.comments = {};
+      }
+
+      // Convert single legacy string/object into Array if needed
+      if (!Array.isArray(window.hostelData.comments[userId])) {
+        window.hostelData.comments[userId] = [];
+      }
+
+      const msgObj = {
+        id: 'MSG_' + Date.now(),
         sender: commenterName || 'Admin',
-        text: comment
+        text: comment,
+        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' (' + getTodayDDMMYYYY() + ')'
       };
+
+      window.hostelData.comments[userId].push(msgObj);
+
       syncMasterData();
-      alert('কমেন্ট ইউজারের প্রোফাইলে পাঠানো হয়েছে!');
+      alert('কমেন্ট/বার্তা ইউজারের প্রোফাইলে সফলভাবে পাঠানো হয়েছে!');
       document.getElementById('admin-comment-text').value = '';
       closeAdminModal();
     };
@@ -1462,28 +1482,55 @@
       syncMasterData();
     };
 
+    /* CHECK & RENDER ALL ADMIN MESSAGES IN USER PROFILE SEPARATELY */
     window.checkUserAdminComments = function() {
-      if (window.currentUser && window.hostelData.comments[window.currentUser.userId]) {
-        const commData = window.hostelData.comments[window.currentUser.userId];
-        if (typeof commData === 'object') {
-          document.getElementById('user-message-sender').innerText = commData.sender || 'Admin';
-          document.getElementById('user-message-text').innerText = commData.text || '';
-        } else {
-          document.getElementById('user-message-sender').innerText = 'Admin';
-          document.getElementById('user-message-text').innerText = commData;
-        }
-        document.getElementById('user-message-banner').classList.remove('hidden');
+      if (!window.currentUser) return;
+      const uId = window.currentUser.userId;
+      const userMsgs = window.hostelData.comments[uId];
+      const banner = document.getElementById('user-message-banner');
+      const listContainer = document.getElementById('user-messages-list');
+
+      listContainer.innerHTML = '';
+
+      if (userMsgs && (Array.isArray(userMsgs) ? userMsgs.length > 0 : true)) {
+        banner.classList.remove('hidden');
+
+        let msgsArray = Array.isArray(userMsgs) ? userMsgs : [
+          typeof userMsgs === 'object' ? userMsgs : { id: 'legacy', sender: 'Admin', text: userMsgs, date: '' }
+        ];
+
+        msgsArray.forEach(m => {
+          listContainer.innerHTML += `
+            <div class="flex justify-between items-start bg-white p-2.5 rounded-xl border border-red-200 shadow-sm">
+              <div>
+                <p class="text-[11px] font-bold text-red-700">
+                  <span>বার্তা প্রেরক:</span> <span class="underline">${m.sender || 'Admin'}</span>
+                  ${m.date ? `<span class="text-[10px] text-gray-400 ml-1">(${m.date})</span>` : ''}
+                </p>
+                <p class="text-xs font-semibold text-gray-800 mt-1">${m.text}</p>
+              </div>
+              <button onclick="deleteSingleUserMessage('${m.id}')" class="text-red-500 hover:text-red-700 p-1 text-xs font-bold" title="মুছে ফেলুন">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          `;
+        });
       } else {
-        document.getElementById('user-message-banner').classList.add('hidden');
+        banner.classList.add('hidden');
       }
     };
 
-    window.deleteUserMessage = function() {
-      if (window.currentUser && window.hostelData.comments[window.currentUser.userId]) {
-        delete window.hostelData.comments[window.currentUser.userId];
-        syncMasterData();
-        document.getElementById('user-message-banner').classList.add('hidden');
+    /* DELETE SINGLE MESSAGE FROM USER PROFILE */
+    window.deleteSingleUserMessage = function(msgId) {
+      if (!window.currentUser) return;
+      const uId = window.currentUser.userId;
+      if (Array.isArray(window.hostelData.comments[uId])) {
+        window.hostelData.comments[uId] = window.hostelData.comments[uId].filter(m => m.id !== msgId);
+      } else {
+        delete window.hostelData.comments[uId];
       }
+      syncMasterData();
+      checkUserAdminComments();
     };
 
     window.openChangePasswordModal = function() {
@@ -1674,7 +1721,6 @@
       syncMasterData();
     };
 
-    /* EDIT TRANSACTION FUNCTION */
     window.editTransaction = function(listName, id) {
       const list = window.hostelData[listName];
       const item = list.find(x => x.id === id);
@@ -1806,7 +1852,7 @@
               
               <div class="mt-3 space-y-2">
                 <div class="flex gap-2">
-                  <input type="number" id="dep-amt-${m.id}" class="w-full px-2 py-1 border rounded text-xs">
+                  <input type="number" id="dep-amt-${m.id}" placeholder="টাকা" class="w-full px-2 py-1 border rounded text-xs">
                   <input type="text" id="dep-date-${m.id}" value="${getTodayDDMMYYYY()}" class="w-28 px-2 py-1 border rounded text-xs">
                   <button onclick="addDepositForMember('${m.id}')" class="btn-green-to-red px-3 py-1 rounded font-bold text-xs">জমা</button>
                 </div>
