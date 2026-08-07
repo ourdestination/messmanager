@@ -83,6 +83,32 @@
       color: #dc2626 !important;
     }
 
+    /* Expired Lock Overlay */
+    .expired-disabled {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.5;
+      user-select: none;
+    }
+    .expired-disabled::after {
+      content: "🔒 মেস অ্যাকাউন্টের মেয়াদ শেষ! কার্যক্রম বন্ধ রয়েছে। রিনিউ করুন।";
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      z-index: 30;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      padding: 10px;
+      text-align: center;
+    }
+
     @media print {
       .no-print { display: none !important; }
       .print-only { display: block !important; }
@@ -92,6 +118,12 @@
   </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between text-gray-800 relative">
+
+  <!-- EXPIRED TOAST BANNER -->
+  <div id="expired-toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-6 py-3 rounded-2xl shadow-2xl font-bold text-sm border-2 border-white hidden flex items-center gap-2 transition-all">
+    <i class="fa-solid fa-triangle-exclamation text-amber-300 text-lg animate-bounce"></i>
+    <span>আপনার অ্যাকাউন্টের মেয়াদ শেষ হয়ে গেছে! দয়া করে পেমেন্ট করে অ্যাকাউন্ট রিনিউ করুন।</span>
+  </div>
 
   <!-- TOP BAR -->
   <div class="marquee-wrapper no-print text-xs md:text-sm font-medium">
@@ -245,7 +277,7 @@
     <section id="dashboard-section" class="hidden auth-transition">
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        <!-- LEFT USER PANEL -->
+        <!-- LEFT USER PANEL (ALWAYS OPEN FOR EXPIRED USERS TO RENEW) -->
         <aside class="lg:col-span-1 bg-white/95 backdrop-blur-md rounded-2xl p-5 border border-slate-200 shadow-xl space-y-5 h-fit no-print">
           <div class="text-center border-b pb-4">
             <div class="relative inline-block group">
@@ -271,8 +303,8 @@
               <span id="panel-user-dob" class="text-gray-800">--</span>
             </div>
             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
-              <span class="text-gray-600">আইডি মেয়াদ:</span>
-              <span id="panel-user-validity" class="text-amber-600 font-bold">-- দিন বাকি</span>
+              <span class="text-gray-600">আইডি মেয়াদ:</span>
+              <span id="panel-user-validity" class="text-amber-600 font-bold">--</span>
             </div>
             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
               <span class="text-gray-600">স্ট্যাটাস:</span>
@@ -295,8 +327,8 @@
           </button>
         </aside>
 
-        <!-- RIGHT MAIN CONTENT AREA -->
-        <div class="lg:col-span-3 space-y-6">
+        <!-- RIGHT MAIN CONTENT AREA (DISABLED IF EXPIRED) -->
+        <div id="restricted-dashboard-content" class="lg:col-span-3 space-y-6">
 
           <!-- ADMIN MESSAGES BANNER -->
           <div id="user-message-banner" class="hidden reflect-message bg-red-50 border-l-4 border-red-600 p-4 rounded-r-2xl space-y-3">
@@ -810,7 +842,6 @@
           <h4 class="text-xs font-bold text-indigo-900 flex items-center gap-1">
             <i class="fa-solid fa-headset text-indigo-600"></i> ইউজার লাইভ চ্যাট সাপোর্ট প্যানেল
           </h4>
-          <!-- চ্যাট ডিলিট বাটন -->
           <button onclick="clearMgmtSelectedUserChats()" class="text-xs bg-red-100 hover:bg-red-200 text-red-600 font-bold px-2 py-1 rounded transition flex items-center gap-1" title="সিলেক্টেড ইউজারের চ্যাট মুছুন">
             <i class="fa-solid fa-trash-can"></i> চ্যাট ক্লিয়ার করুন
           </button>
@@ -904,7 +935,7 @@
                 <th class="p-2">নাম / আইডি</th>
                 <th class="p-2">মোবাইল</th>
                 <th class="p-2">পাসওয়ার্ড</th>
-                <th class="p-2">অবস্থা/মেয়াদ (দিন)</th>
+                <th class="p-2">মেয়াদ নির্দিষ্ট তারিখ পর্যন্ত</th>
                 <th class="p-2 text-right">অ্যাকশন</th>
               </tr>
             </thead>
@@ -1165,6 +1196,19 @@
       reader.readAsDataURL(file);
     };
 
+    window.isUserExpired = function(user) {
+      if (!user) return false;
+      if (user.isLocked) return true;
+      if (user.expiryDate) {
+        const expDate = new Date(user.expiryDate);
+        const today = new Date();
+        // Compare date without time
+        expDate.setHours(23, 59, 59, 999);
+        if (today > expDate) return true;
+      }
+      return false;
+    };
+
     window.renderUserProfilePanel = function() {
       if (!window.currentUser) return;
 
@@ -1173,29 +1217,31 @@
       document.getElementById('panel-user-mobile').innerText = window.currentUser.mobile || '--';
       document.getElementById('panel-user-dob').innerText = window.currentUser.dob || '--';
 
-      const today = new Date();
-      let remainingDays = 0;
-      if (window.currentUser.expiryDate) {
-        const exp = new Date(window.currentUser.expiryDate);
-        const diff = exp - today;
-        remainingDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-      } else {
-        remainingDays = 30;
-      }
-
+      const isExpired = window.isUserExpired(window.currentUser);
       const validEl = document.getElementById('panel-user-validity');
       const statusText = document.getElementById('panel-user-status-text');
+      const restContent = document.getElementById('restricted-dashboard-content');
 
-      if (window.currentUser.isLocked || remainingDays <= 0) {
-        validEl.innerText = remainingDays <= 0 ? 'মেয়াদ শেষ' : 'অ্যাকোউন্ট লক';
-        validEl.className = 'text-red-600 font-bold';
-        statusText.innerHTML = '<i class="fa-solid fa-lock text-[10px] mr-1 text-red-600"></i>লক করা';
-        statusText.className = 'text-red-600 font-bold';
+      if (window.currentUser.expiryDate) {
+        const exp = new Date(window.currentUser.expiryDate);
+        const day = String(exp.getDate()).padStart(2, '0');
+        const month = String(exp.getMonth() + 1).padStart(2, '0');
+        const year = exp.getFullYear();
+        validEl.innerText = `${day}-${month}-${year}`;
       } else {
-        validEl.innerText = `${remainingDays} দিন বাকি`;
+        validEl.innerText = 'নির্ধারিত নয়';
+      }
+
+      if (isExpired) {
+        validEl.className = 'text-red-600 font-bold';
+        statusText.innerHTML = '<i class="fa-solid fa-lock text-[10px] mr-1 text-red-600"></i>মেয়াদ শেষ/লকড';
+        statusText.className = 'text-red-600 font-bold';
+        restContent.classList.add('expired-disabled');
+      } else {
         validEl.className = 'text-amber-600 font-bold';
         statusText.innerHTML = '<i class="fa-solid fa-circle-check text-[10px] mr-1"></i>সক্রিয়';
         statusText.className = 'text-emerald-600 font-bold';
+        restContent.classList.remove('expired-disabled');
       }
 
       const imgEl = document.getElementById('user-profile-img');
@@ -1335,11 +1381,8 @@
       document.getElementById('payment-modal').classList.add('hidden');
     };
 
-    /* ============================================================ */
-    /*              USER & MANAGEMENT LIVE CHAT SYSTEM              */
-    /* ============================================================ */
+    /* USER & MANAGEMENT LIVE CHAT SYSTEM */
 
-    // ১. ইউজারের চ্যাট হ্যান্ডলিং
     window.openLiveChatModal = function() {
       renderLiveChatMessages();
       document.getElementById('live-chat-modal').classList.remove('hidden');
@@ -1417,7 +1460,6 @@
       }
     };
 
-    // ২. ম্যানেজমেন্ট প্যানেল চ্যাট হ্যান্ডলিং
     window.populateMgmtChatUsers = function() {
       const sel = document.getElementById('mgmt-chat-user-select');
       if (!sel) return;
@@ -1495,7 +1537,6 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     };
 
-    // ম্যানেজমেন্ট প্যানেল থেকে সিলেক্টেড ইউজারের চ্যাট ডিলিট করা
     window.clearMgmtSelectedUserChats = function() {
       const sel = document.getElementById('mgmt-chat-user-select');
       const targetUserId = sel ? sel.value : '';
@@ -1516,8 +1557,6 @@
         alert('চ্যাট হিস্ট্রি সফলভাবে মুছে ফেলা হয়েছে!');
       }
     };
-
-    /* ============================================================ */
 
     window.renderPendingEditsTable = function() {
       const tbody = document.getElementById('pending-edits-table-body');
@@ -1620,14 +1659,22 @@
         approvedTbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-gray-500 font-semibold">কোনো নিবন্ধিত আইডি পাওয়া যায়নি</td></tr>`;
       } else {
         approvedUsers.forEach(u => {
+          let dateVal = '';
+          if (u.expiryDate) {
+            dateVal = u.expiryDate.split('T')[0];
+          }
+          const isExp = window.isUserExpired(u);
+
           approvedTbody.innerHTML += `
             <tr class="hover:bg-slate-50">
               <td class="p-2 font-bold">${u.fullName || '-'}<br><span class="text-gray-400 font-normal">@${u.userId}</span></td>
               <td class="p-2">${u.mobile}</td>
               <td class="p-2 text-gray-600">${u.pass}</td>
-              <td class="p-2 font-bold ${u.isLocked ? 'text-red-600' : 'text-emerald-700'}">
-                ${u.isLocked ? 'লকড' : 'সক্রিয়'}<br>
-                <button onclick="setExpiryDays('${u.userId}')" class="text-[10px] text-blue-600 underline">মেয়াদ সেট করুন</button>
+              <td class="p-2 font-bold ${isExp ? 'text-red-600' : 'text-emerald-700'}">
+                <div class="flex items-center gap-1">
+                  <input type="date" value="${dateVal}" onchange="setExpiryDateExact('${u.userId}', this.value)" class="border rounded px-1 py-0.5 text-xs text-gray-800">
+                </div>
+                <span class="text-[10px] opacity-75">${isExp ? 'মেয়াদ শেষ/লকড' : 'সক্রিয়'}</span>
               </td>
               <td class="p-2 text-right space-x-1">
                 <button onclick="toggleUserLock('${u.userId}')" class="bg-amber-600 hover:bg-amber-700 text-white px-2 py-1 rounded text-[11px] font-bold">
@@ -1651,18 +1698,17 @@
       }
     };
 
-    window.setExpiryDays = function(userId) {
-      const days = prompt('ইউজার আর কত দিন তার আইডি ব্যবহার করতে পারবে? (দিনের সংখ্যা লিখুন):', '30');
-      if (days && !isNaN(days)) {
-        const u = window.hostelData.users.find(x => x.userId === userId);
-        if (u) {
-          const exp = new Date();
-          exp.setDate(exp.getDate() + parseInt(days));
-          u.expiryDate = exp.toISOString();
-          syncMasterData();
-          renderMgmtUserTables();
-          alert(`মেয়াদ ${days} দিনের জন্য নির্ধারণ করা হয়েছে!`);
-        }
+    /* নির্দিষ্ট তারিখ অনুযায়ী মেয়াদ নির্ধারণ করা */
+    window.setExpiryDateExact = function(userId, dateString) {
+      if (!dateString) return;
+      const u = window.hostelData.users.find(x => x.userId === userId);
+      if (u) {
+        const exp = new Date(dateString);
+        exp.setHours(23, 59, 59, 999);
+        u.expiryDate = exp.toISOString();
+        syncMasterData();
+        renderMgmtUserTables();
+        alert(`মেয়াদ ${dateString} তারিখ পর্যন্ত সংরক্ষণ করা হয়েছে!`);
       }
     };
 
@@ -1752,12 +1798,20 @@
           alert('আপনার আইডিটি এখনো অনুমোদন করা হয়নি! ম্যানেজমেন্ট প্যানেলের অনুমোদনের জন্য অপেক্ষা করুন।');
           return;
         }
-        if (user.isLocked) {
-          alert('আপনার আইডিটি লক করা আছে! ম্যানেজমেন্টের সাথে যোগাযোগ করুন।');
-          return;
-        }
+        
         window.currentUser = user;
-        trigger1SecTransition(true);
+
+        /* যদি অ্যাকাউন্টের মেয়াদ শেষ হয়ে থাকে তবে ২ সেকেন্ড নোটিফিকেশন প্রদর্শন করবে */
+        if (window.isUserExpired(user)) {
+          const toast = document.getElementById('expired-toast');
+          toast.classList.remove('hidden');
+          setTimeout(() => {
+            toast.classList.add('hidden');
+            trigger1SecTransition(true);
+          }, 2000);
+        } else {
+          trigger1SecTransition(true);
+        }
       } else {
         alert(window.currentLang === 'bn' ? 'ভুল ইউজার আইডি বা পাসওয়ার্ড!' : 'Invalid User ID or Password!');
       }
@@ -2120,7 +2174,7 @@
         resMsg.innerText = `আপনার পাসওয়ার্ড: ${user.pass}`;
       } else {
         resMsg.className = 'text-xs font-bold p-2 rounded bg-red-100 text-red-800 block';
-        resMsg.innerText = 'মোবাইল নম্বর অথবা জন্ম তারিখ মilenি!';
+        resMsg.innerText = 'মোবাইল নম্বর অথবা জন্ম তারিখ মিলেনি!';
       }
     };
 
