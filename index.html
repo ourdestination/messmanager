@@ -347,22 +347,6 @@
             </div>
           </div>
 
-          <!-- MEAL ENTRY REQUEST SESSION -->
-          <div id="user-meal-request-section" class="bg-white/95 rounded-2xl shadow-md p-5 border border-amber-200 space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-              <h3 class="text-base font-black text-amber-800"><i class="fa-solid fa-utensils text-amber-600 mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট</h3>
-              <span class="text-[10px] font-bold text-gray-500">একদিনে একজন সদস্য একবার</span>
-            </div>
-            <form onsubmit="submitMealEntryRequest(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 bg-amber-50 p-4 rounded-xl">
-              <div class="md:col-span-2"><label class="text-xs font-bold block mb-1">তারিখ (দিন-মাস-বছর)</label><input type="text" id="user-meal-request-date" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-              <div><label class="text-xs font-bold block mb-1">সকাল</label><input type="number" id="user-meal-request-m" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-              <div><label class="text-xs font-bold block mb-1">দুপুর</label><input type="number" id="user-meal-request-n" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-              <div><label class="text-xs font-bold block mb-1">রাত</label><input type="number" id="user-meal-request-nt" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-              <button type="submit" class="md:col-span-5 btn-green-to-red py-2.5 rounded-lg font-bold text-sm shadow"><i class="fa-solid fa-paper-plane mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট</button>
-            </form>
-            <div><h4 class="text-xs font-bold mb-2">আমার মিল এন্ট্রি রিকোয়েস্ট</h4><div id="user-meal-request-list" class="space-y-2"></div></div>
-          </div>
-
           <!-- OVERVIEW SUMMARY CARDS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
@@ -639,6 +623,14 @@
                 </button>
               </div>
             </form>
+
+            <div id="user-meal-request-section" class="bg-amber-50 rounded-xl border border-amber-200 p-4 space-y-3">
+              <div class="flex justify-between items-center border-b border-amber-200 pb-2">
+                <h4 class="text-sm font-black text-amber-800"><i class="fa-solid fa-inbox text-amber-600 mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট</h4>
+                <span class="text-[10px] font-bold text-gray-500">প্রতি সদস্য, প্রতি দিনে সর্বোচ্চ ১টি</span>
+              </div>
+              <div id="user-meal-request-list" class="space-y-2"></div>
+            </div>
 
             <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-200 flex flex-col sm:flex-row items-center gap-3">
               <label class="text-xs font-bold text-emerald-900 whitespace-nowrap">
@@ -1049,11 +1041,17 @@
         </div>
       </div>
       <div id="admin-meal-tab" class="hidden space-y-4 pt-1">
-        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900">ইউজার নির্বাচন করে সকাল/দুপুর/রাতের মিল দিয়ে রিকোয়েস্ট পাঠান। রিকোয়েস্টটি নির্বাচিত ইউজারের প্যানেলে যাবে; ইউজার অনুমোদন করলে মিল এন্ট্রি সম্পন্ন হবে, বাতিল করলে বাতিল হবে।</div>
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900">প্রথমে ইউজার নির্বাচন করুন। এরপর ঐ ইউজারের অধীনে যুক্ত সদস্যদের তালিকা থেকে নির্দিষ্ট সদস্য নির্বাচন করে মিল এন্ট্রি রিকোয়েস্ট পাঠান। রিকোয়েস্ট নির্বাচিত ইউজারের প্যানেলে যাবে; ইউজার অনুমোদন করলে মিল সরাসরি যুক্ত হবে এবং বাতিল করলে রিকোয়েস্টটি মুছে যাবে।</div>
         <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
-          <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">ইউজার নির্বাচন করুন:</label>
-            <select id="admin-meal-user-selector" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold"></select>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">ইউজার নির্বাচন করুন:</label>
+              <select id="admin-meal-user-selector" onchange="populateAdminMealMemberSelector(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">সদস্য নির্বাচন করুন:</label>
+              <select id="admin-meal-member-selector" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold" disabled><option value="">-- আগে ইউজার নির্বাচন করুন --</option></select>
+            </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             <div><label class="block text-xs font-bold mb-1">তারিখ</label><input type="text" id="admin-meal-date" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
@@ -2243,7 +2241,8 @@
         id: 'MEM_' + Date.now(),
         name,
         phone,
-        useGas
+        useGas,
+        userId: window.currentUser ? window.currentUser.userId : ''
       });
       document.getElementById('member-input-name').value = '';
       document.getElementById('member-input-phone').value = '';
@@ -2368,14 +2367,29 @@
       syncMasterData();
     };
 
-    /* USER MEAL ENTRY REQUEST WORKFLOW */
+    /* MEAL ENTRY REQUEST WORKFLOW */
+    window.getMembersForUser = function(user) {
+      if (!user) return [];
+
+      // নতুন সদস্যগুলো সরাসরি userId দিয়ে যুক্ত থাকে।
+      const owned = window.hostelData.members.filter(m =>
+        m.userId && m.userId === user.userId
+      );
+
+      // পুরোনো সদস্যগুলোর userId না থাকলে সেগুলো unassigned/legacy member।
+      // এগুলো আগের ভার্সনে তৈরি হওয়ায় owner তথ্য ছিল না; তাই Admin-এর
+      // নির্বাচিত ইউজারের তালিকা থেকে এগুলো লুকানো যাবে না।
+      const legacy = window.hostelData.members.filter(m => !m.userId);
+
+      // একই সদস্য যেন দুইবার না আসে।
+      const result = [...owned, ...legacy];
+      return result.filter((m, index, arr) =>
+        arr.findIndex(x => x.id === m.id) === index
+      );
+    };
+
     window.getMemberForUser = function(user) {
-      if (!user) return null;
-      return window.hostelData.members.find(m =>
-        (m.userId && m.userId === user.userId) ||
-        (m.phone && user.mobile && m.phone === user.mobile) ||
-        (m.name && user.fullName && m.name === user.fullName)
-      ) || null;
+      return getMembersForUser(user)[0] || null;
     };
 
     window.hasMealForMemberDate = function(memberId, date) {
@@ -2396,36 +2410,22 @@
         alert('আপনার ইউজারের সাথে কোনো সদস্য প্রোফাইল মিলেনি। আগে সদস্য হিসেবে যুক্ত হতে হবে।');
         return;
       }
-
-      const date = document.getElementById('user-meal-request-date').value.trim() || getTodayDDMMYYYY();
-      const morning = parseFloat(document.getElementById('user-meal-request-m').value) || 0;
-      const noon = parseFloat(document.getElementById('user-meal-request-n').value) || 0;
-      const night = parseFloat(document.getElementById('user-meal-request-nt').value) || 0;
-
-      if (morning + noon + night <= 0) {
-        alert('কমপক্ষে একটি মিলের পরিমাণ দিতে হবে।');
-        return;
-      }
+      const date = document.getElementById('user-meal-request-date')?.value.trim() || getTodayDDMMYYYY();
+      const morning = parseFloat(document.getElementById('user-meal-request-m')?.value) || 0;
+      const noon = parseFloat(document.getElementById('user-meal-request-n')?.value) || 0;
+      const night = parseFloat(document.getElementById('user-meal-request-nt')?.value) || 0;
+      if (morning + noon + night <= 0) { alert('কমপক্ষে একটি মিলের পরিমাণ দিতে হবে।'); return; }
       if (hasMealForMemberDate(member.id, date) || hasMealRequestForMemberDate(member.id, date)) {
         alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে।`);
         return;
       }
-
       if (!window.hostelData.mealRequests) window.hostelData.mealRequests = [];
       window.hostelData.mealRequests.push({
-        id: 'MRQ_' + Date.now(),
-        userId: window.currentUser.userId,
+        id: 'MRQ_' + Date.now(), userId: window.currentUser.userId,
         userName: window.currentUser.fullName || window.currentUser.userId,
-        memberId: member.id,
-        memberName: member.name,
-        date, morning, noon, night,
-        total: morning + noon + night,
-        status: 'pending',
-        managementStatus: 'pending',
-        createdAt: Date.now()
+        memberId: member.id, memberName: member.name, date, morning, noon, night,
+        total: morning + noon + night, status: 'pending', managementStatus: 'pending', createdAt: Date.now()
       });
-
-      ['user-meal-request-m','user-meal-request-n','user-meal-request-nt'].forEach(id => document.getElementById(id).value = '0');
       syncMasterData();
       renderUserMealRequests();
       alert('মিল এন্ট্রি রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে।');
@@ -2435,77 +2435,47 @@
       const box = document.getElementById('user-meal-request-list');
       if (!box || !window.currentUser) return;
       const requests = (window.hostelData.mealRequests || [])
-        .filter(r => r.userId === window.currentUser.userId)
+        .filter(r => r.status === 'pending' && r.userId === window.currentUser.userId)
         .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
-
       if (!requests.length) {
-        box.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-3">কোনো মিল এন্ট্রি রিকোয়েস্ট নেই।</div>';
+        box.innerHTML = '<div class="text-center text-xs text-gray-400 bg-white/70 border rounded-xl p-3">কোনো অপেক্ষমান মিল রিকোয়েস্ট নেই।</div>';
         return;
       }
-
-      box.innerHTML = requests.map(r => {
-        const cls = r.status === 'approved'
-          ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-          : r.status === 'rejected'
-            ? 'bg-red-50 border-red-200 text-red-800'
-            : 'bg-amber-50 border-amber-200 text-amber-800';
-        const status = r.status === 'approved'
-          ? 'অনুমোদিত'
-          : r.status === 'rejected'
-            ? 'বাতিল'
-            : (r.managementStatus === 'sent' ? 'আপনার অনুমোদন প্রয়োজন' : 'অপেক্ষমান');
-        const actions = r.status === 'pending' && r.managementStatus === 'approved'
-          ? `<div class="flex gap-2 mt-2">
-              <button onclick="approveMealEntryRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
-              <button onclick="rejectMealEntryRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
-            </div>` : '';
-        return `<div class="${cls} border rounded-xl p-3 text-xs">
-          <div class="flex justify-between gap-2 font-bold"><span>${r.date} — ${r.memberName || ''}</span><span>${status}</span></div>
-          <div class="mt-1">সকাল: ${r.morning} | দুপুর: ${r.noon} | রাত: ${r.night} | মোট: <b>${r.total}</b></div>${actions}
-        </div>`;
-      }).join('');
+      box.innerHTML = requests.map(r => `<div class="bg-white border border-amber-200 rounded-xl p-3 text-xs shadow-sm">
+        <div class="flex justify-between gap-2 font-bold text-amber-900"><span>${r.date} — ${r.memberName || ''}</span><span>অনুমোদন প্রয়োজন</span></div>
+        <div class="mt-1 text-gray-700">সকাল: ${r.morning} | দুপুর: ${r.noon} | রাত: ${r.night} | মোট: <b>${r.total}</b></div>
+        <div class="mt-2 flex gap-2">
+          <button onclick="approveMealEntryRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+          <button onclick="rejectMealEntryRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+        </div>
+      </div>`).join('');
     };
 
     window.approveMealEntryRequest = function(requestId) {
       const req = (window.hostelData.mealRequests || []).find(r => r.id === requestId);
-      if (!req || req.status !== 'pending') return;
+      if (!req || req.status !== 'pending' || !window.currentUser || req.userId !== window.currentUser.userId) return;
       if (hasMealForMemberDate(req.memberId, req.date)) {
-        req.status = 'rejected';
-        syncMasterData();
-        renderUserMealRequests();
-        alert('এই তারিখে ইতোমধ্যে মিল এন্ট্রি আছে। রিকোয়েস্টটি বাতিল করা হয়েছে।');
+        window.hostelData.mealRequests = window.hostelData.mealRequests.filter(r => r.id !== requestId);
+        syncMasterData(); renderUserMealRequests();
+        alert('এই তারিখে ইতোমধ্যে মিল এন্ট্রি আছে। রিকোয়েস্টটি মুছে দেওয়া হয়েছে।');
         return;
       }
-
       window.hostelData.meals.push({
-        id: 'MEL_' + Date.now(),
-        memberId: req.memberId,
-        date: req.date,
-        morning: req.morning,
-        noon: req.noon,
-        night: req.night,
-        total: req.total,
-        timestamp: Date.now(),
-        editCount: 0,
-        isPending: false,
-        source: 'user_meal_request',
-        requestId: req.id
+        id: 'MEL_' + Date.now(), memberId: req.memberId, date: req.date,
+        morning: req.morning, noon: req.noon, night: req.night, total: req.total,
+        timestamp: Date.now(), editCount: 0, isPending: false, source: 'user_meal_request', requestId: req.id
       });
-      req.status = 'approved';
-      req.approvedAt = Date.now();
-      syncMasterData();
-      renderUserMealRequests();
+      req.status = 'approved'; req.approvedAt = Date.now();
+      syncMasterData(); renderUserMealRequests();
       alert('মিল এন্ট্রি সফলভাবে অনুমোদিত ও হিসাবের সাথে যুক্ত হয়েছে।');
     };
 
     window.rejectMealEntryRequest = function(requestId) {
       const req = (window.hostelData.mealRequests || []).find(r => r.id === requestId);
-      if (!req || req.status !== 'pending') return;
-      req.status = 'rejected';
-      req.rejectedAt = Date.now();
-      syncMasterData();
-      renderUserMealRequests();
-      alert('মিল এন্ট্রি রিকোয়েস্ট বাতিল করা হয়েছে।');
+      if (!req || req.status !== 'pending' || !window.currentUser || req.userId !== window.currentUser.userId) return;
+      window.hostelData.mealRequests = window.hostelData.mealRequests.filter(r => r.id !== requestId);
+      syncMasterData(); renderUserMealRequests();
+      alert('মিল এন্ট্রি রিকোয়েস্ট বাতিল করে মুছে দেওয়া হয়েছে।');
     };
 
     window.populateAdminMealUserSelector = function() {
@@ -2513,47 +2483,54 @@
       if (!sel) return;
       sel.innerHTML = '<option value="">-- ইউজার নির্বাচন করুন --</option>';
       window.hostelData.users.filter(u => u.status !== 'pending').forEach(u => {
-        const member = getMemberForUser(u);
-        if (member) sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
+        const members = getMembersForUser(u);
+        if (members.length) sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
       });
+      populateAdminMealMemberSelector(sel.value);
       const date = document.getElementById('admin-meal-date');
       if (date && !date.value) date.value = getTodayDDMMYYYY();
     };
 
+    window.populateAdminMealMemberSelector = function(userId) {
+      const sel = document.getElementById('admin-meal-member-selector');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- সদস্য নির্বাচন করুন --</option>';
+      sel.disabled = !userId;
+      if (!userId) return;
+      const user = window.hostelData.users.find(u => u.userId === userId);
+      getMembersForUser(user).forEach(m => {
+        sel.innerHTML += `<option value="${m.id}">${m.name}${m.phone ? ' — ' + m.phone : ''}</option>`;
+      });
+    };
+
     window.sendAdminMealRequest = function() {
       const userId = document.getElementById('admin-meal-user-selector').value;
+      const memberId = document.getElementById('admin-meal-member-selector').value;
       const user = window.hostelData.users.find(u => u.userId === userId);
-      const member = getMemberForUser(user);
+      const member = window.hostelData.members.find(m => m.id === memberId);
       const date = document.getElementById('admin-meal-date').value.trim() || getTodayDDMMYYYY();
       const morning = parseFloat(document.getElementById('admin-meal-m').value) || 0;
       const noon = parseFloat(document.getElementById('admin-meal-n').value) || 0;
       const night = parseFloat(document.getElementById('admin-meal-nt').value) || 0;
-
-      if (!user || !member) { alert('অনুগ্রহ করে এমন ইউজার নির্বাচন করুন যার সাথে সদস্য প্রোফাইল যুক্ত আছে।'); return; }
+      if (!user || !member) { alert('অনুগ্রহ করে ইউজার ও নির্দিষ্ট সদস্য নির্বাচন করুন।'); return; }
+      // পুরোনো unassigned সদস্যকে প্রথমবার Admin-এর নির্বাচিত ইউজারের সাথে
+      // স্থায়ীভাবে যুক্ত করে দিচ্ছি, যাতে পরবর্তীতে এই সদস্য সঠিক ইউজারের
+      // অধীনেই থাকে।
+      if (!member.userId) member.userId = user.userId;
       if (morning + noon + night <= 0) { alert('কমপক্ষে একটি মিলের পরিমাণ দিতে হবে।'); return; }
       if (hasMealForMemberDate(member.id, date) || hasMealRequestForMemberDate(member.id, date)) {
-        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে.`);
-        return;
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে।`); return;
       }
-
       if (!window.hostelData.mealRequests) window.hostelData.mealRequests = [];
       window.hostelData.mealRequests.push({
-        id: 'MRQ_' + Date.now(),
-        userId: user.userId,
-        userName: user.fullName || user.userId,
-        memberId: member.id,
-        memberName: member.name,
-        date, morning, noon, night,
-        total: morning + noon + night,
-        status: 'pending',
-        managementStatus: 'sent',
-        createdAt: Date.now()
+        id: 'MRQ_' + Date.now(), userId: user.userId, userName: user.fullName || user.userId,
+        memberId: member.id, memberName: member.name, date, morning, noon, night,
+        total: morning + noon + night, status: 'pending', managementStatus: 'sent', createdAt: Date.now()
       });
       ['admin-meal-m','admin-meal-n','admin-meal-nt'].forEach(id => document.getElementById(id).value = '0');
-      syncMasterData();
-      renderAdminMealRequests();
+      syncMasterData(); renderAdminMealRequests();
       if (window.currentUser && window.currentUser.userId === user.userId) renderUserMealRequests();
-      alert('নির্বাচিত ইউজারের প্যানেলে মিল এন্ট্রি রিকোয়েস্ট পাঠানো হয়েছে।');
+      alert('নির্বাচিত সদস্যের জন্য মিল এন্ট্রি রিকোয়েস্ট ইউজার প্যানেলে পাঠানো হয়েছে।');
     };
 
     window.switchAdminTab = function(tab) {
@@ -2592,7 +2569,7 @@
       box.innerHTML = requests.map(r => `<div class="border rounded-xl p-3 bg-white shadow-sm">
         <div class="flex flex-wrap justify-between gap-2 text-xs"><div><b>${r.userName || r.userId}</b> (@${r.userId})</div><div class="font-bold text-amber-700">${r.date}</div></div>
         <div class="text-xs text-gray-600 mt-1">সদস্য: <b>${r.memberName || '-'}</b> | সকাল: ${r.morning} | দুপুর: ${r.noon} | রাত: ${r.night} | মোট: <b>${r.total}</b></div>
-        <div class="mt-2 text-[10px] font-bold text-amber-700">এই রিকোয়েস্টের অনুমোদন/বাতিল নির্বাচিত ইউজারের প্যানেল থেকে হবে।</div>
+        <div class="mt-2 text-[10px] font-bold text-amber-700">অনুমোদন বা বাতিল নির্বাচিত ইউজারের প্যানেল থেকেই হবে।</div>
       </div>`).join('');
     };
 
@@ -2618,8 +2595,8 @@
 
       if (!memberId) return;
 
-      if (hasMealForMemberDate(memberId, date)) {
-        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে।`);
+      if (hasMealForMemberDate(memberId, date) || hasMealRequestForMemberDate(memberId, date)) {
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে।`);
         return;
       }
 
@@ -2712,6 +2689,7 @@
     };
 
     window.renderDashboard = function() {
+      renderUserMealRequests();
       const membersContainer = document.getElementById('members-cards-container');
       const mealSelect = document.getElementById('meal-member-select');
       const shopperList = document.getElementById('shopper-checkbox-list');
