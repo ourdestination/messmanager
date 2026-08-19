@@ -347,6 +347,22 @@
             </div>
           </div>
 
+          <!-- MEAL ENTRY REQUEST SESSION -->
+          <div id="user-meal-request-section" class="bg-white/95 rounded-2xl shadow-md p-5 border border-amber-200 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+              <h3 class="text-base font-black text-amber-800"><i class="fa-solid fa-utensils text-amber-600 mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট</h3>
+              <span class="text-[10px] font-bold text-gray-500">একদিনে একজন সদস্য একবার</span>
+            </div>
+            <form onsubmit="submitMealEntryRequest(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 bg-amber-50 p-4 rounded-xl">
+              <div class="md:col-span-2"><label class="text-xs font-bold block mb-1">তারিখ (দিন-মাস-বছর)</label><input type="text" id="user-meal-request-date" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+              <div><label class="text-xs font-bold block mb-1">সকাল</label><input type="number" id="user-meal-request-m" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+              <div><label class="text-xs font-bold block mb-1">দুপুর</label><input type="number" id="user-meal-request-n" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+              <div><label class="text-xs font-bold block mb-1">রাত</label><input type="number" id="user-meal-request-nt" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+              <button type="submit" class="md:col-span-5 btn-green-to-red py-2.5 rounded-lg font-bold text-sm shadow"><i class="fa-solid fa-paper-plane mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট</button>
+            </form>
+            <div><h4 class="text-xs font-bold mb-2">আমার মিল এন্ট্রি রিকোয়েস্ট</h4><div id="user-meal-request-list" class="space-y-2"></div></div>
+          </div>
+
           <!-- OVERVIEW SUMMARY CARDS -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-lg flex items-center justify-between">
@@ -797,7 +813,7 @@
       <div class="space-y-3">
         <p class="text-xs text-gray-500 font-semibold">প্রবেশ করতে আইডি ও পাসওয়ার্ড দিন:</p>
         <input type="text" id="admin-auth-id" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
-        <input type="password" id="admin-auth-pass" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        <div class="relative"><input type="password" id="admin-auth-pass" class="w-full pr-10 px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"><button type="button" onclick="togglePasswordVisibility('admin-auth-pass','admin-auth-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="admin-auth-pass-eye" class="fa-solid fa-eye"></i></button></div>
         <button onclick="verifyAdminAuth()" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
           প্রবেশ করুন
         </button>
@@ -818,7 +834,7 @@
       <div class="space-y-3">
         <p class="text-xs text-gray-500 font-semibold">ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:</p>
         <input type="text" id="mgmt-auth-id" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
-        <input type="password" id="mgmt-auth-pass" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+        <div class="relative"><input type="password" id="mgmt-auth-pass" class="w-full pr-10 px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"><button type="button" onclick="togglePasswordVisibility('mgmt-auth-pass','mgmt-auth-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-auth-pass-eye" class="fa-solid fa-eye"></i></button></div>
         <button onclick="verifyMgmtAuth()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
           প্যানেলে প্রবেশ করুন
         </button>
@@ -986,6 +1002,19 @@
         </table>
       </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="border rounded-xl overflow-hidden">
+          <div class="bg-emerald-50 px-4 py-3 font-black text-emerald-800"><i class="fa-solid fa-cart-shopping mr-1"></i> বাজার খরচের বিস্তারিত</div>
+          <div class="max-h-56 overflow-y-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-100"><tr><th class="p-2">তারিখ</th><th class="p-2">আইটেম</th><th class="p-2">কে করেছে</th><th class="p-2">টাকা</th></tr></thead><tbody id="accounts-bazaar-detail-body"></tbody></table></div>
+          <div class="p-3 text-right bg-emerald-50 border-t font-black">মোট বাজার খরচ: ৳ <span id="accounts-bazaar-detail-total">0</span></div>
+        </div>
+        <div class="border rounded-xl overflow-hidden">
+          <div class="bg-blue-50 px-4 py-3 font-black text-blue-800"><i class="fa-solid fa-building-columns mr-1"></i> স্থায়ী খরচের বিস্তারিত</div>
+          <div class="max-h-56 overflow-y-auto"><table class="w-full text-left text-xs"><thead class="bg-slate-100"><tr><th class="p-2">তারিখ</th><th class="p-2">খাত</th><th class="p-2">টাকা</th></tr></thead><tbody id="accounts-fixed-detail-body"></tbody></table></div>
+          <div class="p-3 text-right bg-blue-50 border-t font-black">মোট স্থায়ী খরচ: ৳ <span id="accounts-fixed-detail-total">0</span></div>
+        </div>
+      </div>
+
       <div class="text-right">
         <button onclick="closeViewAccountsModal()" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
           বন্ধ করুন
@@ -1004,33 +1033,42 @@
         <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <div class="space-y-4 pt-1">
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label>
-          <select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold focus:ring-2 focus:ring-emerald-500">
-            <option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option>
-          </select>
-        </div>
-
-        <div id="admin-user-data-preview" class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1">
-          <p class="font-bold text-emerald-800">ইউজার প্রোফাইল তথ্য:</p>
-          <div id="admin-user-details-content">ইউজার নির্বাচন করুন...</div>
-        </div>
-
+      <div class="flex border-b text-sm font-black">
+        <button id="admin-tab-message" onclick="switchAdminTab('message')" class="flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600"><i class="fa-solid fa-envelope mr-1"></i> বার্তা</button>
+        <button id="admin-tab-meal" onclick="switchAdminTab('meal')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-utensils mr-1"></i> মিল এন্ট্রি</button>
+      </div>
+      <div id="admin-message-tab" class="space-y-4 pt-1">
+        <div><label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label><select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"><option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option></select></div>
+        <div id="admin-user-data-preview" class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1"><p class="font-bold text-emerald-800">ইউজার প্রোফাইল তথ্য:</p><div id="admin-user-details-content">ইউজার নির্বাচন করুন...</div></div>
         <div class="space-y-2">
           <label class="block text-xs font-bold text-gray-700 mb-1">প্রেরকের নাম:</label>
-          <select id="admin-commenter-dropdown" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50 focus:ring-2 focus:ring-emerald-500">
-            <option value="">-- প্রেরকের নাম নির্বাচন করুন --</option>
-          </select>
-          
+          <select id="admin-commenter-dropdown" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50"><option value="">-- প্রেরকের নাম নির্বাচন করুন --</option></select>
           <label class="block text-xs font-bold text-gray-700 mb-1">বার্তার বিষয়বস্তু:</label>
-          <textarea id="admin-comment-text" rows="3" placeholder="বার্তা লিখুন..." class="w-full p-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"></textarea>
-          
-          <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow mt-1">
-            <i class="fa-solid fa-paper-plane mr-1"></i> বার্তা পাঠাও
-          </button>
+          <textarea id="admin-comment-text" rows="3" placeholder="বার্তা লিখুন..." class="w-full p-2 border rounded-xl text-sm"></textarea>
+          <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i> বার্তা পাঠাও</button>
         </div>
       </div>
+      <div id="admin-meal-tab" class="hidden space-y-4 pt-1">
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900">ইউজার নির্বাচন করে সকাল/দুপুর/রাতের মিল দিয়ে রিকোয়েস্ট পাঠান। রিকোয়েস্টটি নির্বাচিত ইউজারের প্যানেলে যাবে; ইউজার অনুমোদন করলে মিল এন্ট্রি সম্পন্ন হবে, বাতিল করলে বাতিল হবে।</div>
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">ইউজার নির্বাচন করুন:</label>
+            <select id="admin-meal-user-selector" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold"></select>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            <div><label class="block text-xs font-bold mb-1">তারিখ</label><input type="text" id="admin-meal-date" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+            <div><label class="block text-xs font-bold mb-1">সকাল</label><input type="number" id="admin-meal-m" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+            <div><label class="block text-xs font-bold mb-1">দুপুর</label><input type="number" id="admin-meal-n" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+            <div><label class="block text-xs font-bold mb-1">রাত</label><input type="number" id="admin-meal-nt" step="0.5" min="0" value="0" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+          </div>
+          <button onclick="sendAdminMealRequest()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট পাঠান</button>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold mb-2">অপেক্ষমান রিকোয়েস্ট</h4>
+          <div id="admin-meal-request-list" class="space-y-2"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1045,11 +1083,11 @@
       <form onsubmit="handleChangePassword(event)" class="space-y-3">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">বর্তমান পাসওয়ার্ড</label>
-          <input type="password" id="old-pass-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
+          <div class="relative"><input type="password" id="old-pass-input" required class="w-full pr-10 px-3 py-2 border rounded-xl text-sm"><button type="button" onclick="togglePasswordVisibility('old-pass-input','old-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="old-pass-eye" class="fa-solid fa-eye"></i></button></div>
         </div>
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">নতুন পাসওয়ার্ড</label>
-          <input type="password" id="new-pass-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
+          <div class="relative"><input type="password" id="new-pass-input" required class="w-full pr-10 px-3 py-2 border rounded-xl text-sm"><button type="button" onclick="togglePasswordVisibility('new-pass-input','new-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="new-pass-eye" class="fa-solid fa-eye"></i></button></div>
         </div>
         <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow">
           পাসওয়ার্ড সেভ করুন
@@ -1120,6 +1158,7 @@
       gasExpenses: [],
       bazaarExpenses: [],
       meals: [],
+      mealRequests: [],
       pendingEdits: [],
       comments: {},
       replies: [],
@@ -1140,6 +1179,7 @@
           gasExpenses: data.gasExpenses || [],
           bazaarExpenses: data.bazaarExpenses || [],
           meals: data.meals || [],
+          mealRequests: data.mealRequests || [],
           pendingEdits: data.pendingEdits || [],
           comments: data.comments || {},
           replies: data.replies || [],
@@ -1152,6 +1192,7 @@
           renderUserProfilePanel();
           renderDashboard();
           checkUserAdminComments();
+          renderUserMealRequests();
           renderLiveChatMessages();
         }
         renderMgmtLiveChatMessages();
@@ -1282,7 +1323,7 @@
 
     window.setInitialDates = function() {
       const today = getTodayDDMMYYYY();
-      ['fixed-date-input', 'gas-date-input', 'bazaar-date-input', 'meal-date-input'].forEach(id => {
+      ['fixed-date-input', 'gas-date-input', 'bazaar-date-input', 'meal-date-input', 'user-meal-request-date'].forEach(id => {
         const el = document.getElementById(id);
         if (el && !el.value) el.value = today;
       });
@@ -1669,7 +1710,7 @@
             <tr class="hover:bg-slate-50">
               <td class="p-2 font-bold">${u.fullName || '-'}<br><span class="text-gray-400 font-normal">@${u.userId}</span></td>
               <td class="p-2">${u.mobile}</td>
-              <td class="p-2 text-gray-600">${u.pass}</td>
+              <td class="p-2"><div class="relative min-w-[130px]"><input type="password" id="mgmt-pass-${u.userId}" value="${u.pass || ''}" readonly class="w-full pr-8 px-2 py-1 border rounded text-xs"><button type="button" onclick="togglePasswordVisibility('mgmt-pass-${u.userId}','mgmt-pass-eye-${u.userId}')" class="absolute right-2 top-1.5 text-gray-500"><i id="mgmt-pass-eye-${u.userId}" class="fa-solid fa-eye text-xs"></i></button></div></td>
               <td class="p-2 font-bold ${isExp ? 'text-red-600' : 'text-emerald-700'}">
                 <div class="flex items-center gap-1">
                   <input type="date" value="${dateVal}" onchange="setExpiryDateExact('${u.userId}', this.value)" class="border rounded px-1 py-0.5 text-xs text-gray-800">
@@ -1834,6 +1875,7 @@
           document.getElementById('header-logout-btn').classList.remove('hidden');
           renderUserProfilePanel();
           checkUserAdminComments();
+          renderUserMealRequests();
           renderDashboard();
         }, 500);
       } else {
@@ -1951,11 +1993,24 @@
           </tr>
         `;
       });
+      const bazBody = document.getElementById('accounts-bazaar-detail-body');
+      const fixBody = document.getElementById('accounts-fixed-detail-body');
+      if (bazBody && fixBody) {
+        const sortedBazaar = [...window.hostelData.bazaarExpenses].sort((a,b) => parseDDMMYYYY(a.date)-parseDDMMYYYY(b.date) || (a.timestamp||0)-(b.timestamp||0));
+        bazBody.innerHTML = sortedBazaar.length ? sortedBazaar.map(b => `<tr class="border-b"><td class="p-2">${b.date}</td><td class="p-2">${b.items ? b.items.join(', ') : '-'}</td><td class="p-2">${b.shoppers ? b.shoppers.join(', ') : '-'}</td><td class="p-2">৳${b.amount}</td></tr>`).join('') : '<tr><td colspan="4" class="p-3 text-center text-gray-400">কোনো বাজার খরচ নেই</td></tr>';
+        const sortedFixed = [...window.hostelData.fixedExpenses].sort((a,b) => parseDDMMYYYY(a.date)-parseDDMMYYYY(b.date) || (a.timestamp||0)-(b.timestamp||0));
+        fixBody.innerHTML = sortedFixed.length ? sortedFixed.map(f => `<tr class="border-b"><td class="p-2">${f.date}</td><td class="p-2">${f.category}</td><td class="p-2">৳${f.amount}</td></tr>`).join('') : '<tr><td colspan="3" class="p-3 text-center text-gray-400">কোনো স্থায়ী খরচ নেই</td></tr>';
+        document.getElementById('accounts-bazaar-detail-total').innerText = totBazaar;
+        document.getElementById('accounts-fixed-detail-total').innerText = totFixed;
+      }
+
     };
 
     window.openAdminPanelModal = function() {
       populateAdminUserSelector();
       populateAdminCommenterDropdown();
+      switchAdminTab('message');
+      renderAdminMealRequests();
       document.getElementById('admin-modal').classList.remove('hidden');
     };
 
@@ -2313,6 +2368,246 @@
       syncMasterData();
     };
 
+    /* USER MEAL ENTRY REQUEST WORKFLOW */
+    window.getMemberForUser = function(user) {
+      if (!user) return null;
+      return window.hostelData.members.find(m =>
+        (m.userId && m.userId === user.userId) ||
+        (m.phone && user.mobile && m.phone === user.mobile) ||
+        (m.name && user.fullName && m.name === user.fullName)
+      ) || null;
+    };
+
+    window.hasMealForMemberDate = function(memberId, date) {
+      return window.hostelData.meals.some(m => m.memberId === memberId && m.date === date);
+    };
+
+    window.hasMealRequestForMemberDate = function(memberId, date) {
+      return (window.hostelData.mealRequests || []).some(r =>
+        r.memberId === memberId && r.date === date && r.status === 'pending'
+      );
+    };
+
+    window.submitMealEntryRequest = function(e) {
+      e.preventDefault();
+      if (!window.currentUser) return;
+      const member = getMemberForUser(window.currentUser);
+      if (!member) {
+        alert('আপনার ইউজারের সাথে কোনো সদস্য প্রোফাইল মিলেনি। আগে সদস্য হিসেবে যুক্ত হতে হবে।');
+        return;
+      }
+
+      const date = document.getElementById('user-meal-request-date').value.trim() || getTodayDDMMYYYY();
+      const morning = parseFloat(document.getElementById('user-meal-request-m').value) || 0;
+      const noon = parseFloat(document.getElementById('user-meal-request-n').value) || 0;
+      const night = parseFloat(document.getElementById('user-meal-request-nt').value) || 0;
+
+      if (morning + noon + night <= 0) {
+        alert('কমপক্ষে একটি মিলের পরিমাণ দিতে হবে।');
+        return;
+      }
+      if (hasMealForMemberDate(member.id, date) || hasMealRequestForMemberDate(member.id, date)) {
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে।`);
+        return;
+      }
+
+      if (!window.hostelData.mealRequests) window.hostelData.mealRequests = [];
+      window.hostelData.mealRequests.push({
+        id: 'MRQ_' + Date.now(),
+        userId: window.currentUser.userId,
+        userName: window.currentUser.fullName || window.currentUser.userId,
+        memberId: member.id,
+        memberName: member.name,
+        date, morning, noon, night,
+        total: morning + noon + night,
+        status: 'pending',
+        managementStatus: 'pending',
+        createdAt: Date.now()
+      });
+
+      ['user-meal-request-m','user-meal-request-n','user-meal-request-nt'].forEach(id => document.getElementById(id).value = '0');
+      syncMasterData();
+      renderUserMealRequests();
+      alert('মিল এন্ট্রি রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে।');
+    };
+
+    window.renderUserMealRequests = function() {
+      const box = document.getElementById('user-meal-request-list');
+      if (!box || !window.currentUser) return;
+      const requests = (window.hostelData.mealRequests || [])
+        .filter(r => r.userId === window.currentUser.userId)
+        .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      if (!requests.length) {
+        box.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-3">কোনো মিল এন্ট্রি রিকোয়েস্ট নেই।</div>';
+        return;
+      }
+
+      box.innerHTML = requests.map(r => {
+        const cls = r.status === 'approved'
+          ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+          : r.status === 'rejected'
+            ? 'bg-red-50 border-red-200 text-red-800'
+            : 'bg-amber-50 border-amber-200 text-amber-800';
+        const status = r.status === 'approved'
+          ? 'অনুমোদিত'
+          : r.status === 'rejected'
+            ? 'বাতিল'
+            : (r.managementStatus === 'sent' ? 'আপনার অনুমোদন প্রয়োজন' : 'অপেক্ষমান');
+        const actions = r.status === 'pending' && r.managementStatus === 'approved'
+          ? `<div class="flex gap-2 mt-2">
+              <button onclick="approveMealEntryRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+              <button onclick="rejectMealEntryRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+            </div>` : '';
+        return `<div class="${cls} border rounded-xl p-3 text-xs">
+          <div class="flex justify-between gap-2 font-bold"><span>${r.date} — ${r.memberName || ''}</span><span>${status}</span></div>
+          <div class="mt-1">সকাল: ${r.morning} | দুপুর: ${r.noon} | রাত: ${r.night} | মোট: <b>${r.total}</b></div>${actions}
+        </div>`;
+      }).join('');
+    };
+
+    window.approveMealEntryRequest = function(requestId) {
+      const req = (window.hostelData.mealRequests || []).find(r => r.id === requestId);
+      if (!req || req.status !== 'pending') return;
+      if (hasMealForMemberDate(req.memberId, req.date)) {
+        req.status = 'rejected';
+        syncMasterData();
+        renderUserMealRequests();
+        alert('এই তারিখে ইতোমধ্যে মিল এন্ট্রি আছে। রিকোয়েস্টটি বাতিল করা হয়েছে।');
+        return;
+      }
+
+      window.hostelData.meals.push({
+        id: 'MEL_' + Date.now(),
+        memberId: req.memberId,
+        date: req.date,
+        morning: req.morning,
+        noon: req.noon,
+        night: req.night,
+        total: req.total,
+        timestamp: Date.now(),
+        editCount: 0,
+        isPending: false,
+        source: 'user_meal_request',
+        requestId: req.id
+      });
+      req.status = 'approved';
+      req.approvedAt = Date.now();
+      syncMasterData();
+      renderUserMealRequests();
+      alert('মিল এন্ট্রি সফলভাবে অনুমোদিত ও হিসাবের সাথে যুক্ত হয়েছে।');
+    };
+
+    window.rejectMealEntryRequest = function(requestId) {
+      const req = (window.hostelData.mealRequests || []).find(r => r.id === requestId);
+      if (!req || req.status !== 'pending') return;
+      req.status = 'rejected';
+      req.rejectedAt = Date.now();
+      syncMasterData();
+      renderUserMealRequests();
+      alert('মিল এন্ট্রি রিকোয়েস্ট বাতিল করা হয়েছে।');
+    };
+
+    window.populateAdminMealUserSelector = function() {
+      const sel = document.getElementById('admin-meal-user-selector');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- ইউজার নির্বাচন করুন --</option>';
+      window.hostelData.users.filter(u => u.status !== 'pending').forEach(u => {
+        const member = getMemberForUser(u);
+        if (member) sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
+      });
+      const date = document.getElementById('admin-meal-date');
+      if (date && !date.value) date.value = getTodayDDMMYYYY();
+    };
+
+    window.sendAdminMealRequest = function() {
+      const userId = document.getElementById('admin-meal-user-selector').value;
+      const user = window.hostelData.users.find(u => u.userId === userId);
+      const member = getMemberForUser(user);
+      const date = document.getElementById('admin-meal-date').value.trim() || getTodayDDMMYYYY();
+      const morning = parseFloat(document.getElementById('admin-meal-m').value) || 0;
+      const noon = parseFloat(document.getElementById('admin-meal-n').value) || 0;
+      const night = parseFloat(document.getElementById('admin-meal-nt').value) || 0;
+
+      if (!user || !member) { alert('অনুগ্রহ করে এমন ইউজার নির্বাচন করুন যার সাথে সদস্য প্রোফাইল যুক্ত আছে।'); return; }
+      if (morning + noon + night <= 0) { alert('কমপক্ষে একটি মিলের পরিমাণ দিতে হবে।'); return; }
+      if (hasMealForMemberDate(member.id, date) || hasMealRequestForMemberDate(member.id, date)) {
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে.`);
+        return;
+      }
+
+      if (!window.hostelData.mealRequests) window.hostelData.mealRequests = [];
+      window.hostelData.mealRequests.push({
+        id: 'MRQ_' + Date.now(),
+        userId: user.userId,
+        userName: user.fullName || user.userId,
+        memberId: member.id,
+        memberName: member.name,
+        date, morning, noon, night,
+        total: morning + noon + night,
+        status: 'pending',
+        managementStatus: 'sent',
+        createdAt: Date.now()
+      });
+      ['admin-meal-m','admin-meal-n','admin-meal-nt'].forEach(id => document.getElementById(id).value = '0');
+      syncMasterData();
+      renderAdminMealRequests();
+      if (window.currentUser && window.currentUser.userId === user.userId) renderUserMealRequests();
+      alert('নির্বাচিত ইউজারের প্যানেলে মিল এন্ট্রি রিকোয়েস্ট পাঠানো হয়েছে।');
+    };
+
+    window.switchAdminTab = function(tab) {
+      const msg = document.getElementById('admin-message-tab');
+      const meal = document.getElementById('admin-meal-tab');
+      const msgBtn = document.getElementById('admin-tab-message');
+      const mealBtn = document.getElementById('admin-tab-meal');
+
+      if (tab === 'meal') {
+        msg.classList.add('hidden');
+        meal.classList.remove('hidden');
+        msgBtn.className = 'flex-1 py-2.5 text-center text-gray-400';
+        mealBtn.className = 'flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';
+        populateAdminMealUserSelector();
+        renderAdminMealRequests();
+      } else {
+        meal.classList.add('hidden');
+        msg.classList.remove('hidden');
+        mealBtn.className = 'flex-1 py-2.5 text-center text-gray-400';
+        msgBtn.className = 'flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';
+      }
+    };
+
+    window.renderAdminMealRequests = function() {
+      const box = document.getElementById('admin-meal-request-list');
+      if (!box) return;
+      const requests = (window.hostelData.mealRequests || [])
+        .filter(r => r.status === 'pending')
+        .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      if (!requests.length) {
+        box.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">কোনো অপেক্ষমান মিল এন্ট্রি রিকোয়েস্ট নেই।</div>';
+        return;
+      }
+
+      box.innerHTML = requests.map(r => `<div class="border rounded-xl p-3 bg-white shadow-sm">
+        <div class="flex flex-wrap justify-between gap-2 text-xs"><div><b>${r.userName || r.userId}</b> (@${r.userId})</div><div class="font-bold text-amber-700">${r.date}</div></div>
+        <div class="text-xs text-gray-600 mt-1">সদস্য: <b>${r.memberName || '-'}</b> | সকাল: ${r.morning} | দুপুর: ${r.noon} | রাত: ${r.night} | মোট: <b>${r.total}</b></div>
+        <div class="mt-2 text-[10px] font-bold text-amber-700">এই রিকোয়েস্টের অনুমোদন/বাতিল নির্বাচিত ইউজারের প্যানেল থেকে হবে।</div>
+      </div>`).join('');
+    };
+
+    window.adminApproveMealRequest = function(requestId) {
+      const req = (window.hostelData.mealRequests || []).find(r => r.id === requestId);
+      if (!req || req.status !== 'pending') return;
+      alert('মিল এন্ট্রি অনুমোদন নির্বাচিত ইউজার প্যানেল থেকেই করতে হবে।');
+    };
+
+    window.adminRejectMealRequest = function(requestId) {
+      const req = (window.hostelData.mealRequests || []).find(r => r.id === requestId);
+      if (!req || req.status !== 'pending') return;
+      alert('মিল এন্ট্রি বাতিল নির্বাচিত ইউজার প্যানেল থেকেই করতে হবে।');
+    };
+
     window.handleSaveMeal = function(e) {
       e.preventDefault();
       const memberId = document.getElementById('meal-member-select').value;
@@ -2322,6 +2617,11 @@
       const nt = parseFloat(document.getElementById('meal-nt-input').value) || 0;
 
       if (!memberId) return;
+
+      if (hasMealForMemberDate(memberId, date)) {
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে মিল এন্ট্রি রয়েছে। একদিনে একবারই মিল এন্ট্রি করা যাবে।`);
+        return;
+      }
 
       window.hostelData.meals.push({
         id: 'MEL_' + Date.now(),
@@ -2512,6 +2812,7 @@
       document.getElementById('section-total-deposit').innerText = sectionTotalDepositSum;
 
       renderTables();
+      renderUserMealRequests();
 
       const totalAllDeposits = window.hostelData.deposits.reduce((a, c) => a + c.amount, 0);
       const totalAllExpenses = totFixed + totGas + totBazaar;
