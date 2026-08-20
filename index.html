@@ -77,6 +77,19 @@
       100% { transform: translateY(0); opacity: 1; }
     }
 
+    .receipt-paper { max-width: 760px; margin: 0 auto; background: #fff; color:#111827; font-family: Arial, sans-serif; }
+    .receipt-header { border-bottom: 2px solid #111827; padding-bottom: 12px; margin-bottom: 14px; }
+    .receipt-table td { padding: 7px 8px; border-bottom: 1px solid #e5e7eb; }
+    .receipt-table .label { color:#6b7280; width:42%; }
+    .receipt-total { font-size: 1.15rem; font-weight: 900; border-top:2px solid #111827; border-bottom:2px solid #111827; padding:10px 0; }
+    @media print {
+      body * { visibility: hidden !important; }
+      #receipt-print-area, #receipt-print-area * { visibility: visible !important; }
+      #receipt-print-area { position:absolute !important; left:0; top:0; width:100%; background:#fff !important; }
+      .no-print { display:none !important; }
+      @page { size: A4; margin: 12mm; }
+    }
+
     .pending-approval {
       background-color: #fef2f2 !important;
       border: 2px solid #ef4444 !important;
@@ -726,6 +739,21 @@
     </section>
 
   </main>
+
+  <!-- RECEIPT MODAL -->
+  <div id="receipt-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-[80] no-print">
+    <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[95vh] overflow-y-auto shadow-2xl">
+      <div class="flex items-center justify-between p-4 border-b no-print">
+        <h3 id="receipt-modal-title" class="font-black text-lg text-emerald-800"><i class="fa-solid fa-receipt mr-2"></i>রশিদ</h3>
+        <button onclick="closeReceiptModal()" class="text-gray-500 hover:text-red-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="receipt-print-area" class="p-6"></div>
+      <div class="flex gap-2 p-4 border-t no-print">
+        <button onclick="printReceipt()" class="btn-green-to-red flex-1 py-2.5 rounded-xl font-bold"><i class="fa-solid fa-print mr-1"></i> প্রিন্ট / PDF</button>
+        <button onclick="closeReceiptModal()" class="bg-gray-200 text-gray-800 px-5 py-2.5 rounded-xl font-bold">বন্ধ করুন</button>
+      </div>
+    </div>
+  </div>
 
   <!-- FLOATING WIDGET -->
   <div id="floating-replies-container" class="fixed bottom-4 right-4 z-40 max-w-xs w-full space-y-2 no-print"></div>
@@ -2259,6 +2287,7 @@
 
       window.hostelData.deposits.push({
         id: 'DEP_' + Date.now(),
+        receiptNo: 'DEP-' + Date.now(),
         memberId,
         amount,
         date,
@@ -2267,6 +2296,88 @@
       });
       amtInput.value = '';
       syncMasterData();
+    };
+
+    /* RECEIPT SYSTEM */
+    window.numberToBanglaWords = function(amount) {
+      const n = Math.round(Number(amount) || 0);
+      const ones = ['', 'এক', 'দুই', 'তিন', 'চার', 'পাঁচ', 'ছয়', 'সাত', 'আট', 'নয়', 'দশ', 'এগারো', 'বারো', 'তেরো', 'চৌদ্দ', 'পনেরো', 'ষোল', 'সতেরো', 'আঠারো', 'উনিশ', 'বিশ'];
+      const tens = ['', '', 'বিশ', 'ত্রিশ', 'চল্লিশ', 'পঞ্চাশ', 'ষাট', 'সত্তর', 'আশি', 'নব্বই'];
+      if (n <= 20) return ones[n] || 'শূন্য';
+      if (n < 100) return tens[Math.floor(n/10)] + (n%10 ? ' ' + ones[n%10] : '');
+      if (n < 1000) return ones[Math.floor(n/100)] + ' শত' + (n%100 ? ' ' + window.numberToBanglaWords(n%100) : '');
+      if (n < 100000) return window.numberToBanglaWords(Math.floor(n/1000)) + ' হাজার' + (n%1000 ? ' ' + window.numberToBanglaWords(n%1000) : '');
+      if (n < 10000000) return window.numberToBanglaWords(Math.floor(n/100000)) + ' লক্ষ' + (n%100000 ? ' ' + window.numberToBanglaWords(n%100000) : '');
+      return window.numberToBanglaWords(Math.floor(n/10000000)) + ' কোটি' + (n%10000000 ? ' ' + window.numberToBanglaWords(n%10000000) : '');
+    };
+
+    window.escapeReceipt = function(v) {
+      return String(v ?? '-').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    };
+
+    window.getReceiptTime = function(ts) {
+      return new Date(ts || Date.now()).toLocaleString('bn-BD', { dateStyle:'medium', timeStyle:'short' });
+    };
+
+    window.openReceipt = function(title, html) {
+      document.getElementById('receipt-modal-title').innerHTML = '<i class="fa-solid fa-receipt mr-2"></i>' + title;
+      document.getElementById('receipt-print-area').innerHTML = html;
+      const m = document.getElementById('receipt-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    };
+    window.closeReceiptModal = function() {
+      const m = document.getElementById('receipt-modal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    };
+    window.printReceipt = function() { window.print(); };
+
+    window.showDepositReceipt = function(id) {
+      const d = window.hostelData.deposits.find(x => x.id === id);
+      if (!d) return;
+      const m = window.hostelData.members.find(x => x.id === d.memberId) || {};
+      const u = window.hostelData.users.find(x => x.userId === m.userId) || {};
+      const previous = window.hostelData.deposits.filter(x => x.memberId === d.memberId && x.id !== d.id && (x.timestamp||0) < (d.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0);
+      const current = previous + Number(d.amount||0);
+      const receiptNo = d.receiptNo || ('DEP-' + String(d.timestamp || Date.now()).slice(-10));
+      const html = `<div class="receipt-paper">
+        <div class="receipt-header text-center">
+          <div class="text-2xl font-black tracking-wide">DREAM TOUCHING HOSTEL</div>
+          <div class="text-sm font-bold text-gray-500">OFFICIAL DEPOSIT RECEIPT</div>
+          <div class="text-xs mt-2">জমার রশিদ</div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-sm mb-4">
+          <div><b>রশিদ নম্বর:</b> ${window.escapeReceipt(receiptNo)}</div><div class="text-right"><b>তারিখ/সময়:</b> ${window.escapeReceipt(d.date)} | ${window.escapeReceipt(window.getReceiptTime(d.timestamp))}</div>
+        </div>
+        <table class="w-full receipt-table text-sm"><tr><td class="label">সদস্যের নাম</td><td class="font-bold">${window.escapeReceipt(m.name)}</td></tr><tr><td class="label">মোবাইল নম্বর</td><td>${window.escapeReceipt(m.phone)}</td></tr><tr><td class="label">ইউজার আইডি</td><td>${window.escapeReceipt(m.userId || u.userId)}</td></tr><tr><td class="label">পূর্বের জমা</td><td>৳ ${previous.toLocaleString('en-IN')}</td></tr><tr><td class="label">এই জমা</td><td class="font-black text-lg">৳ ${Number(d.amount||0).toLocaleString('en-IN')}</td></tr><tr><td class="label">জমার পর মোট জমা</td><td class="font-black">৳ ${current.toLocaleString('en-IN')}</td></tr></table>
+        <div class="my-4 p-3 bg-gray-50 rounded-lg"><b>কথায়:</b> ${window.numberToBanglaWords(d.amount)} টাকা মাত্র</div>
+        <div class="receipt-total flex justify-between"><span>TRANSACTION SUCCESSFUL</span><span>৳ ${Number(d.amount||0).toLocaleString('en-IN')}</span></div>
+        <div class="grid grid-cols-2 gap-10 mt-12 text-center text-xs"><div class="border-t pt-2">জমাদানকারীর স্বাক্ষর</div><div class="border-t pt-2">Authorized Signature</div></div>
+        <div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি DREAM TOUCHING HOSTEL-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div>
+      </div>`;
+      window.openReceipt('জমার রশিদ', html);
+    };
+
+    window.showBazaarReceipt = function(id) {
+      const b = window.hostelData.bazaarExpenses.find(x => x.id === id);
+      if (!b) return;
+      const ordered = [...window.hostelData.bazaarExpenses].sort((a,c)=>(a.timestamp||0)-(c.timestamp||0));
+      const idx = ordered.findIndex(x=>x.id===id);
+      const previous = window.hostelData.deposits.reduce((a,x)=>a+Number(x.amount||0),0) - ordered.slice(0,idx).reduce((a,x)=>a+Number(x.amount||0),0) - window.hostelData.fixedExpenses.filter(x=>(x.timestamp||0)<(b.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0) - window.hostelData.gasExpenses.filter(x=>(x.timestamp||0)<(b.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0);
+      const before = Math.max(0, previous);
+      const after = before - Number(b.amount||0);
+      const receiptNo = b.receiptNo || ('BAZ-' + String(b.timestamp || Date.now()).slice(-10));
+      const items = (b.items && b.items.length) ? b.items : ['উল্লেখ করা হয়নি'];
+      const shoppers = (b.shoppers && b.shoppers.length) ? b.shoppers : ['উল্লেখ করা হয়নি'];
+      const html = `<div class="receipt-paper">
+        <div class="receipt-header text-center"><div class="text-2xl font-black tracking-wide">DREAM TOUCHING HOSTEL</div><div class="text-sm font-bold text-gray-500">BAZAAR EXPENSE RECEIPT</div><div class="text-xs mt-2">বাজার খরচের রশিদ</div></div>
+        <div class="grid grid-cols-2 gap-2 text-sm mb-4"><div><b>রশিদ নম্বর:</b> ${window.escapeReceipt(receiptNo)}</div><div class="text-right"><b>তারিখ/সময়:</b> ${window.escapeReceipt(b.date)} | ${window.escapeReceipt(window.getReceiptTime(b.timestamp))}</div></div>
+        <table class="w-full receipt-table text-sm"><tr><td class="label">বাজার করেছেন</td><td>${window.escapeReceipt(shoppers.join(', '))}</td></tr><tr><td class="label">বাজারের আইটেম</td><td>${items.map(window.escapeReceipt).join(', ')}</td></tr><tr><td class="label">পূর্বের ক্যাশ</td><td>৳ ${before.toLocaleString('en-IN')}</td></tr><tr><td class="label">বাজার খরচ</td><td class="font-black text-lg">৳ ${Number(b.amount||0).toLocaleString('en-IN')}</td></tr><tr><td class="label">খরচের পর ক্যাশ</td><td class="font-black">৳ ${after.toLocaleString('en-IN')}</td></tr></table>
+        <div class="my-4 p-3 bg-gray-50 rounded-lg"><b>খরচের পরিমাণ কথায়:</b> ${window.numberToBanglaWords(b.amount)} টাকা মাত্র</div>
+        <div class="receipt-total flex justify-between"><span>EXPENSE RECORDED</span><span>৳ ${Number(b.amount||0).toLocaleString('en-IN')}</span></div>
+        <div class="grid grid-cols-2 gap-10 mt-12 text-center text-xs"><div class="border-t pt-2">বাজারকারীর স্বাক্ষর</div><div class="border-t pt-2">Authorized Signature</div></div>
+        <div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি DREAM TOUCHING HOSTEL-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div>
+      </div>`;
+      window.openReceipt('বাজার খরচের রশিদ', html);
     };
 
     window.leaveMemberAction = function(memberId) {
@@ -2351,6 +2462,7 @@
 
       window.hostelData.bazaarExpenses.push({
         id: 'BAZ_' + Date.now(),
+        receiptNo: 'BAZ-' + Date.now(),
         items: checkedItems,
         shoppers: checkedShoppers,
         amount,
@@ -2773,7 +2885,10 @@
                   ${memberDeposits.map(d => `
                     <div class="flex justify-between items-center py-1">
                       <span>${d.date}: ৳${d.amount}</span>
-                      <button onclick="editTransaction('deposits', '${d.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+                      <span class="flex items-center gap-2">
+                        <button onclick="showDepositReceipt('${d.id}')" title="জমার রশিদ" class="text-blue-600 hover:underline"><i class="fa-solid fa-receipt"></i></button>
+                        <button onclick="editTransaction('deposits', '${d.id}')" title="এডিট" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+                      </span>
                     </div>
                   `).join('')}
                 </div>
@@ -2925,7 +3040,8 @@
           <td class="p-2 font-semibold">${b.shoppers ? b.shoppers.join(', ') : '-'}</td>
           <td class="p-2">৳${b.amount}</td>
           <td class="p-2 text-right space-x-1">
-            <button onclick="editTransaction('bazaarExpenses', '${b.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="showBazaarReceipt('${b.id}')" title="বাজার খরচের রশিদ" class="text-blue-600 hover:underline"><i class="fa-solid fa-receipt"></i></button>
+            <button onclick="editTransaction('bazaarExpenses', '${b.id}')" title="এডিট" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
             <button onclick="requestDeleteTransaction('bazaarExpenses', '${b.id}')" class="text-red-600 hover:underline"><i class="fa-solid fa-trash-can"></i></button>
           </td>
         </tr>
