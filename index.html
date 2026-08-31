@@ -291,6 +291,9 @@
           <i class="fa-solid fa-user-shield text-amber-400"></i>
           <span data-bn="অ্যাডমিন প্যানেল (বার্তা পাঠাতে)" data-en="Admin Panel">অ্যাডমিন প্যানেল (বার্তা পাঠাতে)</span>
         </button>
+        <button onclick="openLiveChatModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-headset"></i><span data-bn="ম্যানেজারের সাথে লাইভ চ্যাট" data-en="Live Chat with Manager">ম্যানেজারের সাথে লাইভ চ্যাট</span>
+        </button>
       </div>
 
     </section>
@@ -485,6 +488,11 @@
                 </button>
               </div>
             </form>
+
+            <div id="user-bazaar-request-section" class="bg-blue-50 rounded-xl border border-blue-200 p-4 space-y-3">
+              <div class="flex justify-between items-center border-b border-blue-200 pb-2"><h4 class="text-sm font-black text-blue-900"><i class="fa-solid fa-inbox text-blue-600 mr-1"></i> <span data-bn="বাজার খরচ রিকোয়েস্ট" data-en="Bazaar Expense Requests">বাজার খরচ রিকোয়েস্ট</span></h4><span class="text-[10px] font-bold text-gray-500" data-bn="অনুমোদন করলে হিসাবের সাথে যুক্ত হবে" data-en="Approved requests are added to the ledger">অনুমোদন করলে হিসাবের সাথে যুক্ত হবে</span></div>
+              <div id="user-bazaar-request-list" class="space-y-2"></div>
+            </div>
 
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs border-collapse">
@@ -684,55 +692,57 @@
             </div>
           </div>
 
-          <!-- FINAL SUMMARY LEDGER BREAKDOWN & PRINT REPORT -->
+          <!-- FINAL SUMMARY LEDGER BREAKDOWN & SAVE AS JPG -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-6">
-            <div class="flex justify-between items-center border-b pb-3">
-              <h3 class="text-xl font-black text-emerald-800 flex items-center gap-2">
-                <i class="fa-solid fa-calculator text-emerald-600"></i>
-                <span data-bn="চূড়ান্ত হিসাব ও মাসের পুরো হিসেব" data-en="Final Ledger & Monthly Summary">চূড়ান্ত হিসাব ও মাসের পুরো হিসেব</span>
-              </h3>
-            </div>
+            <div id="final-summary-capture-area" class="space-y-6 bg-white/95">
+              <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-black text-emerald-800 flex items-center gap-2">
+                  <i class="fa-solid fa-calculator text-emerald-600"></i>
+                  <span data-bn="চূড়ান্ত হিসাব ও মাসের পুরো হিসেব" data-en="Final Ledger & Monthly Summary">চূড়ান্ত হিসাব ও মাসের পুরো হিসেব</span>
+                </h3>
+              </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-gray-200">
-              <div class="p-2 bg-white rounded border">
-                <span class="text-gray-500 block">মিল চার্জ (Per Meal Rate):</span>
-                <b class="text-emerald-700 text-sm">৳ <span id="calc-meal-rate">0.00</span></b>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-gray-200">
+                <div class="p-2 bg-white rounded border">
+                  <span class="text-gray-500 block">মিল চার্জ (Per Meal Rate):</span>
+                  <b class="text-emerald-700 text-sm">৳ <span id="calc-meal-rate">0.00</span></b>
+                </div>
+                <div class="p-2 bg-white rounded border">
+                  <span class="text-gray-500 block">প্রতি সদস্যের স্থায়ী চার্জ:</span>
+                  <b class="text-emerald-700 text-sm">৳ <span id="calc-fixed-rate">0.00</span></b>
+                </div>
+                <div class="p-2 bg-white rounded border">
+                  <span class="text-gray-500 block">প্রতি ইউজারের গ্যাস চার্জ:</span>
+                  <b class="text-emerald-700 text-sm">৳ <span id="calc-gas-rate">0.00</span></b>
+                </div>
+                <div class="p-2 bg-white rounded border">
+                  <span class="text-gray-500 block">মোট বাজার খরচ:</span>
+                  <b class="text-emerald-700 text-sm">৳ <span id="calc-tot-bazaar">0</span></b>
+                </div>
               </div>
-              <div class="p-2 bg-white rounded border">
-                <span class="text-gray-500 block">প্রতি সদস্যের স্থায়ী চার্জ:</span>
-                <b class="text-emerald-700 text-sm">৳ <span id="calc-fixed-rate">0.00</span></b>
-              </div>
-              <div class="p-2 bg-white rounded border">
-                <span class="text-gray-500 block">প্রতি ইউজারের গ্যাস চার্জ:</span>
-                <b class="text-emerald-700 text-sm">৳ <span id="calc-gas-rate">0.00</span></b>
-              </div>
-              <div class="p-2 bg-white rounded border">
-                <span class="text-gray-500 block">মোট বাজার খরচ:</span>
-                <b class="text-emerald-700 text-sm">৳ <span id="calc-tot-bazaar">0</span></b>
-              </div>
-            </div>
 
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs border border-gray-200 rounded-lg">
-                <thead class="bg-emerald-700 text-white font-bold">
-                  <tr>
-                    <th class="p-2.5">সদস্যের নাম</th>
-                    <th class="p-2.5">মোট জমা (৳)</th>
-                    <th class="p-2.5">মোট মিল</th>
-                    <th class="p-2.5">মিল খরচ (৳)</th>
-                    <th class="p-2.5">স্থায়ী খরচ (৳)</th>
-                    <th class="p-2.5">গ্যাস খরচ (৳)</th>
-                    <th class="p-2.5">সর্বমোট খরচ (৳)</th>
-                    <th class="p-2.5">অবস্থা (পাবো/দিবো)</th>
-                  </tr>
-                </thead>
-                <tbody id="final-summary-table-body" class="divide-y"></tbody>
-              </table>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border border-gray-200 rounded-lg">
+                  <thead class="bg-emerald-700 text-white font-bold">
+                    <tr>
+                      <th class="p-2.5">সদস্যের নাম</th>
+                      <th class="p-2.5">মোট জমা (৳)</th>
+                      <th class="p-2.5">মোট মিল</th>
+                      <th class="p-2.5">মিল খরচ (৳)</th>
+                      <th class="p-2.5">স্থায়ী খরচ (৳)</th>
+                      <th class="p-2.5">গ্যাস খরচ (৳)</th>
+                      <th class="p-2.5">সর্বমোট খরচ (৳)</th>
+                      <th class="p-2.5">অবস্থা (পাবো/দিবো)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="final-summary-table-body" class="divide-y"></tbody>
+                </table>
+              </div>
             </div>
 
             <div class="flex flex-wrap justify-between items-center gap-4 pt-4 border-t no-print">
-              <button onclick="window.print()" class="btn-green-to-red px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2">
-                <i class="fa-solid fa-print"></i> <span data-bn="প্রিন্ট / PDF ডাউনলোড করুন" data-en="Print / Download PDF">প্রিন্ট / PDF ডাউনলোড করুন</span>
+              <button id="final-summary-save-btn" onclick="saveFinalSummaryAsJPG()" class="btn-green-to-red px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> <span data-bn="সেভ" data-en="Save">সেভ</span>
               </button>
 
               <button onclick="handleResetLedger()" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow flex items-center gap-2 transition">
@@ -803,28 +813,20 @@
     </div>
   </div>
 
-  <!-- USER LIVE CHAT MODAL -->
+  <!-- USER / HOME LIVE CHAT MODAL -->
   <div id="live-chat-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
-    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-3 shadow-2xl border-t-8 border-indigo-600 flex flex-col h-[500px]">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-base font-black text-indigo-900 flex items-center gap-2">
-          <i class="fa-solid fa-headset text-indigo-600"></i> মেস লাইভ চ্যাট সাপোর্টিং
-        </h3>
-        <div class="flex items-center gap-2">
-          <button onclick="clearLiveChats()" class="text-xs bg-red-100 hover:bg-red-200 text-red-600 font-bold px-2 py-1 rounded transition" title="সকল চ্যাট মুছে ফেলুন">
-            <i class="fa-solid fa-trash-can mr-1"></i> চ্যাট মুছুন
-          </button>
-          <button onclick="closeLiveChatModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-3 shadow-2xl border-t-8 border-indigo-600 flex flex-col max-h-[92vh]">
+      <div class="flex justify-between items-center border-b pb-2"><h3 class="text-base font-black text-indigo-900 flex items-center gap-2"><i class="fa-solid fa-headset text-indigo-600"></i><span data-bn="ম্যানেজারের সাথে লাইভ চ্যাট" data-en="Live Chat with Manager">ম্যানেজারের সাথে লাইভ চ্যাট</span></h3><button onclick="closeLiveChatModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+      <div id="live-chat-contact-form" class="space-y-3 bg-indigo-50 p-4 rounded-xl border border-indigo-200">
+        <p class="text-xs font-bold text-indigo-900" data-bn="চ্যাট শুরু করতে আপনার নাম ও মোবাইল নম্বর দিন। একই নাম ও নম্বর দিলে আগের চ্যাট হিস্ট্রি দেখা যাবে।" data-en="Enter your name and mobile number to start. Previous chat history will appear when the same name and number are provided.">চ্যাট শুরু করতে আপনার নাম ও মোবাইল নম্বর দিন। একই নাম ও নম্বর দিলে আগের চ্যাট হিস্ট্রি দেখা যাবে।</p>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম" data-en="Name">নাম</label><input type="text" id="live-chat-name" required class="w-full px-3 py-2 border rounded-xl text-sm" placeholder="আপনার নাম" data-placeholder-bn="আপনার নাম" data-placeholder-en="Your name"></div>
+        <div><label class="block text-xs font-bold text-gray-700 mb-1" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label><input type="tel" id="live-chat-phone" required class="w-full px-3 py-2 border rounded-xl text-sm" placeholder="মোবাইল নম্বর" data-placeholder-bn="মোবাইল নম্বর" data-placeholder-en="Mobile number"></div>
+        <button onclick="startLiveChat()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-comments mr-1"></i><span data-bn="চ্যাট শুরু করুন" data-en="Start Chat">চ্যাট শুরু করুন</span></button>
       </div>
-
-      <div id="live-chat-messages" class="flex-grow overflow-y-auto space-y-2 bg-slate-50 p-3 rounded-xl border"></div>
-
-      <div class="flex gap-2 pt-1">
-        <input type="text" id="live-chat-input" placeholder="মেসেজ লিখুন..." class="flex-grow px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-        <button onclick="sendLiveChatMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex items-center gap-1">
-          <i class="fa-solid fa-paper-plane"></i>
-        </button>
+      <div id="live-chat-session" class="hidden flex-col min-h-0 flex-1 space-y-3">
+        <div class="flex justify-between items-center bg-slate-50 p-2 rounded-xl border text-xs"><div><b id="live-chat-contact-display">-</b><span id="live-chat-phone-display" class="text-gray-500 ml-1"></span></div><button onclick="changeLiveChatContact()" class="text-indigo-600 font-bold hover:underline" data-bn="পরিবর্তন" data-en="Change">পরিবর্তন</button></div>
+        <div id="live-chat-messages" class="flex-grow min-h-40 overflow-y-auto space-y-2 bg-slate-50 p-3 rounded-xl border"></div>
+        <div class="flex gap-2 pt-1"><input type="text" id="live-chat-input" placeholder="মেসেজ লিখুন..." data-placeholder-bn="মেসেজ লিখুন..." data-placeholder-en="Type a message..." class="flex-grow px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" onkeydown="if(event.key==='Enter'){event.preventDefault();sendLiveChatMessage();}"><button onclick="sendLiveChatMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane"></i></button></div>
       </div>
     </div>
   </div>
@@ -1081,8 +1083,9 @@
       </div>
 
       <div class="flex border-b text-sm font-black">
-        <button id="admin-tab-message" onclick="switchAdminTab('message')" class="flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600"><i class="fa-solid fa-envelope mr-1"></i> বার্তা</button>
-        <button id="admin-tab-meal" onclick="switchAdminTab('meal')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-utensils mr-1"></i> মিল এন্ট্রি</button>
+        <button id="admin-tab-message" onclick="switchAdminTab('message')" class="flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600"><i class="fa-solid fa-envelope mr-1"></i> <span data-bn="বার্তা" data-en="Message">বার্তা</span></button>
+        <button id="admin-tab-meal" onclick="switchAdminTab('meal')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-utensils mr-1"></i> <span data-bn="মিল এন্ট্রি" data-en="Meal Entry">মিল এন্ট্রি</span></button>
+        <button id="admin-tab-bazaar" onclick="switchAdminTab('bazaar')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-cart-shopping mr-1"></i> <span data-bn="বাজার রিকোয়েস্ট" data-en="Bazaar Request">বাজার রিকোয়েস্ট</span></button>
       </div>
       <div id="admin-message-tab" class="space-y-4 pt-1">
         <div><label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label><select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"><option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option></select></div>
@@ -1095,6 +1098,20 @@
           <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i> বার্তা পাঠাও</button>
         </div>
       </div>
+      <div id="admin-bazaar-tab" class="hidden space-y-4 pt-1">
+        <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-xs text-blue-900" data-bn="Meal Request-এর মতো এখান থেকে নির্দিষ্ট ইউজারের কাছে বাজার খরচ রিকোয়েস্ট পাঠানো যাবে। ইউজার অনুমোদন করলে বাজার খরচ হিসাবের সাথে যুক্ত হবে; বাতিল করলে রিকোয়েস্টটি মুছে যাবে।" data-en="Like a Meal Request, send a Bazaar Expense Request to a selected user. It is added to the ledger only after the user approves it; rejecting removes the request.">Meal Request-এর মতো এখান থেকে নির্দিষ্ট ইউজারের কাছে বাজার খরচ রিকোয়েস্ট পাঠানো যাবে। ইউজার অনুমোদন করলে বাজার খরচ হিসাবের সাথে যুক্ত হবে; বাতিল করলে রিকোয়েস্টটি মুছে যাবে।</div>
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div><label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ইউজার নির্বাচন করুন:" data-en="Select User:">ইউজার নির্বাচন করুন:</label><select id="admin-bazaar-user-selector" onchange="populateAdminBazaarMemberSelector(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold"></select></div>
+            <div><label class="block text-xs font-bold text-gray-700 mb-1" data-bn="ক্রেতা সদস্য নির্বাচন করুন:" data-en="Select Shopper Member:">ক্রেতা সদস্য নির্বাচন করুন:</label><select id="admin-bazaar-member-selector" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold" disabled><option value="">-- আগে ইউজার নির্বাচন করুন --</option></select></div>
+          </div>
+          <div><label class="block text-xs font-bold text-gray-700 mb-1" data-bn="বাজারের আইটেম" data-en="Bazaar Items">বাজারের আইটেম</label><div id="admin-bazaar-items-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 text-xs"></div><input type="text" id="admin-bazaar-custom-items" class="w-full mt-2 px-3 py-2 border rounded-lg text-sm" placeholder="অন্যান্য আইটেম, কমা দিয়ে লিখুন" data-placeholder-bn="অন্যান্য আইটেম, কমা দিয়ে লিখুন" data-placeholder-en="Other items, separated by commas"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1" data-bn="টাকার পরিমাণ (৳)" data-en="Amount (৳)">টাকার পরিমাণ (৳)</label><input type="number" id="admin-bazaar-amt" min="1" class="w-full px-3 py-2 border rounded-lg text-sm"></div><div><label class="block text-xs font-bold mb-1" data-bn="তারিখ" data-en="Date">তারিখ</label><input type="text" id="admin-bazaar-date" class="w-full px-3 py-2 border rounded-lg text-sm"></div></div>
+          <button onclick="sendAdminBazaarRequest()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i><span data-bn="বাজার রিকোয়েস্ট পাঠান" data-en="Send Bazaar Request">বাজার রিকোয়েস্ট পাঠান</span></button>
+        </div>
+        <div><h4 class="text-xs font-bold mb-2" data-bn="অপেক্ষমান রিকোয়েস্ট" data-en="Pending Requests">অপেক্ষমান রিকোয়েস্ট</h4><div id="admin-bazaar-request-list" class="space-y-2"></div></div>
+      </div>
+
       <div id="admin-meal-tab" class="hidden space-y-4 pt-1">
         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900">প্রথমে ইউজার নির্বাচন করুন। এরপর ঐ ইউজারের অধীনে যুক্ত সদস্যদের তালিকা থেকে নির্দিষ্ট সদস্য নির্বাচন করে মিল এন্ট্রি রিকোয়েস্ট পাঠান। রিকোয়েস্ট নির্বাচিত ইউজারের প্যানেলে যাবে; ইউজার অনুমোদন করলে মিল সরাসরি যুক্ত হবে এবং বাতিল করলে রিকোয়েস্টটি মুছে যাবে।</div>
         <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
@@ -1212,6 +1229,7 @@
       bazaarExpenses: [],
       meals: [],
       mealRequests: [],
+      bazaarRequests: [],
       pendingEdits: [],
       comments: {},
       replies: [],
@@ -1234,6 +1252,7 @@
           bazaarExpenses: data.bazaarExpenses || [],
           meals: data.meals || [],
           mealRequests: data.mealRequests || [],
+          bazaarRequests: data.bazaarRequests || [],
           pendingEdits: data.pendingEdits || [],
           comments: data.comments || {},
           replies: data.replies || [],
@@ -1241,6 +1260,7 @@
           siteBranding: data.siteBranding || { logo: '' },
           liveChats: data.liveChats || []
         };
+        migrateLiveChats();
         localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
         applySiteBranding();
         renderFloatingReplies();
@@ -1249,9 +1269,12 @@
           renderDashboard();
           checkUserAdminComments();
           renderUserMealRequests();
+          renderUserBazaarRequests();
           renderLiveChatMessages();
         }
+        populateMgmtChatUsers();
         renderMgmtLiveChatMessages();
+        applyLanguage();
       }
     });
 
@@ -1262,6 +1285,7 @@
         .catch(err => console.error('Firebase Realtime Sync Error:', err));
       renderDashboard();
       renderFloatingReplies();
+      applyLanguage();
     };
 
     window.parseDDMMYYYY = function(dateStr) {
@@ -1369,17 +1393,21 @@
     };
 
     window.onload = function() {
+      window.currentLang = localStorage.getItem('dream_touching_hostel_lang') || 'bn';
       renderBazaarChecklist();
       setInitialDates();
       const local = localStorage.getItem('dream_touching_hostel_db');
       if (local) {
         window.hostelData = JSON.parse(local);
+        window.hostelData.bazaarRequests = window.hostelData.bazaarRequests || [];
+        migrateLiveChats();
         window.hostelData.siteBranding = window.hostelData.siteBranding || { logo: '' };
         applySiteBranding();
         renderFloatingReplies();
       } else {
         applySiteBranding();
       }
+      applyLanguage();
     };
 
     window.setInitialDates = function() {
@@ -1425,6 +1453,7 @@
       loadMgmtPaymentFields();
       populateMgmtChatUsers();
       renderMgmtLiveChatMessages();
+      applyLanguage();
       document.getElementById('mgmt-dashboard-modal').classList.remove('hidden');
     };
 
@@ -1568,182 +1597,35 @@
 
     /* USER & MANAGEMENT LIVE CHAT SYSTEM */
 
-    window.openLiveChatModal = function() {
-      renderLiveChatMessages();
-      document.getElementById('live-chat-modal').classList.remove('hidden');
-    };
+    window.normalizeChatPhone=function(phone){return String(phone||'').replace(/\D/g,'').replace(/^88/,'');};
+window.chatContactKey=function(name,phone){return window.normalizeChatPhone(phone)+'|'+String(name||'').trim().toLowerCase();};
+window.migrateLiveChats=function(){
+  const users=window.hostelData.users||[];
+  (window.hostelData.liveChats||[]).forEach(c=>{
+    if(c.contactKey)return;
+    let u=null;
+    if(c.senderId&&c.senderId!=='MANAGEMENT')u=users.find(x=>x.userId===c.senderId);
+    if(!u&&c.recipientId&&c.recipientId!=='MANAGEMENT')u=users.find(x=>x.userId===c.recipientId);
+    const name=c.senderId==='MANAGEMENT'?(c.recipientName||u?.fullName): (c.senderName||u?.fullName);
+    const phone=c.senderId==='MANAGEMENT'?(c.recipientPhone||u?.mobile):(c.senderPhone||u?.mobile);
+    if(name&&phone){c.senderName=c.senderId==='MANAGEMENT'?'Manager':name;c.senderPhone=phone;c.contactKey=window.chatContactKey(name,phone);}
+  });
+};
 
-    window.closeLiveChatModal = function() {
-      document.getElementById('live-chat-modal').classList.add('hidden');
-    };
+window.openLiveChatModal=function(){document.getElementById('live-chat-contact-form').classList.remove('hidden');document.getElementById('live-chat-session').classList.add('hidden');document.getElementById('live-chat-session').classList.remove('flex');document.getElementById('live-chat-name').value=window.currentUser?.fullName||'';document.getElementById('live-chat-phone').value=window.currentUser?.mobile||'';document.getElementById('live-chat-modal').classList.remove('hidden');applyLanguage();};
+window.closeLiveChatModal=function(){document.getElementById('live-chat-modal').classList.add('hidden');};
+window.startLiveChat=function(){const name=document.getElementById('live-chat-name').value.trim(),phone=document.getElementById('live-chat-phone').value.trim();if(!name||!phone){alert(window.currentLang==='bn'?'চ্যাট শুরু করতে নাম ও মোবাইল নম্বর অবশ্যই দিতে হবে।':'Name and mobile number are required to start chat.');return;}const key=window.chatContactKey(name,phone);window.activeChatContact={name,phone,key,userId:window.currentUser?.userId||''};document.getElementById('live-chat-contact-form').classList.add('hidden');document.getElementById('live-chat-session').classList.remove('hidden');document.getElementById('live-chat-session').classList.add('flex');document.getElementById('live-chat-contact-display').innerText=name;document.getElementById('live-chat-phone-display').innerText=phone;renderLiveChatMessages();};
+window.changeLiveChatContact=function(){document.getElementById('live-chat-session').classList.add('hidden');document.getElementById('live-chat-session').classList.remove('flex');document.getElementById('live-chat-contact-form').classList.remove('hidden');};
+window.sendLiveChatMessage=function(){const c=window.activeChatContact,input=document.getElementById('live-chat-input'),text=input.value.trim();if(!c||!text)return;window.hostelData.liveChats=window.hostelData.liveChats||[];window.hostelData.liveChats.push({id:'CHAT_'+Date.now(),senderId:c.userId||('GUEST_'+c.key),senderName:c.name,senderPhone:c.phone,contactKey:c.key,recipientId:'MANAGEMENT',recipientName:'Manager',text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),timestamp:Date.now()});input.value='';syncMasterData();renderLiveChatMessages();};
+window.renderLiveChatMessages=function(){const box=document.getElementById('live-chat-messages'),c=window.activeChatContact;if(!box)return;box.innerHTML='';if(!c){box.innerHTML='<p class="text-center text-gray-400">চ্যাট শুরু করতে নাম ও মোবাইল নম্বর দিন</p>';return;}const rs=(window.hostelData.liveChats||[]).filter(x=>(x.contactKey||'')===c.key).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));if(!rs.length){box.innerHTML='<p class="text-center text-gray-400">এটি নতুন চ্যাট। ম্যানেজারকে আপনার বার্তা পাঠান।</p>';return;}rs.forEach(x=>{const mg=x.senderId==='MANAGEMENT';box.innerHTML+=`<div class="flex flex-col ${mg?'items-start':'items-end'} mb-1"><div class="max-w-[82%] ${mg?'bg-gray-100 text-gray-800':'bg-indigo-600 text-white'} p-2 rounded-xl text-xs"><p class="font-bold text-[9px] opacity-80">${mg?'Manager':(x.senderName||c.name)}</p><p>${String(x.text||'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]))}</p><span class="text-[8px] opacity-60 block text-right mt-0.5">${x.time||''}</span></div></div>`});box.scrollTop=box.scrollHeight;};
+window.clearLiveChats=function(){const c=window.activeChatContact;if(!c)return;if(confirm(window.currentLang==='bn'?'এই নাম ও নম্বরের সকল চ্যাট মুছে ফেলতে চান?':'Delete all chats for this name and number?')){window.hostelData.liveChats=(window.hostelData.liveChats||[]).filter(x=>(x.contactKey||'')!==c.key);syncMasterData();renderLiveChatMessages();}};
+window.populateMgmtChatUsers=function(){const sel=document.getElementById('mgmt-chat-user-select');if(!sel)return;const cs={};(window.hostelData.liveChats||[]).forEach(x=>{const k=x.contactKey||(x.senderPhone?window.chatContactKey(x.senderName,x.senderPhone):'');if(k&&!cs[k])cs[k]={key:k,name:x.senderName||x.senderId||'Unknown',phone:x.senderPhone||'',userId:x.senderId!=='MANAGEMENT'?x.senderId:(x.recipientId||'')};});(window.hostelData.users||[]).forEach(u=>{if(!u.mobile)return;const k=window.chatContactKey(u.fullName||u.userId,u.mobile);if(!cs[k])cs[k]={key:k,name:u.fullName||u.userId,phone:u.mobile,userId:u.userId};});sel.innerHTML='<option value="">-- মেসেজ আদান-প্রদানের জন্য ইউজার সিলেক্ট করুন --</option>';Object.values(cs).sort((a,b)=>a.name.localeCompare(b.name)).forEach(c=>sel.innerHTML+=`<option value="${String(c.key).replace(/"/g,'&quot;')}">${c.name}${c.phone?' — '+c.phone:''}</option>`);};
+window.getMgmtSelectedContact=function(){const key=document.getElementById('mgmt-chat-user-select')?.value;if(!key)return null;const x=(window.hostelData.liveChats||[]).find(c=>(c.contactKey||'')===key);if(x)return{key,name:x.senderName||x.senderId,phone:x.senderPhone||'',userId:x.senderId!=='MANAGEMENT'?x.senderId:x.recipientId};const u=(window.hostelData.users||[]).find(u=>window.chatContactKey(u.fullName||u.userId,u.mobile)===key);return u?{key,name:u.fullName||u.userId,phone:u.mobile,userId:u.userId}:{key,name:key,phone:'',userId:''};};
+window.sendMgmtLiveChatMessage=function(){const c=getMgmtSelectedContact(),input=document.getElementById('mgmt-chat-input'),text=input.value.trim();if(!c){alert(window.currentLang==='bn'?'অনুগ্রহ করে একজন কন্টাক্ট নির্বাচন করুন!':'Please select a contact!');return;}if(!text)return;window.hostelData.liveChats=window.hostelData.liveChats||[];window.hostelData.liveChats.push({id:'CHAT_'+Date.now(),senderId:'MANAGEMENT',senderName:'Manager',recipientId:c.userId||('GUEST_'+c.key),recipientName:c.name,recipientPhone:c.phone,contactKey:c.key,text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),timestamp:Date.now()});input.value='';syncMasterData();populateMgmtChatUsers();document.getElementById('mgmt-chat-user-select').value=c.key;renderMgmtLiveChatMessages();};
+window.renderMgmtLiveChatMessages=function(){const key=document.getElementById('mgmt-chat-user-select')?.value,box=document.getElementById('mgmt-chat-messages');if(!box)return;box.innerHTML='';if(!key){box.innerHTML='<p class="text-center text-gray-400">মেসেজ দেখতে ইউজার নির্বাচন করুন</p>';return;}const rs=(window.hostelData.liveChats||[]).filter(x=>(x.contactKey||'')===key).sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));if(!rs.length){box.innerHTML='<p class="text-center text-gray-400">এই কন্টাক্টের সাথে কোনো চ্যাট হিস্ট্রি নেই।</p>';return;}rs.forEach(x=>{const mg=x.senderId==='MANAGEMENT';box.innerHTML+=`<div class="flex flex-col ${mg?'items-end':'items-start'} mb-1"><div class="max-w-[80%] ${mg?'bg-indigo-600 text-white':'bg-gray-100 text-gray-800'} p-2 rounded-xl text-xs"><p class="font-bold text-[9px] opacity-80">${mg?'Manager':(x.senderName||'-')}</p><p>${String(x.text||'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]))}</p><span class="text-[8px] opacity-60 block text-right mt-0.5">${x.time||''}</span></div></div>`});box.scrollTop=box.scrollHeight;};
+window.clearMgmtSelectedUserChats=function(){const c=getMgmtSelectedContact();if(!c){alert(window.currentLang==='bn'?'অনুগ্রহ করে আগে একটি কন্টাক্ট নির্বাচন করুন!':'Please select a contact first!');return;}if(confirm(window.currentLang==='bn'?`আপনি কি ${c.name} (${c.phone||'No phone'})-এর সকল চ্যাট মুছে ফেলতে চান?`:`Delete all chats for ${c.name} (${c.phone||'No phone'})?`)){window.hostelData.liveChats=(window.hostelData.liveChats||[]).filter(x=>(x.contactKey||'')!==c.key);syncMasterData();populateMgmtChatUsers();renderMgmtLiveChatMessages();}};
 
-    window.sendLiveChatMessage = function() {
-      const input = document.getElementById('live-chat-input');
-      const text = input.value.trim();
-      if (!text || !window.currentUser) return;
-
-      if (!window.hostelData.liveChats) window.hostelData.liveChats = [];
-
-      window.hostelData.liveChats.push({
-        id: 'CHAT_' + Date.now(),
-        senderId: window.currentUser.userId,
-        senderName: window.currentUser.fullName || window.currentUser.userId,
-        recipientId: 'MANAGEMENT',
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      input.value = '';
-      syncMasterData();
-      renderLiveChatMessages();
-    };
-
-    window.renderLiveChatMessages = function() {
-      const chatContainer = document.getElementById('live-chat-messages');
-      if (!chatContainer || !window.currentUser) return;
-      chatContainer.innerHTML = '';
-
-      if (!window.hostelData.liveChats || window.hostelData.liveChats.length === 0) {
-        chatContainer.innerHTML = '<p class="text-center text-xs text-gray-400 mt-10">কোনো চ্যাট মেসেজ নেই।</p>';
-        return;
-      }
-
-      const myChats = window.hostelData.liveChats.filter(c => 
-        c.senderId === window.currentUser.userId || c.recipientId === window.currentUser.userId
-      );
-
-      if (myChats.length === 0) {
-        chatContainer.innerHTML = '<p class="text-center text-xs text-gray-400 mt-10">ম্যানেজমেন্টের সাথে কোনো কথোপকথন নেই।</p>';
-        return;
-      }
-
-      myChats.forEach(c => {
-        const isMe = c.senderId === window.currentUser.userId;
-        chatContainer.innerHTML += `
-          <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-            <div class="max-w-[80%] ${isMe ? 'bg-indigo-600 text-white' : 'bg-white border text-gray-800'} p-2 rounded-2xl text-xs shadow">
-              <p class="font-bold text-[10px] opacity-75">${c.senderName}</p>
-              <p class="mt-0.5">${c.text}</p>
-              <span class="text-[9px] opacity-60 block text-right mt-1">${c.time}</span>
-            </div>
-          </div>
-        `;
-      });
-
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    };
-
-    window.clearLiveChats = function() {
-      if (!window.currentUser) return;
-      if (confirm('আপনি কি নিশ্চিত যে এই আইডি-র সকল চ্যাট মেসেজ মুছে ফেলতে চান?')) {
-        const uId = window.currentUser.userId;
-        window.hostelData.liveChats = (window.hostelData.liveChats || []).filter(c => 
-          c.senderId !== uId && c.recipientId !== uId
-        );
-        syncMasterData();
-        renderLiveChatMessages();
-      }
-    };
-
-    window.populateMgmtChatUsers = function() {
-      const sel = document.getElementById('mgmt-chat-user-select');
-      if (!sel) return;
-      sel.innerHTML = '<option value="">-- মেসেজ আদান-প্রদানের জন্য ইউজার সিলেক্ট করুন --</option>';
-      
-      window.hostelData.users.forEach(u => {
-        sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
-      });
-    };
-
-    window.sendMgmtLiveChatMessage = function() {
-      const sel = document.getElementById('mgmt-chat-user-select');
-      const recipientId = sel ? sel.value : '';
-      const input = document.getElementById('mgmt-chat-input');
-      const text = input.value.trim();
-
-      if (!recipientId) {
-        alert('অনুগ্রহ করে একজন ইউজার সিলেক্ট করুন!');
-        return;
-      }
-      if (!text) return;
-
-      if (!window.hostelData.liveChats) window.hostelData.liveChats = [];
-
-      window.hostelData.liveChats.push({
-        id: 'CHAT_' + Date.now(),
-        senderId: 'MANAGEMENT',
-        senderName: 'Management Panel',
-        recipientId: recipientId,
-        text: text,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-
-      input.value = '';
-      syncMasterData();
-      renderMgmtLiveChatMessages();
-    };
-
-    window.renderMgmtLiveChatMessages = function() {
-      const sel = document.getElementById('mgmt-chat-user-select');
-      const targetUserId = sel ? sel.value : '';
-      const chatContainer = document.getElementById('mgmt-chat-messages');
-
-      if (!chatContainer) return;
-      chatContainer.innerHTML = '';
-
-      if (!targetUserId) {
-        chatContainer.innerHTML = '<p class="text-center text-gray-400">মেসেজ দেখতে ইউজার নির্বাচন করুন</p>';
-        return;
-      }
-
-      const userChats = (window.hostelData.liveChats || []).filter(c => 
-        (c.senderId === targetUserId && c.recipientId === 'MANAGEMENT') || 
-        (c.senderId === 'MANAGEMENT' && c.recipientId === targetUserId)
-      );
-
-      if (userChats.length === 0) {
-        chatContainer.innerHTML = '<p class="text-center text-gray-400">এই ইউজারের সাথে কোনো চ্যাট হিস্ট্রি নেই।</p>';
-        return;
-      }
-
-      userChats.forEach(c => {
-        const isMgmt = c.senderId === 'MANAGEMENT';
-        chatContainer.innerHTML += `
-          <div class="flex flex-col ${isMgmt ? 'items-end' : 'items-start'} mb-1">
-            <div class="max-w-[80%] ${isMgmt ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-800'} p-2 rounded-xl text-xs">
-              <p class="font-bold text-[9px] opacity-80">${c.senderName}</p>
-              <p>${c.text}</p>
-              <span class="text-[8px] opacity-60 block text-right mt-0.5">${c.time}</span>
-            </div>
-          </div>
-        `;
-      });
-
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    };
-
-    window.clearMgmtSelectedUserChats = function() {
-      const sel = document.getElementById('mgmt-chat-user-select');
-      const targetUserId = sel ? sel.value : '';
-
-      if (!targetUserId) {
-        alert('অনুগ্রহ করে আগে একজন ইউজার নির্বাচন করুন!');
-        return;
-      }
-
-      if (confirm(`আপনি কি নিশ্চিত যে আইডি '@${targetUserId}' এর সকল চ্যাট মুছে ফেলতে চান?`)) {
-        window.hostelData.liveChats = (window.hostelData.liveChats || []).filter(c => 
-          !( (c.senderId === targetUserId && c.recipientId === 'MANAGEMENT') || 
-             (c.senderId === 'MANAGEMENT' && c.recipientId === targetUserId) )
-        );
-
-        syncMasterData();
-        renderMgmtLiveChatMessages();
-        alert('চ্যাট হিস্ট্রি সফলভাবে মুছে ফেলা হয়েছে!');
-      }
-    };
-
-    window.renderPendingEditsTable = function() {
+window.renderPendingEditsTable = function() {
       const tbody = document.getElementById('pending-edits-table-body');
       tbody.innerHTML = '';
 
@@ -1931,13 +1813,22 @@
       }
     };
 
-    window.toggleLanguage = function() {
-      window.currentLang = window.currentLang === 'bn' ? 'en' : 'bn';
-      document.getElementById('lang-btn-text').innerText = window.currentLang === 'bn' ? 'English' : 'বাংলা';
-      document.querySelectorAll('[data-bn]').forEach(el => {
-        el.innerText = el.getAttribute(`data-${window.currentLang}`);
-      });
-    };
+    window.i18nMap = {
+'সাইন ইন':'Sign In','সাইন আপ':'Sign Up','সাইন ইন করুন':'Sign In','সাইন আপ করুন':'Sign Up','ইউজার আইডি':'User ID','পাসওয়ার্ড':'Password','পাসওয়ার্ড চেঞ্জ':'Change Password','পাসওয়ার্ড পরিবর্তন':'Change Password','পাসওয়ার্ড পরিবর্তন করুন':'Change Password','পাসওয়ার্ড সেভ করুন':'Save Password','ফরগেট পাসওয়ার্ড?':'Forgot Password?','পাসওয়ার্ড পুনরুদ্ধার':'Recover Password','মোবাইল নম্বর':'Mobile Number','জন্ম তারিখ (দিন-মাস-বছর)':'Date of Birth (DD-MM-YYYY)','এখানে প্রবেশ করে হিসাব দেখুন':'Enter Here to View Accounts','অ্যাডমিন প্যানেল (বার্তা পাঠাতে)':'Admin Panel','ক্যাশ ইন হ্যান্ড':'Cash In Hand','সর্বমোট জমা':'Total Deposit','সর্বমোট খরচ':'Total Expense','সর্বমোট মিল':'Total Meals','সদস্য এন্ট্রি ও জমা হিসাব':'Member Entry & Deposits','সদস্যের নাম':'Member Name','সদস্য যুক্ত করুন':'Add Member','সদস্য নির্বাচন করুন:':'Select Member:','গ্যাস ব্যবহার করেন কিনা?':'Uses Gas?','হ্যাঁ (গ্যাস ব্যবহার করেন)':'Yes (Uses Gas)','না (গ্যাস ব্যবহার করেন না)':'No (Does Not Use Gas)','স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)':'Fixed Expenses (Shared Equally)','বিদ্যুৎ':'Electricity','পানি':'Water','ময়লা':'Garbage','ইন্টারনেট':'Internet','রাধুনি':'Cook','অন্যান্য':'Other','খাত':'Category','টাকার পরিমাণ':'Amount','তারিখ (দিন-মাস-বছর)':'Date (DD-MM-YYYY)','যোগ করুন':'Add','গ্যাস খরচ যোগ করুন':'Add Gas Expense','বাজার খরচ এন্ট্রি (তারিখের ক্রমানুসারে)':'Bazaar Expense Entry (By Date)','কি কি বাজার হলো (টিক দিন):':'Items Bought (Select All):','অন্যান্য বাজার (ম্যানুয়ালি নতুন জিনিস লিখতে চাইলে):':'Other Bazaar Items (Enter manually):','কে কে করল (সদস্য বেছে নিন):':'Who Bought (Select Members):','কত টাকার করল (৳):':'Amount Spent (৳):','বাজার খরচ সেভ করুন':'Save Bazaar Expense','মোট বাজার খরচ:':'Total Bazaar Expense:','দৈনিক মিল এন্ট্রি (তারিখের ক্রমানুসারে)':'Daily Meal Entry (By Date)','সকাল':'Morning','দুপুর':'Noon','রাত':'Night','মিল সেভ':'Save Meal','মিল এন্ট্রি রিকোয়েস্ট':'Meal Entry Request','প্রতি সদস্য, প্রতি দিনে সর্বোচ্চ ১টি':'Maximum 1 request per member per day','সর্বমোট মিল সংখ্যা:':'Total Meals Count:','চূড়ান্ত হিসাব ও মাসের পুরো হিসেব':'Final Ledger & Monthly Summary','মিল খরচ (৳)':'Meal Cost (৳)','স্থায়ী খরচ (৳)':'Fixed Cost (৳)','গ্যাস খরচ (৳)':'Gas Cost (৳)','সর্বমোট খরচ (৳)':'Total Expense (৳)','অবস্থা (পাবো/দিবো)':'Balance (Receive/Pay)','সেভ':'Save','হিসাব রিসেট করুন':'Reset Ledger','লগ আউট':'Log Out','রশিদ':'Receipt','JPG হিসেবে সেভ করুন':'Save as JPG','বন্ধ করুন':'Close','অ্যাকশন':'Action','আইটেম':'Items','কে করেছে':'Buyer','স্ট্যাটাস:':'Status:','আইডি মেয়াদ:':'ID Validity:','সক্রিয়':'Active','বার্তা':'Message','বার্তা পাঠাও':'Send Message','প্রেরকের নাম:':'Sender Name:','বার্তার বিষয়বস্তু:':'Message Content:','ইউজার নির্বাচন করুন:':'Select User:','ইউজার প্রোফাইল তথ্য:':'User Profile Information:','ম্যানেজমেন্ট প্যানেল লগইন':'Management Panel Login','ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:':'Enter Management Panel Login Details:','প্যানেলে প্রবেশ করুন':'Enter Panel','হোস্টেল ম্যানেজমেন্ট প্যানেল':'Hostel Management Panel','ওয়েবসাইট লোগো সেটিংস':'Website Logo Settings','লোগো সেভ করুন':'Save Logo','পেমেন্ট ও সাবস্ক্রিপশন':'Payment & Subscription','পেমেন্ট ও সাবস্ক্রিপশন সেটিংস':'Payment & Subscription Settings','পেমেন্ট লিংক:':'Payment Link:','পেমেন্ট QR কোড:':'Payment QR Code:','পেমেন্ট নির্দেশাবলী:':'Payment Instructions:','কোনো লিংক দেওয়া হয়নি':'No link provided','QR ফাইল নেই':'No QR file','অপেক্ষমান রিকোয়েস্ট':'Pending Requests','মিল এন্ট্রি':'Meal Entry','মিল এন্ট্রি রিকোয়েস্ট পাঠান':'Send Meal Entry Request','মেস লাইভ চ্যাট সাপোর্টিং':'Mess Live Chat Support','ইউজার লাইভ চ্যাট সাপোর্ট প্যানেল':'User Live Chat Support Panel','চ্যাট ক্লিয়ার করুন':'Clear Chat','চ্যাট মুছুন':'Delete Chat','উত্তর দিন':'Reply','পাঠান':'Send','প্রবেশ করুন':'Enter','বর্তমান পাসওয়ার্ড':'Current Password','নতুন পাসওয়ার্ড':'New Password','লাইভ চ্যাট':'Live Chat','ম্যানেজারের সাথে লাইভ চ্যাট':'Live Chat with Manager','চ্যাট শুরু করুন':'Start Chat','নাম':'Name','পরিবর্তন':'Change','তারিখ':'Date','গ্যাস ব্যবহারী':'Gas User','গ্যাস নেই':'No Gas','আলু':'Potato','পেঁয়াজ':'Onion','রসুন':'Garlic','আদা':'Ginger','কাঁচামরিচ':'Green Chili','টমেটো':'Tomato','বেগুন':'Eggplant','পটল':'Pointed Gourd','ঢ্যাঁড়শ':'Okra','শসা':'Cucumber','গাজর':'Carrot','ফুলকপি/বাঁধাকপি':'Cauliflower/Cabbage','মাছ':'Fish','মুরগির মাংস':'Chicken','ডিম':'Egg','চাল':'Rice','ডাল':'Lentils','তেল':'Oil','লবণ':'Salt','চিনি':'Sugar','হলুদ গুঁড়ো':'Turmeric Powder','মরিচ গুঁড়ো':'Chili Powder','জিরে গুঁড়ো':'Cumin Powder','ধনিয়া গুঁড়ো':'Coriander Powder','গরম মসলা':'Garam Masala','তেজপাতা':'Bay Leaf','পাঁচফোড়ন':'Panch Phoron','হারপিক':'Harpic','ভিম':'Vim','সাবান':'Soap','সর্বমোট বাজার খরচ:':'Total Bazaar Expense:','সর্বমোট স্থায়ী খরচ:':'Total Fixed Expense:','সর্বমোট গ্যাস খরচ:':'Total Gas Expense:','সর্বমোট জমা টাকার পরিমাণ:':'Total Deposit Amount:'
+};
+window.translateText=function(text){let out=String(text??'');if(window.currentLang!=='en')return out;Object.keys(window.i18nMap).sort((a,b)=>b.length-a.length).forEach(k=>out=out.split(k).join(window.i18nMap[k]));return out;};
+window.i18nOriginalText=window.i18nOriginalText||new WeakMap();
+window.applyLanguage=function(){
+  const lang=window.currentLang||'bn';document.documentElement.lang=lang;
+  const btn=document.getElementById('lang-btn-text');if(btn)btn.innerText=lang==='bn'?'English':'বাংলা';
+  document.querySelectorAll('[data-bn]').forEach(el=>{const v=el.getAttribute('data-'+lang);if(v!=null)el.innerText=v;});
+  document.querySelectorAll('[data-placeholder-bn]').forEach(el=>{el.placeholder=el.getAttribute('data-placeholder-'+lang)||el.placeholder;});
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),nodes=[];
+  while(w.nextNode()){const n=w.currentNode;if(n.parentElement&&!['SCRIPT','STYLE'].includes(n.parentElement.tagName)){if(!window.i18nOriginalText.has(n))window.i18nOriginalText.set(n,n.nodeValue);nodes.push(n);}}
+  nodes.forEach(n=>{const original=window.i18nOriginalText.get(n);n.nodeValue=lang==='en'?window.translateText(original):original;});
+  localStorage.setItem('dream_touching_hostel_lang',lang);
+};
+window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'en':'bn';applyLanguage();if(window.currentUser){renderDashboard();renderUserMealRequests();renderUserBazaarRequests();}renderMgmtLiveChatMessages();setTimeout(applyLanguage,0);};
 
     window.switchAuthTab = function(tab) {
       if (tab === 'signin') {
@@ -2454,6 +2345,62 @@
         : '';
     };
 
+    window.saveFinalSummaryAsJPG = async function() {
+      const area = document.getElementById('final-summary-capture-area');
+      if (!area) {
+        alert('হিসাব পাওয়া যায়নি!');
+        return;
+      }
+      if (typeof html2canvas !== 'function') {
+        alert('JPG সেভ করার লাইব্রেরি লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+        return;
+      }
+
+      const button = document.getElementById('final-summary-save-btn');
+      const oldText = button ? button.innerHTML : '';
+      if (button) {
+        button.disabled = true;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> JPG তৈরি হচ্ছে...';
+      }
+
+      try {
+        const images = Array.from(area.querySelectorAll('img'));
+        await Promise.all(images.map(img => new Promise(resolve => {
+          if (img.complete) return resolve();
+          img.onload = resolve;
+          img.onerror = resolve;
+        })));
+
+        const canvas = await html2canvas(area, {
+          backgroundColor: '#ffffff',
+          scale: Math.min(3, Math.max(2, window.devicePixelRatio || 2)),
+          useCORS: true,
+          logging: false
+        });
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+        if (!blob) throw new Error('JPG conversion failed');
+
+        const fileName = `final-summary-${Date.now()}.jpg`;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } catch (err) {
+        console.error('Final Summary JPG export error:', err);
+        alert('চূড়ান্ত হিসাব JPG হিসেবে সেভ করা যায়নি। আবার চেষ্টা করুন।');
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.innerHTML = oldText;
+        }
+      }
+    };
+
     window.saveCashMemoAsJPG = async function() {
       const area = document.getElementById('receipt-print-area');
       if (!area || !area.innerHTML.trim()) {
@@ -2662,6 +2609,16 @@
       syncMasterData();
     };
 
+    /* BAZAAR EXPENSE REQUEST WORKFLOW */
+window.renderUserBazaarRequests=function(){const box=document.getElementById('user-bazaar-request-list');if(!box||!window.currentUser)return;const rs=(window.hostelData.bazaarRequests||[]).filter(r=>r.status==='pending'&&r.userId===window.currentUser.userId).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));if(!rs.length){box.innerHTML='<div class="text-center text-xs text-gray-400 bg-white/70 border rounded-xl p-3">কোনো অপেক্ষমান বাজার রিকোয়েস্ট নেই।</div>';return;}box.innerHTML=rs.map(r=>`<div class="bg-white border border-blue-200 rounded-xl p-3 text-xs shadow-sm"><div class="flex justify-between gap-2 font-bold text-blue-900"><span>${r.date} — ${r.memberName||'-'}</span><span>অনুমোদন প্রয়োজন</span></div><div class="mt-1 text-gray-700">আইটেম: <b>${(r.items||[]).join(', ')||'-'}</b> | টাকা: <b>৳${Number(r.amount||0).toLocaleString('en-IN')}</b></div><div class="mt-2 flex gap-2"><button onclick="approveBazaarRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button><button onclick="rejectBazaarRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button></div></div>`).join('');applyLanguage();};
+window.approveBazaarRequest=function(id){const r=(window.hostelData.bazaarRequests||[]).find(x=>x.id===id);if(!r||r.status!=='pending'||!window.currentUser||r.userId!==window.currentUser.userId)return;window.hostelData.bazaarExpenses.push({id:'BAZ_'+Date.now(),receiptNo:'BAZ-'+Date.now(),items:r.items||[],shoppers:r.shoppers||[r.memberName||r.memberId],amount:Number(r.amount||0),date:r.date,timestamp:Date.now(),editCount:0,isPending:false,source:'admin_bazaar_request',requestId:r.id});r.status='approved';r.approvedAt=Date.now();syncMasterData();renderUserBazaarRequests();alert(window.currentLang==='bn'?'বাজার রিকোয়েস্ট অনুমোদন হয়ে হিসাবের সাথে যুক্ত হয়েছে।':'Bazaar request approved and added to the ledger.');};
+window.rejectBazaarRequest=function(id){const r=(window.hostelData.bazaarRequests||[]).find(x=>x.id===id);if(!r||r.status!=='pending'||!window.currentUser||r.userId!==window.currentUser.userId)return;window.hostelData.bazaarRequests=window.hostelData.bazaarRequests.filter(x=>x.id!==id);syncMasterData();renderUserBazaarRequests();alert(window.currentLang==='bn'?'বাজার রিকোয়েস্ট বাতিল করা হয়েছে।':'Bazaar request rejected.');};
+window.populateAdminBazaarItems=function(){const g=document.getElementById('admin-bazaar-items-grid');if(!g)return;g.innerHTML=window.defaultBazaarItems.map(x=>`<label class="flex items-center gap-1 bg-white p-1 rounded border cursor-pointer hover:bg-blue-50"><input type="checkbox" value="${x}" class="admin-bazaar-chk rounded text-blue-600"> <span>${x}</span></label>`).join('');applyLanguage();};
+window.populateAdminBazaarMemberSelector=function(uid){const sel=document.getElementById('admin-bazaar-member-selector');if(!sel)return;sel.innerHTML='<option value="">-- সদস্য নির্বাচন করুন --</option>';sel.disabled=!uid;if(!uid)return;const u=window.hostelData.users.find(x=>x.userId===uid);getMembersForUser(u).forEach(m=>sel.innerHTML+=`<option value="${m.id}">${m.name}${m.phone?' — '+m.phone:''}</option>`);applyLanguage();};
+window.populateAdminBazaarUserSelector=function(){const sel=document.getElementById('admin-bazaar-user-selector');if(!sel)return;sel.innerHTML='<option value="">-- ইউজার নির্বাচন করুন --</option>';window.hostelData.users.filter(u=>u.status!=='pending').forEach(u=>{if(getMembersForUser(u).length)sel.innerHTML+=`<option value="${u.userId}">${u.fullName||u.userId} (@${u.userId})</option>`});populateAdminBazaarMemberSelector(sel.value);const d=document.getElementById('admin-bazaar-date');if(d&&!d.value)d.value=getTodayDDMMYYYY();populateAdminBazaarItems();};
+window.sendAdminBazaarRequest=function(){const uid=document.getElementById('admin-bazaar-user-selector').value,mid=document.getElementById('admin-bazaar-member-selector').value,u=window.hostelData.users.find(x=>x.userId===uid),m=window.hostelData.members.find(x=>x.id===mid),date=document.getElementById('admin-bazaar-date').value.trim()||getTodayDDMMYYYY(),amount=parseFloat(document.getElementById('admin-bazaar-amt').value)||0;let items=Array.from(document.querySelectorAll('.admin-bazaar-chk:checked')).map(x=>x.value);const custom=document.getElementById('admin-bazaar-custom-items').value.trim();if(custom)items.push(...custom.split(',').map(x=>x.trim()).filter(Boolean));if(!u||!m){alert(window.currentLang==='bn'?'অনুগ্রহ করে ইউজার ও ক্রেতা সদস্য নির্বাচন করুন।':'Please select a user and shopper member.');return;}if(!amount||amount<=0){alert(window.currentLang==='bn'?'টাকার পরিমাণ দিতে হবে।':'Please enter an amount.');return;}if(!items.length){alert(window.currentLang==='bn'?'কমপক্ষে একটি বাজার আইটেম দিন।':'Enter at least one bazaar item.');return;}window.hostelData.bazaarRequests=window.hostelData.bazaarRequests||[];window.hostelData.bazaarRequests.push({id:'BRQ_'+Date.now(),userId:u.userId,userName:u.fullName||u.userId,memberId:m.id,memberName:m.name,items,shoppers:[m.id],amount,date,status:'pending',managementStatus:'sent',createdAt:Date.now()});document.getElementById('admin-bazaar-amt').value='';document.getElementById('admin-bazaar-custom-items').value='';document.querySelectorAll('.admin-bazaar-chk:checked').forEach(x=>x.checked=false);syncMasterData();renderAdminBazaarRequests();if(window.currentUser?.userId===u.userId)renderUserBazaarRequests();alert(window.currentLang==='bn'?'বাজার খরচ রিকোয়েস্ট সফলভাবে ইউজার প্যানেলে পাঠানো হয়েছে।':'Bazaar expense request sent to the user panel.');};
+window.renderAdminBazaarRequests=function(){const box=document.getElementById('admin-bazaar-request-list');if(!box)return;const rs=(window.hostelData.bazaarRequests||[]).filter(r=>r.status==='pending').sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));if(!rs.length){box.innerHTML='<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">কোনো অপেক্ষমান বাজার রিকোয়েস্ট নেই।</div>';return;}box.innerHTML=rs.map(r=>`<div class="border rounded-xl p-3 bg-white shadow-sm"><div class="flex flex-wrap justify-between gap-2 text-xs"><div><b>${r.userName||r.userId}</b> (@${r.userId})</div><div class="font-bold text-blue-700">${r.date}</div></div><div class="text-xs text-gray-600 mt-1">সদস্য: <b>${r.memberName||'-'}</b> | আইটেম: <b>${(r.items||[]).join(', ')}</b> | টাকা: <b>৳${Number(r.amount||0).toLocaleString('en-IN')}</b></div><div class="mt-2 text-[10px] font-bold text-blue-700">ইউজারের প্যানেল থেকে অনুমোদন বা বাতিল হবে।</div></div>`).join('');applyLanguage();};
+
     /* MEAL ENTRY REQUEST WORKFLOW */
     window.getMembersForUser = function(user) {
       if (!user) return [];
@@ -2828,28 +2785,9 @@
       alert('নির্বাচিত সদস্যের জন্য মিল এন্ট্রি রিকোয়েস্ট ইউজার প্যানেলে পাঠানো হয়েছে।');
     };
 
-    window.switchAdminTab = function(tab) {
-      const msg = document.getElementById('admin-message-tab');
-      const meal = document.getElementById('admin-meal-tab');
-      const msgBtn = document.getElementById('admin-tab-message');
-      const mealBtn = document.getElementById('admin-tab-meal');
+    window.switchAdminTab=function(tab){const msg=document.getElementById('admin-message-tab'),meal=document.getElementById('admin-meal-tab'),baz=document.getElementById('admin-bazaar-tab'),mb=document.getElementById('admin-tab-message'),meb=document.getElementById('admin-tab-meal'),bb=document.getElementById('admin-tab-bazaar');[msg,meal,baz].forEach(x=>x&&x.classList.add('hidden'));[mb,meb,bb].forEach(x=>x&&(x.className='flex-1 py-2.5 text-center text-gray-400'));if(tab==='meal'){meal.classList.remove('hidden');meb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminMealUserSelector();renderAdminMealRequests();}else if(tab==='bazaar'){baz.classList.remove('hidden');bb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBazaarUserSelector();renderAdminBazaarRequests();}else{msg.classList.remove('hidden');mb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';}applyLanguage();};
 
-      if (tab === 'meal') {
-        msg.classList.add('hidden');
-        meal.classList.remove('hidden');
-        msgBtn.className = 'flex-1 py-2.5 text-center text-gray-400';
-        mealBtn.className = 'flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';
-        populateAdminMealUserSelector();
-        renderAdminMealRequests();
-      } else {
-        meal.classList.add('hidden');
-        msg.classList.remove('hidden');
-        mealBtn.className = 'flex-1 py-2.5 text-center text-gray-400';
-        msgBtn.className = 'flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';
-      }
-    };
-
-    window.renderAdminMealRequests = function() {
+window.renderAdminMealRequests = function() {
       const box = document.getElementById('admin-meal-request-list');
       if (!box) return;
       const requests = (window.hostelData.mealRequests || [])
@@ -2985,6 +2923,7 @@
 
     window.renderDashboard = function() {
       renderUserMealRequests();
+      renderUserBazaarRequests();
       const membersContainer = document.getElementById('members-cards-container');
       const mealSelect = document.getElementById('meal-member-select');
       const shopperList = document.getElementById('shopper-checkbox-list');
