@@ -133,6 +133,21 @@
       body { background: #ffffff !important; color: #000000 !important; }
       .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
     }
+
+    /* DASHBOARD SECTION TABS (LEFT SIDEBAR) */
+    .dash-tab-btn {
+      color: #475569;
+      background-color: transparent;
+    }
+    .dash-tab-btn:hover {
+      background-color: #f1f5f9;
+      color: #059669;
+    }
+    .dash-tab-btn.active-dash-tab {
+      background-color: #059669;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.35);
+    }
   </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between text-gray-800 relative">
@@ -163,12 +178,12 @@
     </div>
     
     <div class="flex items-center gap-2 flex-wrap justify-end">
-      <button id="header-save-btn" onclick="manualSaveData()" class="hidden btn-green-to-red px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow">
-        <i class="fa-solid fa-floppy-disk"></i> <span data-bn="সেভ" data-en="Save">সেভ</span>
-      </button>
-
-      <button id="header-change-pass-btn" onclick="openChangePasswordModal()" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
-        <i class="fa-solid fa-key"></i> <span data-bn="পাসওয়ার্ড চেঞ্জ" data-en="Change Password">পাসওয়ার্ড চেঞ্জ</span>
+      <button id="header-profile-btn" onclick="openProfileModal()" class="hidden bg-slate-800 hover:bg-slate-700 text-white pl-1.5 pr-3 py-1.5 rounded-full text-xs md:text-sm font-semibold flex items-center gap-2 shadow border border-slate-600 transition">
+        <span id="header-profile-img-wrap" class="w-7 h-7 rounded-full overflow-hidden bg-emerald-100 flex items-center justify-center flex-shrink-0">
+          <i id="header-profile-default-icon" class="fa-solid fa-user text-emerald-600 text-sm"></i>
+          <img id="header-profile-img" class="w-full h-full object-cover hidden" alt="Profile">
+        </span>
+        <span data-bn="প্রোফাইল" data-en="Profile">প্রোফাইল</span>
       </button>
 
       <button onclick="toggleLanguage()" class="btn-green-to-red px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow">
@@ -408,6 +423,37 @@
             </div>
           </div>
 
+          <!-- SECTION TABS: LEFT SIDEBAR + CONTENT PANEL -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+            <!-- LEFT SIDEBAR TAB NAV -->
+            <div class="md:col-span-1 no-print">
+              <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md border border-gray-200 p-2 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-visible md:sticky md:top-4">
+                <button onclick="switchDashboardTab('members')" id="dash-tab-btn-members" class="dash-tab-btn active-dash-tab whitespace-nowrap w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 transition">
+                  <i class="fa-solid fa-users w-4 text-center"></i> <span data-bn="সদস্য এন্ট্রি ও জমা হিসাব" data-en="Members & Deposits">সদস্য এন্ট্রি ও জমা হিসাব</span>
+                </button>
+                <button onclick="switchDashboardTab('fixed')" id="dash-tab-btn-fixed" class="dash-tab-btn whitespace-nowrap w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 transition">
+                  <i class="fa-solid fa-building-columns w-4 text-center"></i> <span data-bn="স্থায়ী খরচ" data-en="Fixed Expense">স্থায়ী খরচ</span>
+                </button>
+                <button onclick="switchDashboardTab('gas')" id="dash-tab-btn-gas" class="dash-tab-btn whitespace-nowrap w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 transition">
+                  <i class="fa-solid fa-fire-burner w-4 text-center"></i> <span data-bn="গ্যাস খরচ" data-en="Gas Expense">গ্যাস খরচ</span>
+                </button>
+                <button onclick="switchDashboardTab('bazaar')" id="dash-tab-btn-bazaar" class="dash-tab-btn whitespace-nowrap w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 transition">
+                  <i class="fa-solid fa-cart-shopping w-4 text-center"></i> <span data-bn="বাজার খরচ এন্ট্রি" data-en="Bazaar Entry">বাজার খরচ এন্ট্রি</span>
+                </button>
+                <button onclick="switchDashboardTab('meal')" id="dash-tab-btn-meal" class="dash-tab-btn whitespace-nowrap w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 transition">
+                  <i class="fa-solid fa-utensils w-4 text-center"></i> <span data-bn="দৈনিক মিল এন্ট্রি" data-en="Daily Meal Entry">দৈনিক মিল এন্ট্রি</span>
+                </button>
+                <button onclick="switchDashboardTab('summary')" id="dash-tab-btn-summary" class="dash-tab-btn whitespace-nowrap w-full text-left px-3 py-2.5 rounded-xl text-xs md:text-sm font-bold flex items-center gap-2 transition">
+                  <i class="fa-solid fa-calculator w-4 text-center"></i> <span data-bn="চূড়ান্ত হিসাব" data-en="Final Summary">চূড়ান্ত হিসাব</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- RIGHT CONTENT PANEL -->
+            <div class="md:col-span-3 space-y-6">
+
+            <div id="dash-panel-members" class="dash-tab-panel space-y-6">
           <!-- MEMBER ENTRY & CARDS -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-6">
             <div class="flex justify-between items-center border-b pb-3">
@@ -452,7 +498,9 @@
               </div>
             </div>
           </div>
+            </div><!-- /dash-panel-members -->
 
+            <div id="dash-panel-fixed" class="dash-tab-panel hidden space-y-6">
           <!-- FIXED EXPENSE SECTION -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
             <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
@@ -512,7 +560,9 @@
               <span data-bn="সর্বমোট স্থায়ী খরচ:" data-en="Total Fixed Expense:">সর্বমোট স্থায়ী খরচ:</span> ৳ <span id="section-total-fixed">0</span>
             </div>
           </div>
+            </div><!-- /dash-panel-fixed -->
 
+            <div id="dash-panel-gas" class="dash-tab-panel hidden space-y-6">
           <!-- GAS EXPENSE SECTION -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
             <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
@@ -553,7 +603,9 @@
               <span data-bn="সর্বমোট গ্যাস খরচ:" data-en="Total Gas Expense:">সর্বমোট গ্যাস খরচ:</span> ৳ <span id="section-total-gas">0</span>
             </div>
           </div>
+            </div><!-- /dash-panel-gas -->
 
+            <div id="dash-panel-bazaar" class="dash-tab-panel hidden space-y-6">
           <!-- BAZAAR EXPENSE SECTION -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
             <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
@@ -613,7 +665,9 @@
               <span data-bn="সর্বমোট বাজার খরচ:" data-en="Total Bazaar Expense:">সর্বমোট বাজার খরচ:</span> ৳ <span id="section-total-bazaar">0</span>
             </div>
           </div>
+            </div><!-- /dash-panel-bazaar -->
 
+            <div id="dash-panel-meal" class="dash-tab-panel hidden space-y-6">
           <!-- DAILY MEAL ENTRY SECTION -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
             <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
@@ -691,7 +745,9 @@
               <span data-bn="সর্বমোট মিল সংখ্যা:" data-en="Total Meals Count:">সর্বমোট মিল সংখ্যা:</span> <span id="section-total-meals">0</span> টি
             </div>
           </div>
+            </div><!-- /dash-panel-meal -->
 
+            <div id="dash-panel-summary" class="dash-tab-panel hidden space-y-6">
           <!-- FINAL SUMMARY LEDGER BREAKDOWN & SAVE AS JPG -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-6">
             <div id="final-summary-capture-area" class="space-y-6 bg-white/95">
@@ -751,6 +807,10 @@
             </div>
 
           </div>
+            </div><!-- /dash-panel-summary -->
+
+            </div><!-- /RIGHT CONTENT PANEL -->
+          </div><!-- /SECTION TABS GRID -->
 
         </div>
 
@@ -1166,6 +1226,67 @@
     </div>
   </div>
 
+  <!-- PROFILE MODAL -->
+  <div id="profile-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-600 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-black text-emerald-900 flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-emerald-600"></i>
+          <span data-bn="প্রোফাইল তথ্য" data-en="Profile Information">প্রোফাইল তথ্য</span>
+        </h3>
+        <button onclick="closeProfileModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="text-center">
+        <div class="relative inline-block group">
+          <div id="profile-modal-img-container" class="w-24 h-24 rounded-full border-4 border-emerald-500 shadow-lg mx-auto overflow-hidden bg-slate-100 flex items-center justify-center">
+            <i id="profile-modal-default-icon" class="fa-solid fa-user text-4xl text-emerald-600"></i>
+            <img id="profile-modal-img" class="w-full h-full object-cover hidden" alt="User Profile">
+          </div>
+          <label for="profile-modal-photo-input" class="absolute bottom-0 right-0 bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-full shadow-md cursor-pointer transition" title="ছবি পরিবর্তন করুন">
+            <i class="fa-solid fa-camera text-xs"></i>
+          </label>
+          <input type="file" id="profile-modal-photo-input" accept="image/*" class="hidden" onchange="handleProfilePhotoUpload(event)">
+        </div>
+        <p id="profile-modal-userid" class="text-xs text-emerald-700 font-bold mt-2">@userid</p>
+      </div>
+
+      <form onsubmit="handleProfileInfoUpdate(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম (Full Name)" data-en="Full Name">নাম (Full Name)</label>
+          <input type="text" id="profile-modal-name-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>
+          <input type="tel" id="profile-modal-mobile-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1" data-bn="জন্ম তারিখ (দিন-মাস-বছর)" data-en="Date of Birth (DD-MM-YYYY)">জন্ম তারিখ (দিন-মাস-বছর)</label>
+          <input type="text" id="profile-modal-dob-input" required class="w-full px-3 py-2 border rounded-xl text-sm">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+          <div class="flex flex-col p-2 bg-slate-50 rounded-lg">
+            <span class="text-gray-500" data-bn="আইডি মেয়াদ" data-en="Validity">আইডি মেয়াদ</span>
+            <span id="profile-modal-validity" class="text-amber-600 font-bold">--</span>
+          </div>
+          <div class="flex flex-col p-2 bg-slate-50 rounded-lg">
+            <span class="text-gray-500" data-bn="স্ট্যাটাস" data-en="Status">স্ট্যাটাস</span>
+            <span id="profile-modal-status" class="text-emerald-600 font-bold">--</span>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full btn-green-to-red py-2.5 rounded-xl font-bold text-sm shadow flex items-center justify-center gap-2">
+          <i class="fa-solid fa-floppy-disk"></i> <span data-bn="প্রোফাইল আপডেট করুন" data-en="Update Profile">প্রোফাইল আপডেট করুন</span>
+        </button>
+      </form>
+
+      <button onclick="closeProfileModal();openChangePasswordModal();" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-xl font-bold text-xs shadow flex items-center justify-center gap-1 transition">
+        <i class="fa-solid fa-key"></i> <span data-bn="পাসওয়ার্ড পরিবর্তন" data-en="Change Password">পাসওয়ার্ড পরিবর্তন</span>
+      </button>
+    </div>
+  </div>
+
   <!-- FORGET PASS MODAL -->
   <div id="forget-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-emerald-600">
@@ -1318,6 +1439,46 @@
       reader.readAsDataURL(file);
     };
 
+    window.openProfileModal = function() {
+      if (!window.currentUser) return;
+      document.getElementById('profile-modal-name-input').value = window.currentUser.fullName || '';
+      document.getElementById('profile-modal-mobile-input').value = window.currentUser.mobile || '';
+      document.getElementById('profile-modal-dob-input').value = window.currentUser.dob || '';
+      document.getElementById('profile-modal-userid').innerText = `@${window.currentUser.userId}`;
+      document.getElementById('profile-modal').classList.remove('hidden');
+      document.getElementById('profile-modal').classList.add('flex');
+    };
+
+    window.closeProfileModal = function() {
+      document.getElementById('profile-modal').classList.add('hidden');
+      document.getElementById('profile-modal').classList.remove('flex');
+    };
+
+    window.handleProfileInfoUpdate = function(event) {
+      event.preventDefault();
+      if (!window.currentUser) return;
+
+      const name = document.getElementById('profile-modal-name-input').value.trim();
+      const mobile = document.getElementById('profile-modal-mobile-input').value.trim();
+      const dob = document.getElementById('profile-modal-dob-input').value.trim();
+
+      window.currentUser.fullName = name;
+      window.currentUser.mobile = mobile;
+      window.currentUser.dob = dob;
+
+      const userIdx = window.hostelData.users.findIndex(u => u.userId === window.currentUser.userId);
+      if (userIdx !== -1) {
+        window.hostelData.users[userIdx].fullName = name;
+        window.hostelData.users[userIdx].mobile = mobile;
+        window.hostelData.users[userIdx].dob = dob;
+      }
+
+      syncMasterData();
+      renderUserProfilePanel();
+      alert(window.currentLang === 'bn' ? 'প্রোফাইল সফলভাবে আপডেট করা হয়েছে!' : 'Profile updated successfully!');
+      closeProfileModal();
+    };
+
     window.isUserExpired = function(user) {
       if (!user) return false;
       if (user.isLocked) return true;
@@ -1377,6 +1538,54 @@
         imgEl.classList.add('hidden');
         iconEl.classList.remove('hidden');
       }
+
+      // Sync header profile button photo
+      const headerImgEl = document.getElementById('header-profile-img');
+      const headerIconEl = document.getElementById('header-profile-default-icon');
+      if (headerImgEl && headerIconEl) {
+        if (window.currentUser.photo) {
+          headerImgEl.src = window.currentUser.photo;
+          headerImgEl.classList.remove('hidden');
+          headerIconEl.classList.add('hidden');
+        } else {
+          headerImgEl.classList.add('hidden');
+          headerIconEl.classList.remove('hidden');
+        }
+      }
+
+      // Sync profile modal photo & readonly info
+      const modalImgEl = document.getElementById('profile-modal-img');
+      const modalIconEl = document.getElementById('profile-modal-default-icon');
+      if (modalImgEl && modalIconEl) {
+        if (window.currentUser.photo) {
+          modalImgEl.src = window.currentUser.photo;
+          modalImgEl.classList.remove('hidden');
+          modalIconEl.classList.add('hidden');
+        } else {
+          modalImgEl.classList.add('hidden');
+          modalIconEl.classList.remove('hidden');
+        }
+      }
+      const modalValidityEl = document.getElementById('profile-modal-validity');
+      const modalStatusEl = document.getElementById('profile-modal-status');
+      if (modalValidityEl && modalStatusEl) {
+        modalValidityEl.innerText = validEl.innerText;
+        modalStatusEl.innerHTML = statusText.innerHTML;
+        modalStatusEl.className = statusText.className;
+      }
+    };
+
+    window.dashboardTabNames = ['members', 'fixed', 'gas', 'bazaar', 'meal', 'summary'];
+
+    window.switchDashboardTab = function(tabName) {
+      window.dashboardTabNames.forEach(t => {
+        const panel = document.getElementById('dash-panel-' + t);
+        const btn = document.getElementById('dash-tab-btn-' + t);
+        if (panel) panel.classList.toggle('hidden', t !== tabName);
+        if (btn) btn.classList.toggle('active-dash-tab', t === tabName);
+      });
+      window.currentDashboardTab = tabName;
+      try { localStorage.setItem('dream_touching_hostel_last_tab', tabName); } catch(e) {}
     };
 
     window.manualSaveData = function() {
@@ -1408,6 +1617,8 @@
         applySiteBranding();
       }
       applyLanguage();
+      const savedTab = (function(){ try { return localStorage.getItem('dream_touching_hostel_last_tab'); } catch(e) { return null; } })();
+      switchDashboardTab(window.dashboardTabNames.includes(savedTab) ? savedTab : 'members');
     };
 
     window.setInitialDates = function() {
@@ -1905,8 +2116,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
           dashSec.classList.remove('hidden');
           dashSec.style.opacity = '1';
           dashSec.style.transform = 'scale(1)';
-          document.getElementById('header-save-btn').classList.remove('hidden');
-          document.getElementById('header-change-pass-btn').classList.remove('hidden');
+          document.getElementById('header-profile-btn').classList.remove('hidden');
           document.getElementById('header-logout-btn').classList.remove('hidden');
           renderUserProfilePanel();
           checkUserAdminComments();
@@ -1921,8 +2131,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
           authSec.classList.remove('hidden');
           authSec.style.opacity = '1';
           authSec.style.transform = 'scale(1)';
-          document.getElementById('header-save-btn').classList.add('hidden');
-          document.getElementById('header-change-pass-btn').classList.add('hidden');
+          document.getElementById('header-profile-btn').classList.add('hidden');
           document.getElementById('header-logout-btn').classList.add('hidden');
           window.currentUser = null;
         }, 500);
@@ -2602,11 +2811,16 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         isPending: false
       });
 
+      const savedId = window.hostelData.bazaarExpenses[window.hostelData.bazaarExpenses.length - 1].id;
+
       document.getElementById('bazaar-amt-input').value = '';
       document.getElementById('bazaar-custom-items').value = '';
       document.querySelectorAll('.bazaar-chk:checked, .shopper-chk:checked').forEach(cb => cb.checked = false);
 
       syncMasterData();
+
+      // Auto-open the cash memo/voucher so the member can save it right after adding the bazaar entry
+      showBazaarReceipt(savedId);
     };
 
     /* BAZAAR EXPENSE REQUEST WORKFLOW */
