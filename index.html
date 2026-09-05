@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gour Kishore Das Babaji BACE</title>
+  <link id="site-favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2310b981'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='white'%3E%F0%9F%8F%A0%3C/text%3E%3C/svg%3E">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- html2canvas: Cash Memo JPG export -->
@@ -421,7 +422,7 @@
               </h3>
             </div>
 
-            <form onsubmit="handleAddMember(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-gray-200">
+            <form onsubmit="handleAddMember(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 bg-slate-50 p-4 rounded-xl border border-gray-200">
               <div>
                 <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্যের নাম" data-en="Member Name">সদস্যের নাম</label>
                 <input type="text" id="member-input-name" required class="w-full px-3 py-2 border rounded-lg text-sm">
@@ -430,6 +431,11 @@
               <div>
                 <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="মোবাইল নম্বর" data-en="Mobile Number">মোবাইল নম্বর</label>
                 <input type="tel" id="member-input-phone" required class="w-full px-3 py-2 border rounded-lg text-sm">
+              </div>
+
+              <div>
+                <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সিট বুকিং সংখ্যা" data-en="Seat Booking Quantity">সিট বুকিং সংখ্যা</label>
+                <input type="number" id="member-input-seatqty" min="1" value="1" required class="w-full px-3 py-2 border rounded-lg text-sm">
               </div>
 
               <div>
@@ -465,6 +471,7 @@
             </h3>
 
             <div class="flex flex-wrap gap-2 text-xs font-bold">
+              <button type="button" onclick="setFixedCategory('বাসা ভাড়া')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border"><i class="fa-solid fa-house mr-1"></i>বাসা ভাড়া</button>
               <button type="button" onclick="setFixedCategory('বিদ্যুৎ')" class="fixed-cat-btn bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-lg border border-emerald-300">বিদ্যুৎ</button>
               <button type="button" onclick="setFixedCategory('পানি')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">পানি</button>
               <button type="button" onclick="setFixedCategory('ময়লা')" class="fixed-cat-btn bg-slate-100 text-gray-700 px-3 py-1.5 rounded-lg border">ময়লা</button>
@@ -706,13 +713,17 @@
                 </h3>
               </div>
 
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-gray-200">
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs bg-slate-50 p-4 rounded-xl border border-gray-200">
                 <div class="p-2 bg-white rounded border">
                   <span class="text-gray-500 block">মিল চার্জ (Per Meal Rate):</span>
                   <b class="text-emerald-700 text-sm">৳ <span id="calc-meal-rate">0.00</span></b>
                 </div>
                 <div class="p-2 bg-white rounded border">
-                  <span class="text-gray-500 block">প্রতি সদস্যের স্থায়ী চার্জ:</span>
+                  <span class="text-gray-500 block">প্রতি সিট বাসা ভাড়া চার্জ:</span>
+                  <b class="text-emerald-700 text-sm">৳ <span id="calc-rent-rate">0.00</span></b>
+                </div>
+                <div class="p-2 bg-white rounded border">
+                  <span class="text-gray-500 block">প্রতি সদস্যের অন্যান্য স্থায়ী চার্জ:</span>
                   <b class="text-emerald-700 text-sm">৳ <span id="calc-fixed-rate">0.00</span></b>
                 </div>
                 <div class="p-2 bg-white rounded border">
@@ -1518,6 +1529,11 @@
         else el.classList.remove('hidden');
       });
 
+      const favicon = document.getElementById('site-favicon');
+      if (favicon && logo) {
+        favicon.href = logo;
+      }
+
       if (preview && !logo) preview.classList.add('hidden');
       if (previewIcon) previewIcon.classList.toggle('hidden', !!logo);
     };
@@ -1846,7 +1862,7 @@ window.renderPendingEditsTable = function() {
     };
 
     window.i18nMap = {
-'সাইন ইন':'Sign In','সাইন আপ':'Sign Up','সাইন ইন করুন':'Sign In','সাইন আপ করুন':'Sign Up','ইউজার আইডি':'User ID','পাসওয়ার্ড':'Password','পাসওয়ার্ড চেঞ্জ':'Change Password','পাসওয়ার্ড পরিবর্তন':'Change Password','পাসওয়ার্ড পরিবর্তন করুন':'Change Password','পাসওয়ার্ড সেভ করুন':'Save Password','ফরগেট পাসওয়ার্ড?':'Forgot Password?','পাসওয়ার্ড পুনরুদ্ধার':'Recover Password','মোবাইল নম্বর':'Mobile Number','জন্ম তারিখ (দিন-মাস-বছর)':'Date of Birth (DD-MM-YYYY)','এখানে প্রবেশ করে হিসাব দেখুন':'Enter Here to View Accounts','অ্যাডমিন প্যানেল (বার্তা পাঠাতে)':'Admin Panel','ক্যাশ ইন হ্যান্ড':'Cash In Hand','সর্বমোট জমা':'Total Deposit','সর্বমোট খরচ':'Total Expense','সর্বমোট মিল':'Total Meals','সদস্য এন্ট্রি ও জমা হিসাব':'Member Entry & Deposits','সদস্যের নাম':'Member Name','সদস্য যুক্ত করুন':'Add Member','সদস্য নির্বাচন করুন:':'Select Member:','গ্যাস ব্যবহার করেন কিনা?':'Uses Gas?','হ্যাঁ (গ্যাস ব্যবহার করেন)':'Yes (Uses Gas)','না (গ্যাস ব্যবহার করেন না)':'No (Does Not Use Gas)','স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)':'Fixed Expenses (Shared Equally)','বিদ্যুৎ':'Electricity','পানি':'Water','ময়লা':'Garbage','ইন্টারনেট':'Internet','রাধুনি':'Cook','অন্যান্য':'Other','খাত':'Category','টাকার পরিমাণ':'Amount','তারিখ (দিন-মাস-বছর)':'Date (DD-MM-YYYY)','যোগ করুন':'Add','গ্যাস খরচ যোগ করুন':'Add Gas Expense','বাজার খরচ এন্ট্রি (তারিখের ক্রমানুসারে)':'Bazaar Expense Entry (By Date)','কি কি বাজার হলো (টিক দিন):':'Items Bought (Select All):','অন্যান্য বাজার (ম্যানুয়ালি নতুন জিনিস লিখতে চাইলে):':'Other Bazaar Items (Enter manually):','কে কে করল (সদস্য বেছে নিন):':'Who Bought (Select Members):','কত টাকার করল (৳):':'Amount Spent (৳):','বাজার খরচ সেভ করুন':'Save Bazaar Expense','মোট বাজার খরচ:':'Total Bazaar Expense:','দৈনিক মিল এন্ট্রি (তারিখের ক্রমানুসারে)':'Daily Meal Entry (By Date)','সকাল':'Morning','দুপুর':'Noon','রাত':'Night','মিল সেভ':'Save Meal','মিল এন্ট্রি রিকোয়েস্ট':'Meal Entry Request','প্রতি সদস্য, প্রতি দিনে সর্বোচ্চ ১টি':'Maximum 1 request per member per day','সর্বমোট মিল সংখ্যা:':'Total Meals Count:','চূড়ান্ত হিসাব ও মাসের পুরো হিসেব':'Final Ledger & Monthly Summary','মিল খরচ (৳)':'Meal Cost (৳)','স্থায়ী খরচ (৳)':'Fixed Cost (৳)','গ্যাস খরচ (৳)':'Gas Cost (৳)','সর্বমোট খরচ (৳)':'Total Expense (৳)','অবস্থা (পাবো/দিবো)':'Balance (Receive/Pay)','সেভ':'Save','হিসাব রিসেট করুন':'Reset Ledger','লগ আউট':'Log Out','রশিদ':'Receipt','JPG হিসেবে সেভ করুন':'Save as JPG','বন্ধ করুন':'Close','অ্যাকশন':'Action','আইটেম':'Items','কে করেছে':'Buyer','স্ট্যাটাস:':'Status:','আইডি মেয়াদ:':'ID Validity:','সক্রিয়':'Active','বার্তা':'Message','বার্তা পাঠাও':'Send Message','প্রেরকের নাম:':'Sender Name:','বার্তার বিষয়বস্তু:':'Message Content:','ইউজার নির্বাচন করুন:':'Select User:','ইউজার প্রোফাইল তথ্য:':'User Profile Information:','ম্যানেজমেন্ট প্যানেল লগইন':'Management Panel Login','ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:':'Enter Management Panel Login Details:','প্যানেলে প্রবেশ করুন':'Enter Panel','হোস্টেল ম্যানেজমেন্ট প্যানেল':'Hostel Management Panel','ওয়েবসাইট লোগো সেটিংস':'Website Logo Settings','লোগো সেভ করুন':'Save Logo','পেমেন্ট ও সাবস্ক্রিপশন':'Payment & Subscription','পেমেন্ট ও সাবস্ক্রিপশন সেটিংস':'Payment & Subscription Settings','পেমেন্ট লিংক:':'Payment Link:','পেমেন্ট QR কোড:':'Payment QR Code:','পেমেন্ট নির্দেশাবলী:':'Payment Instructions:','কোনো লিংক দেওয়া হয়নি':'No link provided','QR ফাইল নেই':'No QR file','অপেক্ষমান রিকোয়েস্ট':'Pending Requests','মিল এন্ট্রি':'Meal Entry','মিল এন্ট্রি রিকোয়েস্ট পাঠান':'Send Meal Entry Request','মেস লাইভ চ্যাট সাপোর্টিং':'Mess Live Chat Support','ইউজার লাইভ চ্যাট সাপোর্ট প্যানেল':'User Live Chat Support Panel','চ্যাট ক্লিয়ার করুন':'Clear Chat','চ্যাট মুছুন':'Delete Chat','উত্তর দিন':'Reply','পাঠান':'Send','প্রবেশ করুন':'Enter','বর্তমান পাসওয়ার্ড':'Current Password','নতুন পাসওয়ার্ড':'New Password','লাইভ চ্যাট':'Live Chat','ম্যানেজারের সাথে লাইভ চ্যাট':'Live Chat with Manager','চ্যাট শুরু করুন':'Start Chat','নাম':'Name','পরিবর্তন':'Change','তারিখ':'Date','গ্যাস ব্যবহারী':'Gas User','গ্যাস নেই':'No Gas','আলু':'Potato','পেঁয়াজ':'Onion','রসুন':'Garlic','আদা':'Ginger','কাঁচামরিচ':'Green Chili','টমেটো':'Tomato','বেগুন':'Eggplant','পটল':'Pointed Gourd','ঢ্যাঁড়শ':'Okra','শসা':'Cucumber','গাজর':'Carrot','ফুলকপি/বাঁধাকপি':'Cauliflower/Cabbage','মাছ':'Fish','মুরগির মাংস':'Chicken','ডিম':'Egg','চাল':'Rice','ডাল':'Lentils','তেল':'Oil','লবণ':'Salt','চিনি':'Sugar','হলুদ গুঁড়ো':'Turmeric Powder','মরিচ গুঁড়ো':'Chili Powder','জিরে গুঁড়ো':'Cumin Powder','ধনিয়া গুঁড়ো':'Coriander Powder','গরম মসলা':'Garam Masala','তেজপাতা':'Bay Leaf','পাঁচফোড়ন':'Panch Phoron','হারপিক':'Harpic','ভিম':'Vim','সাবান':'Soap','সর্বমোট বাজার খরচ:':'Total Bazaar Expense:','সর্বমোট স্থায়ী খরচ:':'Total Fixed Expense:','সর্বমোট গ্যাস খরচ:':'Total Gas Expense:','সর্বমোট জমা টাকার পরিমাণ:':'Total Deposit Amount:'
+'সাইন ইন':'Sign In','সাইন আপ':'Sign Up','সাইন ইন করুন':'Sign In','সাইন আপ করুন':'Sign Up','ইউজার আইডি':'User ID','পাসওয়ার্ড':'Password','পাসওয়ার্ড চেঞ্জ':'Change Password','পাসওয়ার্ড পরিবর্তন':'Change Password','পাসওয়ার্ড পরিবর্তন করুন':'Change Password','পাসওয়ার্ড সেভ করুন':'Save Password','ফরগেট পাসওয়ার্ড?':'Forgot Password?','পাসওয়ার্ড পুনরুদ্ধার':'Recover Password','মোবাইল নম্বর':'Mobile Number','জন্ম তারিখ (দিন-মাস-বছর)':'Date of Birth (DD-MM-YYYY)','এখানে প্রবেশ করে হিসাব দেখুন':'Enter Here to View Accounts','অ্যাডমিন প্যানেল (বার্তা পাঠাতে)':'Admin Panel','ক্যাশ ইন হ্যান্ড':'Cash In Hand','সর্বমোট জমা':'Total Deposit','সর্বমোট খরচ':'Total Expense','সর্বমোট মিল':'Total Meals','সদস্য এন্ট্রি ও জমা হিসাব':'Member Entry & Deposits','সদস্যের নাম':'Member Name','সদস্য যুক্ত করুন':'Add Member','সদস্য নির্বাচন করুন:':'Select Member:','গ্যাস ব্যবহার করেন কিনা?':'Uses Gas?','সিট বুকিং সংখ্যা':'Seat Booking Quantity','হ্যাঁ (গ্যাস ব্যবহার করেন)':'Yes (Uses Gas)','না (গ্যাস ব্যবহার করেন না)':'No (Does Not Use Gas)','স্থায়ী খরচ (সকল সদস্যের মধ্যে সমান ভাগ)':'Fixed Expenses (Shared Equally)','বাসা ভাড়া':'House Rent','বিদ্যুৎ':'Electricity','পানি':'Water','ময়লা':'Garbage','ইন্টারনেট':'Internet','রাধুনি':'Cook','অন্যান্য':'Other','খাত':'Category','টাকার পরিমাণ':'Amount','তারিখ (দিন-মাস-বছর)':'Date (DD-MM-YYYY)','যোগ করুন':'Add','গ্যাস খরচ যোগ করুন':'Add Gas Expense','বাজার খরচ এন্ট্রি (তারিখের ক্রমানুসারে)':'Bazaar Expense Entry (By Date)','কি কি বাজার হলো (টিক দিন):':'Items Bought (Select All):','অন্যান্য বাজার (ম্যানুয়ালি নতুন জিনিস লিখতে চাইলে):':'Other Bazaar Items (Enter manually):','কে কে করল (সদস্য বেছে নিন):':'Who Bought (Select Members):','কত টাকার করল (৳):':'Amount Spent (৳):','বাজার খরচ সেভ করুন':'Save Bazaar Expense','মোট বাজার খরচ:':'Total Bazaar Expense:','দৈনিক মিল এন্ট্রি (তারিখের ক্রমানুসারে)':'Daily Meal Entry (By Date)','সকাল':'Morning','দুপুর':'Noon','রাত':'Night','মিল সেভ':'Save Meal','মিল এন্ট্রি রিকোয়েস্ট':'Meal Entry Request','প্রতি সদস্য, প্রতি দিনে সর্বোচ্চ ১টি':'Maximum 1 request per member per day','সর্বমোট মিল সংখ্যা:':'Total Meals Count:','চূড়ান্ত হিসাব ও মাসের পুরো হিসেব':'Final Ledger & Monthly Summary','মিল খরচ (৳)':'Meal Cost (৳)','স্থায়ী খরচ (৳)':'Fixed Cost (৳)','গ্যাস খরচ (৳)':'Gas Cost (৳)','সর্বমোট খরচ (৳)':'Total Expense (৳)','অবস্থা (পাবো/দিবো)':'Balance (Receive/Pay)','সেভ':'Save','হিসাব রিসেট করুন':'Reset Ledger','লগ আউট':'Log Out','রশিদ':'Receipt','JPG হিসেবে সেভ করুন':'Save as JPG','বন্ধ করুন':'Close','অ্যাকশন':'Action','আইটেম':'Items','কে করেছে':'Buyer','স্ট্যাটাস:':'Status:','আইডি মেয়াদ:':'ID Validity:','সক্রিয়':'Active','বার্তা':'Message','বার্তা পাঠাও':'Send Message','প্রেরকের নাম:':'Sender Name:','বার্তার বিষয়বস্তু:':'Message Content:','ইউজার নির্বাচন করুন:':'Select User:','ইউজার প্রোফাইল তথ্য:':'User Profile Information:','ম্যানেজমেন্ট প্যানেল লগইন':'Management Panel Login','ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:':'Enter Management Panel Login Details:','প্যানেলে প্রবেশ করুন':'Enter Panel','হোস্টেল ম্যানেজমেন্ট প্যানেল':'Hostel Management Panel','ওয়েবসাইট লোগো সেটিংস':'Website Logo Settings','লোগো সেভ করুন':'Save Logo','পেমেন্ট ও সাবস্ক্রিপশন':'Payment & Subscription','পেমেন্ট ও সাবস্ক্রিপশন সেটিংস':'Payment & Subscription Settings','পেমেন্ট লিংক:':'Payment Link:','পেমেন্ট QR কোড:':'Payment QR Code:','পেমেন্ট নির্দেশাবলী:':'Payment Instructions:','কোনো লিংক দেওয়া হয়নি':'No link provided','QR ফাইল নেই':'No QR file','অপেক্ষমান রিকোয়েস্ট':'Pending Requests','মিল এন্ট্রি':'Meal Entry','মিল এন্ট্রি রিকোয়েস্ট পাঠান':'Send Meal Entry Request','মেস লাইভ চ্যাট সাপোর্টিং':'Mess Live Chat Support','ইউজার লাইভ চ্যাট সাপোর্ট প্যানেল':'User Live Chat Support Panel','চ্যাট ক্লিয়ার করুন':'Clear Chat','চ্যাট মুছুন':'Delete Chat','উত্তর দিন':'Reply','পাঠান':'Send','প্রবেশ করুন':'Enter','বর্তমান পাসওয়ার্ড':'Current Password','নতুন পাসওয়ার্ড':'New Password','লাইভ চ্যাট':'Live Chat','ম্যানেজারের সাথে লাইভ চ্যাট':'Live Chat with Manager','চ্যাট শুরু করুন':'Start Chat','নাম':'Name','পরিবর্তন':'Change','তারিখ':'Date','গ্যাস ব্যবহারী':'Gas User','গ্যাস নেই':'No Gas','আলু':'Potato','পেঁয়াজ':'Onion','রসুন':'Garlic','আদা':'Ginger','কাঁচামরিচ':'Green Chili','টমেটো':'Tomato','বেগুন':'Eggplant','পটল':'Pointed Gourd','ঢ্যাঁড়শ':'Okra','শসা':'Cucumber','গাজর':'Carrot','ফুলকপি/বাঁধাকপি':'Cauliflower/Cabbage','মাছ':'Fish','মুরগির মাংস':'Chicken','ডিম':'Egg','চাল':'Rice','ডাল':'Lentils','তেল':'Oil','লবণ':'Salt','চিনি':'Sugar','হলুদ গুঁড়ো':'Turmeric Powder','মরিচ গুঁড়ো':'Chili Powder','জিরে গুঁড়ো':'Cumin Powder','ধনিয়া গুঁড়ো':'Coriander Powder','গরম মসলা':'Garam Masala','তেজপাতা':'Bay Leaf','পাঁচফোড়ন':'Panch Phoron','হারপিক':'Harpic','ভিম':'Vim','সাবান':'Soap','সর্বমোট বাজার খরচ:':'Total Bazaar Expense:','সর্বমোট স্থায়ী খরচ:':'Total Fixed Expense:','সর্বমোট গ্যাস খরচ:':'Total Gas Expense:','সর্বমোট জমা টাকার পরিমাণ:':'Total Deposit Amount:'
 };
 window.translateText=function(text){let out=String(text??'');if(window.currentLang!=='en')return out;Object.keys(window.i18nMap).sort((a,b)=>b.length-a.length).forEach(k=>out=out.split(k).join(window.i18nMap[k]));return out;};
 window.i18nOriginalText=window.i18nOriginalText||new WeakMap();
@@ -2016,14 +2032,20 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
 
       const totalMembersCount = window.hostelData.members.length || 1;
       const gasUsersCount = window.hostelData.members.filter(m => m.useGas === 'yes').length || 1;
+      const totalSeatsCount = window.hostelData.members.reduce((a, m) => a + (parseInt(m.seatQty) || 1), 0) || 1;
 
-      const totFixed = window.hostelData.fixedExpenses.reduce((acc, curr) => acc + curr.amount, 0);
+      const houseRentList = window.hostelData.fixedExpenses.filter(f => f.category === 'বাসা ভাড়া');
+      const otherFixedList = window.hostelData.fixedExpenses.filter(f => f.category !== 'বাসা ভাড়া');
+      const totHouseRent = houseRentList.reduce((acc, curr) => acc + curr.amount, 0);
+      const totOtherFixed = otherFixedList.reduce((acc, curr) => acc + curr.amount, 0);
+      const totFixed = totHouseRent + totOtherFixed;
       const totGas = window.hostelData.gasExpenses.reduce((acc, curr) => acc + curr.amount, 0);
       const totBazaar = window.hostelData.bazaarExpenses.reduce((acc, curr) => acc + curr.amount, 0);
       const totMealsAll = window.hostelData.meals.reduce((acc, curr) => acc + curr.total, 0) || 1;
 
       const perMealRate = totBazaar / totMealsAll;
-      const perFixedCharge = totFixed / totalMembersCount;
+      const perOtherFixedCharge = totOtherFixed / totalMembersCount;
+      const perSeatRentCharge = totHouseRent / totalSeatsCount;
       const perGasCharge = totGas / gasUsersCount;
 
       let filteredMembers = window.hostelData.members;
@@ -2040,7 +2062,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         const dep = window.hostelData.deposits.filter(d => d.memberId === m.id).reduce((a, c) => a + c.amount, 0);
         const mls = window.hostelData.meals.filter(ml => ml.memberId === m.id).reduce((a, c) => a + c.total, 0);
         const mealExp = mls * perMealRate;
-        const fixExp = perFixedCharge;
+        const fixExp = perOtherFixedCharge + (perSeatRentCharge * (parseInt(m.seatQty) || 1));
         const gasExp = m.useGas === 'yes' ? perGasCharge : 0;
         const totExp = mealExp + fixExp + gasExp;
         const bal = dep - totExp;
@@ -2305,16 +2327,19 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       const name = document.getElementById('member-input-name').value.trim();
       const phone = document.getElementById('member-input-phone').value.trim();
       const useGas = document.getElementById('member-input-gas').value;
+      const seatQty = parseInt(document.getElementById('member-input-seatqty').value) || 1;
 
       window.hostelData.members.push({
         id: 'MEM_' + Date.now(),
         name,
         phone,
         useGas,
+        seatQty,
         userId: window.currentUser ? window.currentUser.userId : ''
       });
       document.getElementById('member-input-name').value = '';
       document.getElementById('member-input-phone').value = '';
+      document.getElementById('member-input-seatqty').value = '1';
       syncMasterData();
     };
 
@@ -2999,14 +3024,20 @@ window.renderAdminMealRequests = function() {
 
       const totalMembersCount = members.length || 1;
       const gasUsersCount = members.filter(m => m.useGas === 'yes').length || 1;
+      const totalSeatsCount = members.reduce((a, m) => a + (parseInt(m.seatQty) || 1), 0) || 1;
 
-      const totFixed = fixedExpenses.reduce((acc, curr) => acc + curr.amount, 0);
+      const houseRentList = fixedExpenses.filter(f => f.category === 'বাসা ভাড়া');
+      const otherFixedList = fixedExpenses.filter(f => f.category !== 'বাসা ভাড়া');
+      const totHouseRent = houseRentList.reduce((acc, curr) => acc + curr.amount, 0);
+      const totOtherFixed = otherFixedList.reduce((acc, curr) => acc + curr.amount, 0);
+      const totFixed = totHouseRent + totOtherFixed;
       const totGas = gasExpenses.reduce((acc, curr) => acc + curr.amount, 0);
       const totBazaar = bazaarExpenses.reduce((acc, curr) => acc + curr.amount, 0);
       const totMealsAll = meals.reduce((acc, curr) => acc + curr.total, 0) || 1;
 
       const perMealRate = totBazaar / totMealsAll;
-      const perFixedCharge = totFixed / totalMembersCount;
+      const perOtherFixedCharge = totOtherFixed / totalMembersCount;
+      const perSeatRentCharge = totHouseRent / totalSeatsCount;
       const perGasCharge = totGas / gasUsersCount;
 
       let sectionTotalDepositSum = 0;
@@ -3026,7 +3057,7 @@ window.renderAdminMealRequests = function() {
         const myMealsSum = meals.filter(ml => ml.memberId === m.id).reduce((acc, curr) => acc + curr.total, 0);
 
         const myMealCost = myMealsSum * perMealRate;
-        const myFixedCost = perFixedCharge;
+        const myFixedCost = perOtherFixedCharge + (perSeatRentCharge * (parseInt(m.seatQty) || 1));
         const myGasCost = m.useGas === 'yes' ? perGasCharge : 0;
         const myTotalExpense = myMealCost + myFixedCost + myGasCost;
 
@@ -3041,9 +3072,14 @@ window.renderAdminMealRequests = function() {
                 </h4>
                 <p class="text-xs text-gray-500"><i class="fa-solid fa-phone text-xs mr-1"></i>${m.phone}</p>
               </div>
-              <span class="text-xs font-bold px-2.5 py-1 rounded-full ${m.useGas === 'yes' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700'}">
-                ${m.useGas === 'yes' ? 'গ্যাস ব্যবহারী' : 'গ্যাস নেই'}
-              </span>
+              <div class="flex flex-col items-end gap-1">
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-100 text-blue-800">
+                  <i class="fa-solid fa-bed mr-1"></i>সিট: ${m.seatQty || 1}
+                </span>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${m.useGas === 'yes' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700'}">
+                  ${m.useGas === 'yes' ? 'গ্যাস ব্যবহারী' : 'গ্যাস নেই'}
+                </span>
+              </div>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-xs bg-white p-2.5 rounded-xl border">
@@ -3110,8 +3146,10 @@ window.renderAdminMealRequests = function() {
       document.getElementById('section-total-meals').innerText = totalMealsCount;
 
       document.getElementById('calc-meal-rate').innerText = perMealRate.toFixed(2);
-      document.getElementById('calc-fixed-rate').innerText = perFixedCharge.toFixed(2);
+      document.getElementById('calc-fixed-rate').innerText = perOtherFixedCharge.toFixed(2);
       document.getElementById('calc-gas-rate').innerText = perGasCharge.toFixed(2);
+      const rentRateEl = document.getElementById('calc-rent-rate');
+      if (rentRateEl) rentRateEl.innerText = perSeatRentCharge.toFixed(2);
       document.getElementById('calc-tot-bazaar').innerText = totBazaar;
 
       const finalSummaryTbody = document.getElementById('final-summary-table-body');
@@ -3120,7 +3158,7 @@ window.renderAdminMealRequests = function() {
         const dep = deposits.filter(d => d.memberId === m.id).reduce((a, c) => a + c.amount, 0);
         const mls = meals.filter(ml => ml.memberId === m.id).reduce((a, c) => a + c.total, 0);
         const mealExp = mls * perMealRate;
-        const fixExp = perFixedCharge;
+        const fixExp = perOtherFixedCharge + (perSeatRentCharge * (parseInt(m.seatQty) || 1));
         const gasExp = m.useGas === 'yes' ? perGasCharge : 0;
         const totExp = mealExp + fixExp + gasExp;
         const bal = dep - totExp;
