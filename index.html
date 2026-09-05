@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DREAM TOUCHING HOSTEL</title>
+  <title>Gour Kishore Das Babaji BACE</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- html2canvas: Cash Memo JPG export -->
@@ -198,7 +198,7 @@
         </div>
         
         <h1 class="text-2xl md:text-3xl font-black text-emerald-800 tracking-wider uppercase mb-1 hover:text-emerald-900 transition">
-          DREAM TOUCHING HOSTEL
+          Gour Kishore Das Babaji BACE
         </h1>
         <p class="text-xs text-gray-500 font-medium italic flex items-center justify-center gap-1" data-bn="🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚" data-en="🎓 Education & Hostel Life - Accurate Mess Accounting 📚">
           🎓 মেস জীবন ও শিক্ষার আলো, সঠিক হিসেব রেখো ভালো 📚
@@ -2504,7 +2504,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       const html = `<div class="receipt-paper">
         <div class="receipt-header text-center">
           ${window.getReceiptBrandingHTML()}
-          <div class="text-2xl font-black tracking-wide" data-receipt-site-heading>DREAM TOUCHING HOSTEL</div>
+          <div class="text-2xl font-black tracking-wide" data-receipt-site-heading>Gour Kishore Das Babaji BACE</div>
           <div class="text-sm font-bold text-gray-500">OFFICIAL DEPOSIT RECEIPT</div>
           <div class="text-xs mt-2">জমার রশিদ</div>
         </div>
@@ -2515,7 +2515,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         <div class="my-4 p-3 bg-gray-50 rounded-lg"><b>কথায়:</b> ${window.numberToBanglaWords(d.amount)} টাকা মাত্র</div>
         <div class="receipt-total flex justify-between"><span>TRANSACTION SUCCESSFUL</span><span>৳ ${Number(d.amount||0).toLocaleString('en-IN')}</span></div>
         <div class="grid grid-cols-2 gap-10 mt-12 text-center text-xs"><div class="border-t pt-2">জমাদানকারীর স্বাক্ষর</div><div class="border-t pt-2">Authorized Signature</div></div>
-        <div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি DREAM TOUCHING HOSTEL-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div>
+        <div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি Gour Kishore Das Babaji BACE-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div>
       </div>`;
       window.openReceipt('জমার রশিদ', html);
     };
@@ -2532,13 +2532,13 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       const items = (b.items && b.items.length) ? b.items : ['উল্লেখ করা হয়নি'];
       const shoppers = (b.shopperNames && b.shopperNames.length) ? b.shopperNames : (b.shoppers && b.shoppers.length ? b.shoppers.map(id => { const m=window.hostelData.members.find(x=>x.id===id); return m ? m.name : id; }) : ['উল্লেখ করা হয়নি']);
       const html = `<div class="receipt-paper">
-        <div class="receipt-header text-center">${window.getReceiptBrandingHTML()}<div class="text-2xl font-black tracking-wide" data-receipt-site-heading>DREAM TOUCHING HOSTEL</div><div class="text-sm font-bold text-gray-500">BAZAAR EXPENSE RECEIPT</div><div class="text-xs mt-2">বাজার খরচের রশিদ</div></div>
+        <div class="receipt-header text-center">${window.getReceiptBrandingHTML()}<div class="text-2xl font-black tracking-wide" data-receipt-site-heading>Gour Kishore Das Babaji BACE</div><div class="text-sm font-bold text-gray-500">BAZAAR EXPENSE RECEIPT</div><div class="text-xs mt-2">বাজার খরচের রশিদ</div></div>
         <div class="grid grid-cols-2 gap-2 text-sm mb-4"><div><b>রশিদ নম্বর:</b> ${window.escapeReceipt(receiptNo)}</div><div class="text-right"><b>তারিখ/সময়:</b> ${window.escapeReceipt(b.date)} | ${window.escapeReceipt(window.getReceiptTime(b.timestamp))}</div></div>
         <table class="w-full receipt-table text-sm"><tr><td class="label">বাজার করেছেন</td><td>${window.escapeReceipt(shoppers.join(', '))}</td></tr><tr><td class="label">বাজারের আইটেম</td><td>${items.map(window.escapeReceipt).join(', ')}</td></tr><tr><td class="label">পূর্বের ক্যাশ</td><td>৳ ${before.toLocaleString('en-IN')}</td></tr><tr><td class="label">বাজার খরচ</td><td class="font-black text-lg">৳ ${Number(b.amount||0).toLocaleString('en-IN')}</td></tr><tr><td class="label">খরচের পর ক্যাশ</td><td class="font-black">৳ ${after.toLocaleString('en-IN')}</td></tr></table>
         <div class="my-4 p-3 bg-gray-50 rounded-lg"><b>খরচের পরিমাণ কথায়:</b> ${window.numberToBanglaWords(b.amount)} টাকা মাত্র</div>
         <div class="receipt-total flex justify-between"><span>EXPENSE RECORDED</span><span>৳ ${Number(b.amount||0).toLocaleString('en-IN')}</span></div>
         <div class="grid grid-cols-2 gap-10 mt-12 text-center text-xs"><div class="border-t pt-2">বাজারকারীর স্বাক্ষর</div><div class="border-t pt-2">Authorized Signature</div></div>
-        <div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি DREAM TOUCHING HOSTEL-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div>
+        <div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি Gour Kishore Das Babaji BACE-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div>
       </div>`;
       window.openReceipt('বাজার খরচের রশিদ', html);
     };
@@ -2647,7 +2647,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
 
     /* BAZAAR EXPENSE REQUEST WORKFLOW */
 window.renderUserBazaarRequests=function(){const box=document.getElementById('user-bazaar-request-list');if(!box||!window.currentUser)return;const rs=(window.hostelData.bazaarRequests||[]).filter(r=>r.status==='pending'&&r.userId===window.currentUser.userId).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));if(!rs.length){box.innerHTML='<div class="text-center text-xs text-gray-400 bg-white/70 border rounded-xl p-3">কোনো অপেক্ষমান বাজার রিকোয়েস্ট নেই।</div>';return;}box.innerHTML=rs.map(r=>`<div class="bg-white border border-blue-200 rounded-xl p-3 text-xs shadow-sm"><div class="flex justify-between gap-2 font-bold text-blue-900"><span>${r.date} — ${r.memberName||'-'}</span><span>অনুমোদন প্রয়োজন</span></div><div class="mt-1 text-gray-700">আইটেম: <b>${(r.items||[]).join(', ')||'-'}</b> | টাকা: <b>৳${Number(r.amount||0).toLocaleString('en-IN')}</b></div><div class="mt-2 flex flex-wrap gap-2"><button onclick="approveBazaarRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button><button onclick="showBazaarRequestReceipt('${r.id}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-receipt mr-1"></i>রিসিট সেভ</button><button onclick="rejectBazaarRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button></div></div>`).join('');applyLanguage();};
-window.showBazaarRequestReceipt=function(id){const r=(window.hostelData.bazaarRequests||[]).find(x=>x.id===id);if(!r||!window.currentUser||r.userId!==window.currentUser.userId)return;const receiptNo=r.receiptNo||('BRQ-'+String(r.createdAt||Date.now()).slice(-10));const html=`<div class="receipt-paper"><div class="receipt-header text-center">${window.getReceiptBrandingHTML()}<div class="text-2xl font-black tracking-wide">DREAM TOUCHING HOSTEL</div><div class="text-sm font-bold text-gray-500">BAZAAR EXPENSE REQUEST RECEIPT</div><div class="text-xs mt-2">বাজার খরচ রিকোয়েস্টের রশিদ</div></div><div class="grid grid-cols-2 gap-2 text-sm mb-4"><div><b>রশিদ নম্বর:</b> ${window.escapeReceipt(receiptNo)}</div><div class="text-right"><b>তারিখ:</b> ${window.escapeReceipt(r.date)}</div></div><table class="w-full receipt-table text-sm"><tr><td class="label">সদস্য</td><td class="font-bold">${window.escapeReceipt(r.memberName||'-')}</td></tr><tr><td class="label">বাজারের আইটেম</td><td>${(r.items||['উল্লেখ করা হয়নি']).map(window.escapeReceipt).join(', ')}</td></tr><tr><td class="label">বাজারের পরিমাণ</td><td class="font-black text-lg">৳ ${Number(r.amount||0).toLocaleString('en-IN')}</td></tr><tr><td class="label">স্ট্যাটাস</td><td class="font-bold text-amber-700">অনুমোদনের অপেক্ষায়</td></tr></table><div class="my-4 p-3 bg-gray-50 rounded-lg"><b>পরিমাণ কথায়:</b> ${window.numberToBanglaWords(r.amount)} টাকা মাত্র</div><div class="receipt-total flex justify-between"><span>BAZAAR REQUEST</span><span>৳ ${Number(r.amount||0).toLocaleString('en-IN')}</span></div><div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি DREAM TOUCHING HOSTEL-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div></div>`;window.openReceipt('বাজার রিকোয়েস্টের রশিদ',html);};
+window.showBazaarRequestReceipt=function(id){const r=(window.hostelData.bazaarRequests||[]).find(x=>x.id===id);if(!r||!window.currentUser||r.userId!==window.currentUser.userId)return;const receiptNo=r.receiptNo||('BRQ-'+String(r.createdAt||Date.now()).slice(-10));const html=`<div class="receipt-paper"><div class="receipt-header text-center">${window.getReceiptBrandingHTML()}<div class="text-2xl font-black tracking-wide">Gour Kishore Das Babaji BACE</div><div class="text-sm font-bold text-gray-500">BAZAAR EXPENSE REQUEST RECEIPT</div><div class="text-xs mt-2">বাজার খরচ রিকোয়েস্টের রশিদ</div></div><div class="grid grid-cols-2 gap-2 text-sm mb-4"><div><b>রশিদ নম্বর:</b> ${window.escapeReceipt(receiptNo)}</div><div class="text-right"><b>তারিখ:</b> ${window.escapeReceipt(r.date)}</div></div><table class="w-full receipt-table text-sm"><tr><td class="label">সদস্য</td><td class="font-bold">${window.escapeReceipt(r.memberName||'-')}</td></tr><tr><td class="label">বাজারের আইটেম</td><td>${(r.items||['উল্লেখ করা হয়নি']).map(window.escapeReceipt).join(', ')}</td></tr><tr><td class="label">বাজারের পরিমাণ</td><td class="font-black text-lg">৳ ${Number(r.amount||0).toLocaleString('en-IN')}</td></tr><tr><td class="label">স্ট্যাটাস</td><td class="font-bold text-amber-700">অনুমোদনের অপেক্ষায়</td></tr></table><div class="my-4 p-3 bg-gray-50 rounded-lg"><b>পরিমাণ কথায়:</b> ${window.numberToBanglaWords(r.amount)} টাকা মাত্র</div><div class="receipt-total flex justify-between"><span>BAZAAR REQUEST</span><span>৳ ${Number(r.amount||0).toLocaleString('en-IN')}</span></div><div class="text-center text-[10px] text-gray-400 mt-8">এই রশিদটি Gour Kishore Das Babaji BACE-এর হিসাব ব্যবস্থার মাধ্যমে তৈরি।</div></div>`;window.openReceipt('বাজার রিকোয়েস্টের রশিদ',html);};
 window.approveBazaarRequest=function(id){const r=(window.hostelData.bazaarRequests||[]).find(x=>x.id===id);if(!r||r.status!=='pending'||!window.currentUser||r.userId!==window.currentUser.userId)return;window.hostelData.bazaarExpenses.push({id:'BAZ_'+Date.now(),userId:r.userId,receiptNo:'BAZ-'+Date.now(),items:r.items||[],shoppers:r.shopperNames||r.shoppers||[r.memberName||r.memberId],amount:Number(r.amount||0),date:r.date,timestamp:Date.now(),editCount:0,isPending:false,source:'admin_bazaar_request',requestId:r.id});r.status='approved';r.approvedAt=Date.now();syncMasterData();renderUserBazaarRequests();alert(window.currentLang==='bn'?'বাজার রিকোয়েস্ট অনুমোদন হয়ে হিসাবের সাথে যুক্ত হয়েছে।':'Bazaar request approved and added to the ledger.');};
 window.rejectBazaarRequest=function(id){const r=(window.hostelData.bazaarRequests||[]).find(x=>x.id===id);if(!r||r.status!=='pending'||!window.currentUser||r.userId!==window.currentUser.userId)return;window.hostelData.bazaarRequests=window.hostelData.bazaarRequests.filter(x=>x.id!==id);syncMasterData();renderUserBazaarRequests();alert(window.currentLang==='bn'?'বাজার রিকোয়েস্ট বাতিল করা হয়েছে।':'Bazaar request rejected.');};
 window.populateAdminBazaarItems=function(){const g=document.getElementById('admin-bazaar-items-grid');if(!g)return;g.innerHTML=window.defaultBazaarItems.map(x=>`<label class="flex items-center gap-1 bg-white p-1 rounded border cursor-pointer hover:bg-blue-50"><input type="checkbox" value="${x}" class="admin-bazaar-chk rounded text-blue-600"> <span>${x}</span></label>`).join('');applyLanguage();};
