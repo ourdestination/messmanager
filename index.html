@@ -1900,8 +1900,21 @@ window.renderPendingEditsTable = function() {
         if (window.hostelData.comments && window.hostelData.comments[userId]) {
           delete window.hostelData.comments[userId];
         }
+        // FIX: floating "reply" posts made by this user were never being removed before.
+        window.hostelData.replies = (window.hostelData.replies || []).filter(
+          r => r.userId !== userId
+        );
 
         window.hostelData.users = window.hostelData.users.filter(u => u.userId !== userId);
+
+        // FIX: also purge any "orphan" member records left over from before per-user
+        // scoping existed (no userId, or userId pointing at a user that no longer
+        // exists). These used to linger forever and leak into unscoped lists like
+        // the admin "sender name" dropdown even after every user was deleted.
+        const stillActiveUserIds = new Set(window.hostelData.users.map(u => u.userId));
+        window.hostelData.members = (window.hostelData.members || []).filter(
+          m => m.userId && stillActiveUserIds.has(m.userId)
+        );
         syncMasterData();
         renderMgmtUserTables();
         alert('অ্যাকাউন্ট এবং এর অধীনস্থ সকল ডেটা সার্ভার থেকে স্থায়ীভাবে ডিলিট করা হয়েছে!');
@@ -2337,7 +2350,23 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
     };
 
 
+    // FIX: one-time cleanup of pre-existing orphan member records (no userId, or
+    // userId pointing at a user that no longer exists). This clears out any
+    // leftover names that were already stuck in the database from before the
+    // deleteUserAccount fix above existed.
+    window.cleanupOrphanMembers = function() {
+      const activeUserIds = new Set((window.hostelData.users || []).map(u => u.userId));
+      const before = (window.hostelData.members || []).length;
+      window.hostelData.members = (window.hostelData.members || []).filter(
+        m => m.userId && activeUserIds.has(m.userId)
+      );
+      if (window.hostelData.members.length !== before) {
+        syncMasterData();
+      }
+    };
+
     window.openAdminPanelModal = function() {
+      cleanupOrphanMembers();
       populateAdminUserSelector();
       populateAdminCommenterDropdown();
       switchAdminTab('message');
@@ -2361,9 +2390,16 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       const commenterSel = document.getElementById('admin-commenter-dropdown');
       commenterSel.innerHTML = '<option value="">-- প্রেরকের নাম নির্বাচন করুন --</option>';
       commenterSel.innerHTML += '<option value="Admin (Hredoy Roy)">Admin (Hredoy Roy)</option>';
-      window.hostelData.members.forEach(m => {
-        commenterSel.innerHTML += `<option value="${m.name}">${m.name}</option>`;
-      });
+      // FIX: only list members who still belong to a currently existing user.
+      // Previously this looped over the raw, unscoped members array, so any
+      // leftover/orphan member record (e.g. missing userId, or belonging to a
+      // user that was already deleted) kept showing up here forever.
+      const activeUserIds = new Set((window.hostelData.users || []).map(u => u.userId));
+      window.hostelData.members
+        .filter(m => m.userId && activeUserIds.has(m.userId))
+        .forEach(m => {
+          commenterSel.innerHTML += `<option value="${m.name}">${m.name}</option>`;
+        });
     };
 
     window.loadAdminSelectedUser = function(userId) {
@@ -2790,9 +2826,17 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
     window.showBazaarReceipt = function(id) {
       const b = window.hostelData.bazaarExpenses.find(x => x.id === id);
       if (!b) return;
-      const ordered = [...window.hostelData.bazaarExpenses].sort((a,c)=>(a.timestamp||0)-(c.timestamp||0));
+      // FIX: "পূর্বের ক্যাশ" was being calculated from the GLOBAL deposits/expenses
+      // of every user on the site, instead of only this bazaar expense's own user.
+      // Scope everything to b.userId so each user's cash-in-hand stays isolated.
+      const uid = b.userId;
+      const myDeposits = (window.hostelData.deposits || []).filter(x => x.userId === uid);
+      const myBazaarExpenses = (window.hostelData.bazaarExpenses || []).filter(x => x.userId === uid);
+      const myFixedExpenses = (window.hostelData.fixedExpenses || []).filter(x => x.userId === uid);
+      const myGasExpenses = (window.hostelData.gasExpenses || []).filter(x => x.userId === uid);
+      const ordered = [...myBazaarExpenses].sort((a,c)=>(a.timestamp||0)-(c.timestamp||0));
       const idx = ordered.findIndex(x=>x.id===id);
-      const previous = window.hostelData.deposits.reduce((a,x)=>a+Number(x.amount||0),0) - ordered.slice(0,idx).reduce((a,x)=>a+Number(x.amount||0),0) - window.hostelData.fixedExpenses.filter(x=>(x.timestamp||0)<(b.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0) - window.hostelData.gasExpenses.filter(x=>(x.timestamp||0)<(b.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0);
+      const previous = myDeposits.reduce((a,x)=>a+Number(x.amount||0),0) - ordered.slice(0,idx).reduce((a,x)=>a+Number(x.amount||0),0) - myFixedExpenses.filter(x=>(x.timestamp||0)<(b.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0) - myGasExpenses.filter(x=>(x.timestamp||0)<(b.timestamp||0)).reduce((a,x)=>a+Number(x.amount||0),0);
       const before = Math.max(0, previous);
       const after = before - Number(b.amount||0);
       const receiptNo = b.receiptNo || ('BAZ-' + String(b.timestamp || Date.now()).slice(-10));
