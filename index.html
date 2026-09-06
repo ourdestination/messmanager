@@ -460,6 +460,40 @@
             </div>
           </div>
 
+          <!-- MEMBER INFO TRANSFER SECTION -->
+          <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+              <i class="fa-solid fa-right-left text-emerald-600"></i>
+              <span data-bn="সদস্য তথ্য আদান-প্রদান" data-en="Member Info Transfer">সদস্য তথ্য আদান-প্রদান</span>
+            </h3>
+            <p class="text-[11px] text-gray-500 -mt-2">অন্য ইউজারের প্রোফাইল থেকে সদস্য তথ্যের কপি নিজের প্রোফাইলে আনতে অনুরোধ পাঠান। দাতা অনুমোদন দিলে সদস্যের তথ্যের একটি কপি আপনার প্রোফাইলে নতুন সদস্য হিসেবে যুক্ত হবে — দাতার প্রোফাইলের মূল তথ্য ও হিসাব অপরিবর্তিত থাকবে।</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-gray-200">
+              <div>
+                <label class="text-xs font-bold text-gray-600 mb-1 block">দাতা ইউজার নির্বাচন করুন</label>
+                <select id="transfer-donor-user-selector" onchange="renderTransferableMemberList()" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                  <option value="">-- ইউজার নির্বাচন করুন --</option>
+                </select>
+              </div>
+              <div class="sm:col-span-1">
+                <label class="text-xs font-bold text-gray-600 mb-1 block">দাতার সদস্য তালিকা</label>
+                <div id="transfer-donor-member-list" class="space-y-2 max-h-40 overflow-y-auto">
+                  <div class="text-xs text-gray-400">-- আগে একজন ইউজার নির্বাচন করুন --</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="text-xs font-bold text-gray-700 mb-2"><i class="fa-solid fa-inbox mr-1 text-blue-600"></i>প্রাপ্ত রিকোয়েস্ট (আপনার অনুমোদনের অপেক্ষায়)</h4>
+              <div id="member-transfer-incoming-list" class="space-y-2"></div>
+            </div>
+
+            <div>
+              <h4 class="text-xs font-bold text-gray-700 mb-2"><i class="fa-solid fa-paper-plane mr-1 text-amber-600"></i>প্রেরিত রিকোয়েস্ট</h4>
+              <div id="member-transfer-outgoing-list" class="space-y-2"></div>
+            </div>
+          </div>
+
           <!-- FIXED EXPENSE SECTION -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
             <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
@@ -700,6 +734,91 @@
             </div>
           </div>
 
+          <!-- BHAKTI PRACTICE (DEVOTIONAL ACTIVITY) SECTION -->
+          <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+              <i class="fa-solid fa-om text-emerald-600"></i>
+              <span data-bn="ভক্তি চর্চা" data-en="Devotional Practice">ভক্তি চর্চা (তারিখের ক্রমানুসারে)</span>
+            </h3>
+
+            <div id="user-bhakti-request-section" class="bg-amber-50 rounded-xl border border-amber-200 p-4 space-y-3">
+              <div class="flex justify-between items-center border-b border-amber-200 pb-2">
+                <h4 class="text-sm font-black text-amber-800"><i class="fa-solid fa-inbox text-amber-600 mr-1"></i> ভক্তি চর্চা রিকোয়েস্ট</h4>
+                <span class="text-[10px] font-bold text-gray-500">প্রতি সদস্য, প্রতি দিনে সর্বোচ্চ ১টি</span>
+              </div>
+              <div id="user-bhakti-request-list" class="space-y-2"></div>
+            </div>
+
+            <form onsubmit="handleSaveBhakti(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl">
+              <div>
+                <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="সদস্য" data-en="Member">সদস্য</label>
+                <select id="bhakti-member-select" required class="w-full px-3 py-2 border rounded-lg text-sm"></select>
+              </div>
+
+              <div>
+                <label class="text-xs font-bold text-gray-600 mb-1 block" data-bn="তারিখ (দিন-মাস-বছর)" data-en="Date (DD-MM-YYYY)">তারিখ (দিন-মাস-বছর)</label>
+                <input type="text" id="bhakti-date-input" required class="w-full px-3 py-2 border rounded-lg text-sm">
+              </div>
+
+              <div>
+                <label class="text-xs font-bold text-gray-600 mb-1 block">জপ (রাউন্ড)</label>
+                <select id="bhakti-japa-rounds" class="w-full px-3 py-2 border rounded-lg text-sm">
+                  <option value="0">জপ করেননি</option>
+                  <option value="4">৪ রাউন্ড</option>
+                  <option value="8">৮ রাউন্ড</option>
+                  <option value="12">১২ রাউন্ড</option>
+                  <option value="16">১৬ রাউন্ড</option>
+                </select>
+              </div>
+
+              <div class="sm:col-span-2 md:col-span-3">
+                <label class="text-xs font-bold text-gray-700 mb-1 block">ভক্তি বিষয়ক কর্মকান্ড (টিক দিন):</label>
+                <div class="flex flex-wrap gap-2 text-xs bg-white p-2 rounded-lg border">
+                  <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="মঙ্গল আরতি" class="bhakti-activity-chk rounded text-emerald-600"><span>মঙ্গল আরতি</span></label>
+                  <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="দর্শন আরতি" class="bhakti-activity-chk rounded text-emerald-600"><span>দর্শন আরতি</span></label>
+                  <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="গুরুপূজা" class="bhakti-activity-chk rounded text-emerald-600"><span>গুরুপূজা</span></label>
+                  <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="গ্রন্থ অধ্যয়ন ও পড়ালেখা" class="bhakti-activity-chk rounded text-emerald-600"><span>গ্রন্থ অধ্যয়ন ও পড়ালেখা</span></label>
+                </div>
+              </div>
+
+              <div class="sm:col-span-2 md:col-span-3 flex items-end">
+                <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-lg font-bold text-sm shadow flex items-center justify-center gap-1">
+                  <i class="fa-solid fa-plus"></i> <span data-bn="ভক্তি চর্চা সেভ করুন" data-en="Save Devotional Practice">ভক্তি চর্চা সেভ করুন</span>
+                </button>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-100 border-b text-gray-700">
+                    <th class="p-2">তারিখ (ক্রমানুসারে)</th>
+                    <th class="p-2">সদস্য</th>
+                    <th class="p-2">কর্মকান্ড</th>
+                    <th class="p-2">জপ (রাউন্ড)</th>
+                    <th class="p-2">পয়েন্ট</th>
+                    <th class="p-2 text-right">অ্যাকশন</th>
+                  </tr>
+                </thead>
+                <tbody id="bhakti-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="text-right bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-black text-emerald-800 text-sm">
+              <span data-bn="সর্বমোট ভক্তি পয়েন্ট:" data-en="Total Devotional Points:">সর্বমোট ভক্তি পয়েন্ট:</span> <span id="section-total-bhakti">0</span>
+            </div>
+          </div>
+
+          <!-- RANKING CHART SECTION -->
+          <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-4">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 border-b pb-3">
+              <i class="fa-solid fa-ranking-star text-amber-500"></i>
+              <span data-bn="র‍্যাংকিং চার্ট" data-en="Ranking Chart">র‍্যাংকিং চার্ট (সদস্যদের মধ্যে)</span>
+            </h3>
+            <p class="text-xs text-gray-500">বকেয়া না রাখা, প্রয়োজনের চেয়ে বেশি টাকা জমা দেয়া, বাজার করা, নিয়মিত মিল খাওয়া ও ভক্তি চর্চা — সবকিছু মিলিয়ে এই র‍্যাংকিং তৈরি করা হয়েছে।</p>
+            <div id="ranking-chart-container" class="space-y-3"></div>
+          </div>
+
           <!-- FINAL SUMMARY LEDGER BREAKDOWN & SAVE AS JPG -->
           <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-6 border border-gray-200 space-y-6">
             <div id="final-summary-capture-area" class="space-y-6 bg-white/95">
@@ -918,6 +1037,28 @@
         <button onclick="closeMgmtDashboardModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
+      <!-- MANAGEMENT PANEL SECURITY SETTINGS -->
+      <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-3">
+        <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1">
+          <i class="fa-solid fa-shield-halved text-amber-600"></i> ম্যানেজমেন্ট প্যানেল নিরাপত্তা সেটিংস
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onsubmit="handleMgmtChangePassword(event)" class="space-y-2 bg-white p-3 rounded-xl border">
+            <label class="text-[11px] font-bold text-gray-600 block">পাসওয়ার্ড পরিবর্তন করুন</label>
+            <div class="relative"><input type="password" id="mgmt-old-pass-input" placeholder="বর্তমান পাসওয়ার্ড" required class="w-full pr-10 px-3 py-2 border rounded-xl text-sm"><button type="button" onclick="togglePasswordVisibility('mgmt-old-pass-input','mgmt-old-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-old-pass-eye" class="fa-solid fa-eye"></i></button></div>
+            <div class="relative"><input type="password" id="mgmt-new-pass-input" placeholder="নতুন পাসওয়ার্ড" required class="w-full pr-10 px-3 py-2 border rounded-xl text-sm"><button type="button" onclick="togglePasswordVisibility('mgmt-new-pass-input','mgmt-new-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-new-pass-eye" class="fa-solid fa-eye"></i></button></div>
+            <button type="submit" class="btn-green-to-red w-full py-2 rounded-xl text-xs font-bold shadow">পাসওয়ার্ড সেভ করুন</button>
+          </form>
+          <div class="bg-white p-3 rounded-xl border flex flex-col justify-center items-center text-center gap-2">
+            <label class="text-[11px] font-bold text-gray-600 block">ফিঙ্গার লক (এই ডিভাইসের জন্য)</label>
+            <p class="text-[10px] text-gray-400">চালু করলে আইডি ও পাসওয়ার্ড এই ডিভাইসে সেভ থাকবে এবং ফিঙ্গারপ্রিন্ট দিয়ে দ্রুত প্রবেশ করা যাবে।</p>
+            <button id="mgmt-fp-lock-btn" onclick="toggleMgmtFingerprintLock()" class="w-full sm:w-auto bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-fingerprint"></i> <span id="mgmt-fp-lock-btn-text">ম্যানেজমেন্ট ফিঙ্গার লক চালু করুন</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- MANAGEMENT LIVE CHAT PANEL -->
       <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 space-y-3">
         <div class="flex justify-between items-center">
@@ -1121,6 +1262,7 @@
         <button id="admin-tab-message" onclick="switchAdminTab('message')" class="flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600"><i class="fa-solid fa-envelope mr-1"></i> <span data-bn="বার্তা" data-en="Message">বার্তা</span></button>
         <button id="admin-tab-meal" onclick="switchAdminTab('meal')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-utensils mr-1"></i> <span data-bn="মিল এন্ট্রি" data-en="Meal Entry">মিল এন্ট্রি</span></button>
         <button id="admin-tab-bazaar" onclick="switchAdminTab('bazaar')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-cart-shopping mr-1"></i> <span data-bn="বাজার রিকোয়েস্ট" data-en="Bazaar Request">বাজার রিকোয়েস্ট</span></button>
+        <button id="admin-tab-bhakti" onclick="switchAdminTab('bhakti')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-om mr-1"></i> <span data-bn="ভক্তি চর্চা" data-en="Devotional Practice">ভক্তি চর্চা</span></button>
       </div>
       <div id="admin-message-tab" class="space-y-4 pt-1">
         <div><label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label><select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"><option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option></select></div>
@@ -1171,6 +1313,46 @@
         <div>
           <h4 class="text-xs font-bold mb-2">অপেক্ষমান রিকোয়েস্ট</h4>
           <div id="admin-meal-request-list" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div id="admin-bhakti-tab" class="hidden space-y-4 pt-1">
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900">প্রথমে ইউজার নির্বাচন করুন। এরপর ঐ ইউজারের অধীনে যুক্ত সদস্যদের তালিকা থেকে নির্দিষ্ট সদস্য নির্বাচন করে ভক্তি চর্চা রিকোয়েস্ট পাঠান। রিকোয়েস্ট নির্বাচিত ইউজারের প্যানেলে যাবে; ইউজার অনুমোদন করলে ভক্তি চর্চা সরাসরি যুক্ত হবে এবং বাতিল করলে রিকোয়েস্টটি মুছে যাবে।</div>
+        <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">ইউজার নির্বাচন করুন:</label>
+              <select id="admin-bhakti-user-selector" onchange="populateAdminBhaktiMemberSelector(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">সদস্য নির্বাচন করুন:</label>
+              <select id="admin-bhakti-member-selector" class="w-full px-3 py-2 border rounded-xl text-sm bg-white font-bold" disabled><option value="">-- আগে ইউজার নির্বাচন করুন --</option></select>
+            </div>
+          </div>
+          <div><label class="block text-xs font-bold mb-1">তারিখ</label><input type="text" id="admin-bhakti-date" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">ভক্তি বিষয়ক কর্মকান্ড (টিক দিন):</label>
+            <div class="flex flex-wrap gap-2 text-xs bg-white p-2 rounded-xl border">
+              <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="মঙ্গল আরতি" class="admin-bhakti-activity-chk rounded text-blue-600"><span>মঙ্গল আরতি</span></label>
+              <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="দর্শন আরতি" class="admin-bhakti-activity-chk rounded text-blue-600"><span>দর্শন আরতি</span></label>
+              <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="গুরুপূজা" class="admin-bhakti-activity-chk rounded text-blue-600"><span>গুরুপূজা</span></label>
+              <label class="flex items-center gap-1 px-2 py-1 rounded border bg-slate-50 cursor-pointer"><input type="checkbox" value="গ্রন্থ অধ্যয়ন ও পড়ালেখা" class="admin-bhakti-activity-chk rounded text-blue-600"><span>গ্রন্থ অধ্যয়ন ও পড়ালেখা</span></label>
+            </div>
+          </div>
+          <div><label class="block text-xs font-bold mb-1">জপ (রাউন্ড)</label>
+            <select id="admin-bhakti-japa-rounds" class="w-full px-3 py-2 border rounded-lg text-sm">
+              <option value="0">জপ করেননি</option>
+              <option value="4">৪ রাউন্ড</option>
+              <option value="8">৮ রাউন্ড</option>
+              <option value="12">১২ রাউন্ড</option>
+              <option value="16">১৬ রাউন্ড</option>
+            </select>
+          </div>
+          <button onclick="sendAdminBhaktiRequest()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i> ভক্তি চর্চা রিকোয়েস্ট পাঠান</button>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold mb-2">অপেক্ষমান রিকোয়েস্ট</h4>
+          <div id="admin-bhakti-request-list" class="space-y-2"></div>
         </div>
       </div>
 
@@ -1265,12 +1447,16 @@
       meals: [],
       mealRequests: [],
       bazaarRequests: [],
+      bhaktiEntries: [],
+      bhaktiRequests: [],
       pendingEdits: [],
+      memberTransferRequests: [],
       comments: {},
       replies: [],
       paymentInfo: { link: '', qrImage: '', instructions: '' },
       siteBranding: { logo: '' },
-      liveChats: []
+      liveChats: [],
+      mgmtAuth: { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' }
     };
 
     const masterLedgerRef = ref(db, 'hostel_records/master_ledger');
@@ -1288,12 +1474,16 @@
           meals: data.meals || [],
           mealRequests: data.mealRequests || [],
           bazaarRequests: data.bazaarRequests || [],
+          bhaktiEntries: data.bhaktiEntries || [],
+          bhaktiRequests: data.bhaktiRequests || [],
           pendingEdits: data.pendingEdits || [],
+          memberTransferRequests: data.memberTransferRequests || [],
           comments: data.comments || {},
           replies: data.replies || [],
           paymentInfo: data.paymentInfo || { link: '', qrImage: '', instructions: '' },
           siteBranding: data.siteBranding || { logo: '' },
-          liveChats: data.liveChats || []
+          liveChats: data.liveChats || [],
+          mgmtAuth: data.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' }
         };
         migrateLiveChats();
         localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
@@ -1305,10 +1495,15 @@
           checkUserAdminComments();
           renderUserMealRequests();
           renderUserBazaarRequests();
+          renderUserBhaktiRequests();
           renderLiveChatMessages();
         }
+        window.attemptSessionRestore(true);
         populateMgmtChatUsers();
         renderMgmtLiveChatMessages();
+        if (document.getElementById('mgmt-dashboard-modal') && !document.getElementById('mgmt-dashboard-modal').classList.contains('hidden')) {
+          renderMgmtSecurityPanel();
+        }
         applyLanguage();
       }
     });
@@ -1462,6 +1657,8 @@
       if (local) {
         window.hostelData = JSON.parse(local);
         window.hostelData.bazaarRequests = window.hostelData.bazaarRequests || [];
+        window.hostelData.memberTransferRequests = window.hostelData.memberTransferRequests || [];
+        window.hostelData.mgmtAuth = window.hostelData.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' };
         migrateLiveChats();
         window.hostelData.siteBranding = window.hostelData.siteBranding || { logo: '' };
         applySiteBranding();
@@ -1470,11 +1667,13 @@
         applySiteBranding();
       }
       applyLanguage();
+      window.attemptSessionRestore(false);
+      window.autofillSavedLogin();
     };
 
     window.setInitialDates = function() {
       const today = getTodayDDMMYYYY();
-      ['fixed-date-input', 'gas-date-input', 'bazaar-date-input', 'meal-date-input', 'user-meal-request-date'].forEach(id => {
+      ['fixed-date-input', 'gas-date-input', 'bazaar-date-input', 'meal-date-input', 'user-meal-request-date', 'bhakti-date-input'].forEach(id => {
         const el = document.getElementById(id);
         if (el && !el.value) el.value = today;
       });
@@ -1483,7 +1682,7 @@
     // CALENDAR DATE PICKER: every editable date field uses a calendar and DD-MM-YYYY.
     window.initAllDatePickers = function() {
       if (typeof flatpickr !== 'function') return;
-      const ids = ['signup-dob','forget-dob-input','fixed-date-input','gas-date-input','bazaar-date-input','meal-date-input','user-meal-request-date','admin-bazaar-date','admin-meal-date'];
+      const ids = ['signup-dob','forget-dob-input','fixed-date-input','gas-date-input','bazaar-date-input','meal-date-input','user-meal-request-date','admin-bazaar-date','admin-meal-date','bhakti-date-input','admin-bhakti-date'];
       ids.forEach(id => {
         const el = document.getElementById(id);
         if (el && !el._flatpickr) flatpickr(el,{dateFormat:'d-m-Y',allowInput:true,locale:'bn',disableMobile:true,onReady:function(_,__,instance){instance.input.setAttribute('placeholder','দিন-মাস-বছর');instance.input.setAttribute('autocomplete','off');}});
@@ -1498,8 +1697,17 @@
         logoIcon.classList.remove('spin-icon');
       }, 800);
 
-      document.getElementById('mgmt-auth-id').value = '';
-      document.getElementById('mgmt-auth-pass').value = '';
+      let savedId = '', savedPass = '';
+      const savedMgmt = localStorage.getItem('dream_touching_hostel_mgmt_saved_login');
+      if (savedMgmt) {
+        try {
+          const o = JSON.parse(savedMgmt);
+          savedId = o.id || '';
+          savedPass = o.pass || '';
+        } catch (e) { /* ignore corrupt saved login */ }
+      }
+      document.getElementById('mgmt-auth-id').value = savedId;
+      document.getElementById('mgmt-auth-pass').value = savedPass;
       document.getElementById('mgmt-login-modal').classList.remove('hidden');
     };
 
@@ -1507,11 +1715,17 @@
       document.getElementById('mgmt-login-modal').classList.add('hidden');
     };
 
-    window.verifyMgmtAuth = function() {
+    window.verifyMgmtAuth = async function() {
       const id = document.getElementById('mgmt-auth-id').value.trim();
       const pass = document.getElementById('mgmt-auth-pass').value.trim();
+      const mgmtAuth = window.hostelData.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' };
 
-      if (id === 'DTH01518411872' && pass === '01518411872') {
+      if (id === mgmtAuth.id && pass === mgmtAuth.pass) {
+        if (mgmtAuth.fpEnabled) {
+          const fpOk = await window.verifyDeviceFingerprint(mgmtAuth);
+          if (!fpOk) return;
+          localStorage.setItem('dream_touching_hostel_mgmt_saved_login', JSON.stringify({ id, pass }));
+        }
         closeMgmtLoginModal();
         openMgmtDashboardModal();
       } else {
@@ -1526,6 +1740,7 @@
       loadMgmtPaymentFields();
       populateMgmtChatUsers();
       renderMgmtLiveChatMessages();
+      renderMgmtSecurityPanel();
       applyLanguage();
       initAllDatePickers();
       document.getElementById('mgmt-dashboard-modal').classList.remove('hidden');
@@ -1893,7 +2108,12 @@ window.renderPendingEditsTable = function() {
         window.hostelData.meals = ownedByUserOrMember(window.hostelData.meals);
         window.hostelData.mealRequests = ownedByUserOnly(window.hostelData.mealRequests);
         window.hostelData.bazaarRequests = ownedByUserOnly(window.hostelData.bazaarRequests);
+        window.hostelData.bhaktiEntries = ownedByUserOrMember(window.hostelData.bhaktiEntries);
+        window.hostelData.bhaktiRequests = ownedByUserOnly(window.hostelData.bhaktiRequests);
         window.hostelData.pendingEdits = ownedByUserOnly(window.hostelData.pendingEdits);
+        window.hostelData.memberTransferRequests = (window.hostelData.memberTransferRequests || []).filter(
+          r => r.fromUserId !== userId && r.toUserId !== userId
+        );
         window.hostelData.liveChats = (window.hostelData.liveChats || []).filter(
           x => x.senderId !== userId && x.recipientId !== userId
         );
@@ -2005,6 +2225,11 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         }
 
         window.currentUser = user;
+        window.sessionRestoreDone = true;
+        sessionStorage.setItem('dream_touching_hostel_session_uid', user.userId);
+        if (user.fpEnabled) {
+          localStorage.setItem('dream_touching_hostel_saved_login', JSON.stringify({ userId: user.userId, pass }));
+        }
 
         /* যদি অ্যাকাউন্টের মেয়াদ শেষ হয়ে থাকে তবে ২ সেকেন্ড নোটিফিকেশন প্রদর্শন করবে */
         if (window.isUserExpired(user)) {
@@ -2088,10 +2313,11 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
           window.hostelData.users[uIdx].fpEnabled = true;
           window.hostelData.users[uIdx].fpCredId = rawIdB64;
           window.currentUser = window.hostelData.users[uIdx];
+          localStorage.setItem('dream_touching_hostel_saved_login', JSON.stringify({ userId: window.currentUser.userId, pass: window.currentUser.pass }));
           syncMasterData();
         }
         renderUserProfilePanel();
-        alert(window.currentLang === 'bn' ? 'এই ডিভাইসের জন্য ফিঙ্গার লক সফলভাবে চালু করা হয়েছে!' : 'Fingerprint lock has been enabled for this device!');
+        alert(window.currentLang === 'bn' ? 'এই ডিভাইসের জন্য ফিঙ্গার লক সফলভাবে চালু করা হয়েছে! এখন থেকে আইডি ও পাসওয়ার্ড বার বার লিখতে হবে না।' : 'Fingerprint lock has been enabled for this device! Your ID and password will stay saved for next time.');
       } catch (err) {
         alert(window.currentLang === 'bn'
           ? 'ফিঙ্গারপ্রিন্ট রেজিস্ট্রেশন ব্যর্থ হয়েছে বা বাতিল করা হয়েছে।'
@@ -2106,6 +2332,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         window.hostelData.users[uIdx].fpEnabled = false;
         delete window.hostelData.users[uIdx].fpCredId;
         window.currentUser = window.hostelData.users[uIdx];
+        localStorage.removeItem('dream_touching_hostel_saved_login');
         syncMasterData();
       }
       renderUserProfilePanel();
@@ -2153,6 +2380,109 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       }
     };
 
+    // ---- MANAGEMENT PANEL: FINGERPRINT LOCK & PASSWORD CHANGE ----
+    // Mirrors the member-side fingerprint lock, but keyed on window.hostelData.mgmtAuth
+    // (synced through Firebase like the rest of the app) instead of a hardcoded login.
+    window.enableMgmtFingerprintLock = async function() {
+      const supported = await isFingerprintLockSupported();
+      if (!supported) {
+        alert(window.currentLang === 'bn'
+          ? 'এই ডিভাইস/ব্রাউজারে ফিঙ্গারপ্রিন্ট বা বায়োমেট্রিক লক সমর্থিত নয়।'
+          : 'Fingerprint/biometric lock is not supported on this device or browser.');
+        return;
+      }
+      window.hostelData.mgmtAuth = window.hostelData.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' };
+      const mgmtAuth = window.hostelData.mgmtAuth;
+      try {
+        const challenge = crypto.getRandomValues(new Uint8Array(32));
+        const idBytes = new TextEncoder().encode(mgmtAuth.id);
+        const credential = await navigator.credentials.create({
+          publicKey: {
+            challenge,
+            rp: { name: document.title || 'Hostel Ledger' },
+            user: { id: idBytes, name: mgmtAuth.id, displayName: 'Management Panel' },
+            pubKeyCredParams: [
+              { type: 'public-key', alg: -7 },
+              { type: 'public-key', alg: -257 }
+            ],
+            authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' },
+            timeout: 60000
+          }
+        });
+        if (!credential) throw new Error('no credential');
+
+        mgmtAuth.fpEnabled = true;
+        mgmtAuth.fpCredId = arrayBufferToBase64(credential.rawId);
+        localStorage.setItem('dream_touching_hostel_mgmt_saved_login', JSON.stringify({ id: mgmtAuth.id, pass: mgmtAuth.pass }));
+        syncMasterData();
+        renderMgmtSecurityPanel();
+        alert(window.currentLang === 'bn'
+          ? 'ম্যানেজমেন্ট প্যানেলের জন্য ফিঙ্গার লক সফলভাবে চালু করা হয়েছে! এখন থেকে আইডি ও পাসওয়ার্ড বার বার লিখতে হবে না।'
+          : 'Fingerprint lock has been enabled for the management panel!');
+      } catch (err) {
+        alert(window.currentLang === 'bn'
+          ? 'ফিঙ্গারপ্রিন্ট রেজিস্ট্রেশন ব্যর্থ হয়েছে বা বাতিল করা হয়েছে।'
+          : 'Fingerprint registration failed or was cancelled.');
+      }
+    };
+
+    window.disableMgmtFingerprintLock = function() {
+      if (!window.hostelData.mgmtAuth) return;
+      window.hostelData.mgmtAuth.fpEnabled = false;
+      delete window.hostelData.mgmtAuth.fpCredId;
+      localStorage.removeItem('dream_touching_hostel_mgmt_saved_login');
+      syncMasterData();
+      renderMgmtSecurityPanel();
+      alert(window.currentLang === 'bn' ? 'ম্যানেজমেন্ট প্যানেলের ফিঙ্গার লক বন্ধ করা হয়েছে।' : 'Management panel fingerprint lock has been disabled.');
+    };
+
+    window.toggleMgmtFingerprintLock = function() {
+      const mgmtAuth = window.hostelData.mgmtAuth || {};
+      if (mgmtAuth.fpEnabled) {
+        if (confirm(window.currentLang === 'bn' ? 'ম্যানেজমেন্ট প্যানেলের ফিঙ্গার লক বন্ধ করতে চান?' : 'Disable fingerprint lock for the management panel?')) {
+          disableMgmtFingerprintLock();
+        }
+      } else {
+        enableMgmtFingerprintLock();
+      }
+    };
+
+    window.handleMgmtChangePassword = function(e) {
+      e.preventDefault();
+      const oldP = document.getElementById('mgmt-old-pass-input').value;
+      const newP = document.getElementById('mgmt-new-pass-input').value;
+      window.hostelData.mgmtAuth = window.hostelData.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' };
+      const mgmtAuth = window.hostelData.mgmtAuth;
+
+      if (mgmtAuth.pass !== oldP) {
+        alert('বর্তমান পাসওয়ার্ড ভুল দিয়েছেন!');
+        return;
+      }
+
+      mgmtAuth.pass = newP;
+      if (mgmtAuth.fpEnabled) {
+        localStorage.setItem('dream_touching_hostel_mgmt_saved_login', JSON.stringify({ id: mgmtAuth.id, pass: newP }));
+      }
+      syncMasterData();
+      alert('ম্যানেজমেন্ট পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!');
+      document.getElementById('mgmt-old-pass-input').value = '';
+      document.getElementById('mgmt-new-pass-input').value = '';
+    };
+
+    window.renderMgmtSecurityPanel = function() {
+      const mgmtAuth = window.hostelData.mgmtAuth || {};
+      const btn = document.getElementById('mgmt-fp-lock-btn');
+      const btnText = document.getElementById('mgmt-fp-lock-btn-text');
+      if (btn && btnText) {
+        if (mgmtAuth.fpEnabled) {
+          btnText.innerText = 'ম্যানেজমেন্ট ফিঙ্গার লক বন্ধ করুন';
+          btn.className = 'w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center gap-1 transition';
+        } else {
+          btnText.innerText = 'ম্যানেজমেন্ট ফিঙ্গার লক চালু করুন';
+          btn.className = 'w-full sm:w-auto bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center gap-1 transition';
+        }
+      }
+    };
 
     window.trigger1SecTransition = function(isLogin) {
       const authSec = document.getElementById('auth-section');
@@ -2172,6 +2502,8 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
           renderUserProfilePanel();
           checkUserAdminComments();
           renderUserMealRequests();
+          populateMemberTransferUserSelector();
+          renderMemberTransferRequests();
           renderDashboard();
         }, 500);
       } else {
@@ -2191,7 +2523,67 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
     };
 
     window.logout = function() {
+      sessionStorage.removeItem('dream_touching_hostel_session_uid');
       trigger1SecTransition(false);
+      setTimeout(() => { window.autofillSavedLogin(); }, 520);
+    };
+
+    // ---- SESSION PERSISTENCE ----
+    // Reloading the page should NOT log the user out (sessionStorage survives a
+    // reload), but closing the tab/browser SHOULD log the user out (sessionStorage
+    // is cleared automatically when the tab/browser closes).
+    window.sessionRestoreDone = false;
+    window.attemptSessionRestore = function(isFinal) {
+      if (window.sessionRestoreDone) return;
+      if (window.currentUser) { window.sessionRestoreDone = true; return; }
+
+      const sessionUid = sessionStorage.getItem('dream_touching_hostel_session_uid');
+      if (!sessionUid) { window.sessionRestoreDone = true; return; }
+
+      const u = (window.hostelData.users || []).find(x => x.userId === sessionUid);
+      if (u && u.status !== 'pending') {
+        window.sessionRestoreDone = true;
+        window.currentUser = u;
+        const authSec = document.getElementById('auth-section');
+        const dashSec = document.getElementById('dashboard-section');
+        authSec.classList.add('hidden');
+        dashSec.classList.remove('hidden');
+        dashSec.style.opacity = '1';
+        dashSec.style.transform = 'scale(1)';
+        document.getElementById('header-save-btn').classList.remove('hidden');
+        document.getElementById('header-change-pass-btn').classList.remove('hidden');
+        document.getElementById('header-logout-btn').classList.remove('hidden');
+        renderUserProfilePanel();
+        checkUserAdminComments();
+        renderUserMealRequests();
+        renderUserBazaarRequests();
+        populateMemberTransferUserSelector();
+        renderMemberTransferRequests();
+        renderDashboard();
+      } else if (isFinal) {
+        // Firebase data has fully loaded and this session's user genuinely no
+        // longer exists/isn't approved -- only now is it safe to clear it.
+        window.sessionRestoreDone = true;
+        sessionStorage.removeItem('dream_touching_hostel_session_uid');
+      }
+      // If not final and not found yet, wait for the authoritative Firebase pass
+      // (the quick localStorage cache read on page load may simply be stale).
+    };
+
+    // ---- FINGERPRINT-LOCK SAVED LOGIN (auto-fill, no retyping) ----
+    // When a member enables the device fingerprint lock, their user ID and
+    // password are remembered on THIS device so the sign-in fields are always
+    // pre-filled; they only need to tap the fingerprint sensor to get in.
+    window.autofillSavedLogin = function() {
+      const saved = localStorage.getItem('dream_touching_hostel_saved_login');
+      if (!saved) return;
+      try {
+        const { userId, pass } = JSON.parse(saved);
+        const idEl = document.getElementById('signin-userid');
+        const passEl = document.getElementById('signin-pass');
+        if (idEl && !idEl.value) idEl.value = userId || '';
+        if (passEl && !passEl.value) passEl.value = pass || '';
+      } catch (e) { /* ignore corrupt saved login */ }
     };
 
     window.triggerAdminAuth = function(action) {
@@ -2371,6 +2763,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       populateAdminCommenterDropdown();
       switchAdminTab('message');
       renderAdminMealRequests();
+      renderAdminBhaktiRequests();
       document.getElementById('admin-modal').classList.remove('hidden');
     };
 
@@ -2571,6 +2964,9 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       if (uIdx !== -1) {
         window.hostelData.users[uIdx].pass = newP;
       }
+      if (window.currentUser.fpEnabled) {
+        localStorage.setItem('dream_touching_hostel_saved_login', JSON.stringify({ userId: window.currentUser.userId, pass: newP }));
+      }
       syncMasterData();
       alert('পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!');
       document.getElementById('old-pass-input').value = '';
@@ -2619,6 +3015,148 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
       document.getElementById('member-input-phone').value = '';
       document.getElementById('member-input-seatqty').value = '1';
       syncMasterData();
+    };
+
+    // ---- MEMBER INFO TRANSFER (between two different user profiles) ----
+    // A "customer" (গ্রাহক) sends a request to receive a member's info from a
+    // "donor" (দাতা) user's profile. Once the donor approves, a COPY of that
+    // member (name/phone/gas/seat info) is created under the requester's own
+    // profile as a brand-new member record. The donor's original member and
+    // its existing ledger (deposits/expenses/meals) are left completely
+    // untouched -- only the member's basic info is duplicated, not moved.
+    window.populateMemberTransferUserSelector = function() {
+      const sel = document.getElementById('transfer-donor-user-selector');
+      if (!sel || !window.currentUser) return;
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">-- ইউজার নির্বাচন করুন --</option>';
+      (window.hostelData.users || [])
+        .filter(u => u.status !== 'pending' && u.userId !== window.currentUser.userId)
+        .forEach(u => {
+          sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
+        });
+      if (prev && Array.from(sel.options).some(o => o.value === prev)) sel.value = prev;
+      renderTransferableMemberList();
+    };
+
+    window.renderTransferableMemberList = function() {
+      const box = document.getElementById('transfer-donor-member-list');
+      if (!box) return;
+      const donorUid = document.getElementById('transfer-donor-user-selector').value;
+      if (!donorUid) {
+        box.innerHTML = '<div class="text-xs text-gray-400">-- আগে একজন ইউজার নির্বাচন করুন --</div>';
+        return;
+      }
+      const members = (window.hostelData.members || []).filter(m => m.userId === donorUid);
+      if (!members.length) {
+        box.innerHTML = '<div class="text-xs text-gray-400">এই ইউজারের কোনো সদস্য নেই।</div>';
+        return;
+      }
+      const pendingMemberIds = new Set(
+        (window.hostelData.memberTransferRequests || [])
+          .filter(r => r.status === 'pending' && r.fromUserId === window.currentUser.userId)
+          .map(r => r.memberId)
+      );
+      box.innerHTML = members.map(m => `
+        <div class="flex items-center justify-between bg-white border rounded-lg px-3 py-2">
+          <span class="text-xs font-bold">${m.name}${m.phone ? ' — ' + m.phone : ''}</span>
+          ${pendingMemberIds.has(m.id)
+            ? '<span class="text-[10px] font-bold text-amber-600">রিকোয়েস্ট পাঠানো হয়েছে</span>'
+            : `<button onclick="sendMemberTransferRequest('${m.id}','${donorUid}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg"><i class="fa-solid fa-paper-plane mr-1"></i>রিকোয়েস্ট পাঠান</button>`}
+        </div>
+      `).join('');
+    };
+
+    window.sendMemberTransferRequest = function(memberId, donorUid) {
+      if (!window.currentUser) return;
+      const member = (window.hostelData.members || []).find(m => m.id === memberId && m.userId === donorUid);
+      const donor = (window.hostelData.users || []).find(u => u.userId === donorUid);
+      if (!member || !donor) return;
+
+      window.hostelData.memberTransferRequests = window.hostelData.memberTransferRequests || [];
+      window.hostelData.memberTransferRequests.push({
+        id: 'MTR_' + Date.now(),
+        memberId: member.id,
+        memberName: member.name,
+        fromUserId: window.currentUser.userId,
+        fromUserName: window.currentUser.fullName || window.currentUser.userId,
+        toUserId: donor.userId,
+        toUserName: donor.fullName || donor.userId,
+        status: 'pending',
+        createdAt: Date.now()
+      });
+      syncMasterData();
+      renderTransferableMemberList();
+      renderMemberTransferRequests();
+      alert('সদস্য তথ্যের কপি পাওয়ার অনুরোধ পাঠানো হয়েছে! দাতা অনুমোদন দিলে তথ্যের একটি কপি আপনার প্রোফাইলে যুক্ত হবে।');
+    };
+
+    window.renderMemberTransferRequests = function() {
+      if (!window.currentUser) return;
+      const uid = window.currentUser.userId;
+      const all = window.hostelData.memberTransferRequests || [];
+
+      const incomingBox = document.getElementById('member-transfer-incoming-list');
+      if (incomingBox) {
+        const incoming = all.filter(r => r.toUserId === uid && r.status === 'pending').sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        incomingBox.innerHTML = incoming.length ? incoming.map(r => `
+          <div class="bg-white border border-emerald-200 rounded-xl p-3 text-xs shadow-sm">
+            <div class="font-bold text-emerald-900"><b>${r.fromUserName}</b> (@${r.fromUserId}) আপনার সদস্য <b>${r.memberName}</b>-এর তথ্যের একটি কপি চেয়েছেন।</div>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <button onclick="approveMemberTransferRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+              <button onclick="rejectMemberTransferRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+            </div>
+          </div>
+        `).join('') : '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-3">কোনো অপেক্ষমান রিকোয়েস্ট নেই।</div>';
+      }
+
+      const outgoingBox = document.getElementById('member-transfer-outgoing-list');
+      if (outgoingBox) {
+        const outgoing = all.filter(r => r.fromUserId === uid).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        outgoingBox.innerHTML = outgoing.length ? outgoing.map(r => {
+          const statusText = r.status === 'pending' ? '<span class="font-bold text-amber-600">অনুমোদনের অপেক্ষায়</span>' : r.status === 'approved' ? '<span class="font-bold text-emerald-600">অনুমোদিত, কপি যুক্ত হয়েছে</span>' : '<span class="font-bold text-red-600">বাতিল হয়েছে</span>';
+          return `
+            <div class="bg-white border rounded-xl p-3 text-xs shadow-sm flex justify-between items-center gap-2">
+              <span><b>${r.memberName}</b> — ${r.toUserName} (@${r.toUserId}) থেকে</span>
+              ${statusText}
+            </div>
+          `;
+        }).join('') : '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-3">কোনো প্রেরিত রিকোয়েস্ট নেই।</div>';
+      }
+    };
+
+    window.approveMemberTransferRequest = function(reqId) {
+      const req = (window.hostelData.memberTransferRequests || []).find(r => r.id === reqId);
+      if (!req || req.status !== 'pending' || !window.currentUser || req.toUserId !== window.currentUser.userId) return;
+      if (!confirm(`আপনি কি নিশ্চিত যে '${req.memberName}'-এর সদস্য তথ্যের একটি কপি '${req.fromUserName}'-এর প্রোফাইলে যুক্ত করতে চান? আপনার নিজের প্রোফাইলে এই সদস্যের তথ্য ও হিসাব অপরিবর্তিত থাকবে।`)) return;
+
+      const donorMember = (window.hostelData.members || []).find(m => m.id === req.memberId);
+      if (donorMember) {
+        // Duplicate the member's basic info only (name/phone/gas/seat) as a new
+        // record owned by the requester. The donor's original member record and
+        // its linked deposits/expenses/meals are left untouched.
+        window.hostelData.members.push({
+          id: 'MEM_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+          name: donorMember.name,
+          phone: donorMember.phone,
+          useGas: donorMember.useGas,
+          seatQty: donorMember.seatQty,
+          userId: req.fromUserId
+        });
+      }
+      req.status = 'approved';
+      req.approvedAt = Date.now();
+      syncMasterData();
+      renderMemberTransferRequests();
+      alert('সদস্য তথ্যের একটি কপি সফলভাবে অনুমোদন করে সংশ্লিষ্ট প্রোফাইলে যুক্ত করা হয়েছে। আপনার নিজের প্রোফাইলে মূল তথ্য অপরিবর্তিত রয়েছে।');
+    };
+
+    window.rejectMemberTransferRequest = function(reqId) {
+      const req = (window.hostelData.memberTransferRequests || []).find(r => r.id === reqId);
+      if (!req || req.status !== 'pending' || !window.currentUser || req.toUserId !== window.currentUser.userId) return;
+      req.status = 'rejected';
+      req.rejectedAt = Date.now();
+      syncMasterData();
+      renderMemberTransferRequests();
     };
 
     window.addDepositForMember = function(memberId) {
@@ -2992,7 +3530,7 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
     // Ownership is stored by userId. For old transaction records without userId,
     // ownership can be resolved through their memberId where possible.
     window.getUserLedger = function(user) {
-      if (!user) return { members: [], deposits: [], fixedExpenses: [], gasExpenses: [], bazaarExpenses: [], meals: [], mealRequests: [], bazaarRequests: [], pendingEdits: [] };
+      if (!user) return { members: [], deposits: [], fixedExpenses: [], gasExpenses: [], bazaarExpenses: [], meals: [], mealRequests: [], bazaarRequests: [], bhaktiEntries: [], bhaktiRequests: [], pendingEdits: [] };
       const uid = user.userId;
       const members = (window.hostelData.members || []).filter(m => m.userId === uid);
       const memberIds = new Set(members.map(m => m.id));
@@ -3008,8 +3546,257 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
         meals: owned(window.hostelData.meals),
         mealRequests: owned(window.hostelData.mealRequests),
         bazaarRequests: owned(window.hostelData.bazaarRequests),
+        bhaktiEntries: owned(window.hostelData.bhaktiEntries),
+        bhaktiRequests: owned(window.hostelData.bhaktiRequests),
         pendingEdits: owned(window.hostelData.pendingEdits)
       };
+    };
+
+    /* BHAKTI (DEVOTIONAL PRACTICE) ENTRY WORKFLOW */
+    window.hasBhaktiForMemberDate = function(memberId, date) {
+      return (window.hostelData.bhaktiEntries || []).some(b => b.memberId === memberId && b.date === date);
+    };
+
+    window.hasBhaktiRequestForMemberDate = function(memberId, date) {
+      return (window.hostelData.bhaktiRequests || []).some(r =>
+        r.memberId === memberId && r.date === date && r.status === 'pending'
+      );
+    };
+
+    window.computeBhaktiPoints = function(activities, japaRounds) {
+      const actPts = (activities || []).length * 1;
+      const japaPts = (parseInt(japaRounds) || 0) / 4; // 4=>1, 8=>2, 12=>3, 16=>4
+      return actPts + japaPts;
+    };
+
+    window.handleSaveBhakti = function(e) {
+      e.preventDefault();
+      const memberId = document.getElementById('bhakti-member-select').value;
+      const date = document.getElementById('bhakti-date-input').value.trim();
+      const activities = Array.from(document.querySelectorAll('.bhakti-activity-chk:checked')).map(cb => cb.value);
+      const japaRounds = parseInt(document.getElementById('bhakti-japa-rounds').value) || 0;
+
+      if (!memberId) return;
+      if (!activities.length && !japaRounds) {
+        alert('কমপক্ষে একটি কর্মকান্ড অথবা জপ রাউন্ড নির্বাচন করুন।');
+        return;
+      }
+      if (hasBhaktiForMemberDate(memberId, date) || hasBhaktiRequestForMemberDate(memberId, date)) {
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে ভক্তি চর্চা এন্ট্রি/রিকোয়েস্ট রয়েছে। একদিনে একবারই এন্ট্রি করা যাবে।`);
+        return;
+      }
+
+      if (!window.hostelData.bhaktiEntries) window.hostelData.bhaktiEntries = [];
+      window.hostelData.bhaktiEntries.push({
+        id: 'BHK_' + Date.now(),
+        userId: window.currentUser ? window.currentUser.userId : '',
+        memberId,
+        date,
+        activities,
+        japaRounds,
+        points: computeBhaktiPoints(activities, japaRounds),
+        timestamp: Date.now(),
+        editCount: 0,
+        isPending: false
+      });
+
+      document.querySelectorAll('.bhakti-activity-chk:checked').forEach(cb => cb.checked = false);
+      document.getElementById('bhakti-japa-rounds').value = '0';
+      syncMasterData();
+    };
+
+    window.renderUserBhaktiRequests = function() {
+      const box = document.getElementById('user-bhakti-request-list');
+      if (!box || !window.currentUser) return;
+      const requests = (window.hostelData.bhaktiRequests || [])
+        .filter(r => r.status === 'pending' && r.userId === window.currentUser.userId)
+        .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+      if (!requests.length) {
+        box.innerHTML = '<div class="text-center text-xs text-gray-400 bg-white/70 border rounded-xl p-3">কোনো অপেক্ষমান ভক্তি চর্চা রিকোয়েস্ট নেই।</div>';
+        return;
+      }
+      box.innerHTML = requests.map(r => `<div class="bg-white border border-amber-200 rounded-xl p-3 text-xs shadow-sm">
+        <div class="flex justify-between gap-2 font-bold text-amber-900"><span>${r.date} — ${r.memberName || ''}</span><span>অনুমোদন প্রয়োজন</span></div>
+        <div class="mt-1 text-gray-700">কর্মকান্ড: ${(r.activities||[]).join(', ') || '-'} | জপ: ${r.japaRounds||0} রাউন্ড | পয়েন্ট: <b>${(r.points||0).toFixed(1)}</b></div>
+        <div class="mt-2 flex gap-2">
+          <button onclick="approveBhaktiEntryRequest('${r.id}')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>অনুমোদন</button>
+          <button onclick="rejectBhaktiEntryRequest('${r.id}')" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i>বাতিল</button>
+        </div>
+      </div>`).join('');
+    };
+
+    window.approveBhaktiEntryRequest = function(requestId) {
+      const req = (window.hostelData.bhaktiRequests || []).find(r => r.id === requestId);
+      if (!req || req.status !== 'pending' || !window.currentUser || req.userId !== window.currentUser.userId) return;
+      if (hasBhaktiForMemberDate(req.memberId, req.date)) {
+        window.hostelData.bhaktiRequests = window.hostelData.bhaktiRequests.filter(r => r.id !== requestId);
+        syncMasterData(); renderUserBhaktiRequests();
+        alert('এই তারিখে ইতোমধ্যে ভক্তি চর্চা এন্ট্রি আছে। রিকোয়েস্টটি মুছে দেওয়া হয়েছে।');
+        return;
+      }
+      if (!window.hostelData.bhaktiEntries) window.hostelData.bhaktiEntries = [];
+      window.hostelData.bhaktiEntries.push({
+        id: 'BHK_' + Date.now(), memberId: req.memberId, date: req.date,
+        activities: req.activities || [], japaRounds: req.japaRounds || 0, points: req.points || 0,
+        timestamp: Date.now(), editCount: 0, isPending: false, source: 'admin_bhakti_request', requestId: req.id
+      });
+      req.status = 'approved'; req.approvedAt = Date.now();
+      syncMasterData(); renderUserBhaktiRequests();
+      alert('ভক্তি চর্চা রিকোয়েস্ট সফলভাবে অনুমোদিত ও হিসাবের সাথে যুক্ত হয়েছে।');
+    };
+
+    window.rejectBhaktiEntryRequest = function(requestId) {
+      const req = (window.hostelData.bhaktiRequests || []).find(r => r.id === requestId);
+      if (!req || req.status !== 'pending' || !window.currentUser || req.userId !== window.currentUser.userId) return;
+      window.hostelData.bhaktiRequests = window.hostelData.bhaktiRequests.filter(r => r.id !== requestId);
+      syncMasterData(); renderUserBhaktiRequests();
+      alert('ভক্তি চর্চা রিকোয়েস্ট বাতিল করে মুছে দেওয়া হয়েছে।');
+    };
+
+    window.populateAdminBhaktiUserSelector = function() {
+      const sel = document.getElementById('admin-bhakti-user-selector');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- ইউজার নির্বাচন করুন --</option>';
+      window.hostelData.users.filter(u => u.status !== 'pending').forEach(u => {
+        const members = getMembersForUser(u);
+        if (members.length) sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
+      });
+      populateAdminBhaktiMemberSelector(sel.value);
+      const date = document.getElementById('admin-bhakti-date');
+      if (date && !date.value) date.value = getTodayDDMMYYYY();
+    };
+
+    window.populateAdminBhaktiMemberSelector = function(userId) {
+      const sel = document.getElementById('admin-bhakti-member-selector');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- সদস্য নির্বাচন করুন --</option>';
+      sel.disabled = !userId;
+      if (!userId) return;
+      const user = window.hostelData.users.find(u => u.userId === userId);
+      getMembersForUser(user).forEach(m => {
+        sel.innerHTML += `<option value="${m.id}">${m.name}${m.phone ? ' — ' + m.phone : ''}</option>`;
+      });
+    };
+
+    window.sendAdminBhaktiRequest = function() {
+      const userId = document.getElementById('admin-bhakti-user-selector').value;
+      const memberId = document.getElementById('admin-bhakti-member-selector').value;
+      const user = window.hostelData.users.find(u => u.userId === userId);
+      const member = window.hostelData.members.find(m => m.id === memberId);
+      const date = document.getElementById('admin-bhakti-date').value.trim() || getTodayDDMMYYYY();
+      const activities = Array.from(document.querySelectorAll('.admin-bhakti-activity-chk:checked')).map(cb => cb.value);
+      const japaRounds = parseInt(document.getElementById('admin-bhakti-japa-rounds').value) || 0;
+      if (!user || !member) { alert('অনুগ্রহ করে ইউজার ও নির্দিষ্ট সদস্য নির্বাচন করুন।'); return; }
+      if (!member.userId) member.userId = user.userId;
+      if (!activities.length && !japaRounds) { alert('কমপক্ষে একটি কর্মকান্ড অথবা জপ রাউন্ড নির্বাচন করুন।'); return; }
+      if (hasBhaktiForMemberDate(member.id, date) || hasBhaktiRequestForMemberDate(member.id, date)) {
+        alert(`এই সদস্যের জন্য ${date} তারিখে ইতোমধ্যে ভক্তি চর্চা এন্ট্রি/রিকোয়েস্ট রয়েছে।`); return;
+      }
+      if (!window.hostelData.bhaktiRequests) window.hostelData.bhaktiRequests = [];
+      const points = computeBhaktiPoints(activities, japaRounds);
+      window.hostelData.bhaktiRequests.push({
+        id: 'BHR_' + Date.now(), userId: user.userId, userName: user.fullName || user.userId,
+        memberId: member.id, memberName: member.name, date, activities, japaRounds, points,
+        status: 'pending', managementStatus: 'sent', createdAt: Date.now()
+      });
+      document.querySelectorAll('.admin-bhakti-activity-chk:checked').forEach(cb => cb.checked = false);
+      const japaSel = document.getElementById('admin-bhakti-japa-rounds');
+      if (japaSel) japaSel.value = '0';
+      syncMasterData(); renderAdminBhaktiRequests();
+      if (window.currentUser && window.currentUser.userId === user.userId) renderUserBhaktiRequests();
+      alert('নির্বাচিত সদস্যের জন্য ভক্তি চর্চা রিকোয়েস্ট ইউজার প্যানেলে পাঠানো হয়েছে।');
+    };
+
+    window.renderAdminBhaktiRequests = function() {
+      const box = document.getElementById('admin-bhakti-request-list');
+      if (!box) return;
+      const requests = (window.hostelData.bhaktiRequests || [])
+        .filter(r => r.status === 'pending')
+        .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+      if (!requests.length) {
+        box.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">কোনো অপেক্ষমান ভক্তি চর্চা রিকোয়েস্ট নেই।</div>';
+        return;
+      }
+      box.innerHTML = requests.map(r => `<div class="border rounded-xl p-3 bg-white shadow-sm">
+        <div class="flex flex-wrap justify-between gap-2 text-xs"><div><b>${r.userName || r.userId}</b> (@${r.userId})</div><div class="font-bold text-amber-700">${r.date}</div></div>
+        <div class="text-xs text-gray-600 mt-1">সদস্য: <b>${r.memberName || '-'}</b> | কর্মকান্ড: ${(r.activities||[]).join(', ') || '-'} | জপ: ${r.japaRounds||0} রাউন্ড</div>
+        <div class="mt-2 text-[10px] font-bold text-amber-700">অনুমোদন বা বাতিল নির্বাচিত ইউজারের প্যানেল থেকেই হবে।</div>
+      </div>`).join('');
+    };
+
+    window.renderRankingChart = function() {
+      const container = document.getElementById('ranking-chart-container');
+      if (!container || !window.currentUser) return;
+      const scoped = getUserLedger(window.currentUser);
+      const members = scoped.members;
+      if (!members.length) {
+        container.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">কোনো সদস্য পাওয়া যায়নি।</div>';
+        return;
+      }
+
+      const totalMembersCount = members.length || 1;
+      const gasUsersCount = members.filter(m => m.useGas === 'yes').length || 1;
+      const totalSeatsCount = members.reduce((a, m) => a + (parseInt(m.seatQty) || 1), 0) || 1;
+      const houseRentList = scoped.fixedExpenses.filter(f => f.category === 'বাসা ভাড়া');
+      const otherFixedList = scoped.fixedExpenses.filter(f => f.category !== 'বাসা ভাড়া');
+      const totHouseRent = houseRentList.reduce((a,c) => a + c.amount, 0);
+      const totOtherFixed = otherFixedList.reduce((a,c) => a + c.amount, 0);
+      const totGas = scoped.gasExpenses.reduce((a,c) => a + c.amount, 0);
+      const totBazaar = scoped.bazaarExpenses.reduce((a,c) => a + c.amount, 0);
+      const totMealsAll = scoped.meals.reduce((a,c) => a + c.total, 0) || 1;
+      const perMealRate = totBazaar / totMealsAll;
+      const perOtherFixedCharge = totOtherFixed / totalMembersCount;
+      const perSeatRentCharge = totHouseRent / totalSeatsCount;
+      const perGasCharge = totGas / gasUsersCount;
+
+      const stats = members.map(m => {
+        const dep = scoped.deposits.filter(d => d.memberId === m.id).reduce((a,c) => a + c.amount, 0);
+        const mls = scoped.meals.filter(ml => ml.memberId === m.id).reduce((a,c) => a + c.total, 0);
+        const mealExp = mls * perMealRate;
+        const fixExp = perOtherFixedCharge + (perSeatRentCharge * (parseInt(m.seatQty) || 1));
+        const gasExp = m.useGas === 'yes' ? perGasCharge : 0;
+        const totExp = mealExp + fixExp + gasExp;
+        const netBalance = dep - totExp;
+        const marketCount = scoped.bazaarExpenses.filter(b => (b.shoppers || []).includes(m.name)).length;
+        const bhaktiPoints = (scoped.bhaktiEntries || []).filter(b => b.memberId === m.id).reduce((a,c) => a + (c.points || 0), 0);
+        return { member: m, netBalance, mealCount: mls, marketCount, bhaktiPoints };
+      });
+
+      const maxSurplus = Math.max(1, ...stats.map(s => s.netBalance > 0 ? s.netBalance : 0));
+      const maxDeficit = Math.max(1, ...stats.map(s => s.netBalance < 0 ? Math.abs(s.netBalance) : 0));
+      const maxMeal = Math.max(1, ...stats.map(s => s.mealCount));
+      const maxMarket = Math.max(1, ...stats.map(s => s.marketCount));
+      const maxBhakti = Math.max(1, ...stats.map(s => s.bhaktiPoints));
+
+      const ranked = stats.map(s => {
+        const noDuesScore = s.netBalance >= 0 ? 100 : Math.max(0, 100 - (Math.abs(s.netBalance) / maxDeficit) * 100);
+        const extraPayScore = s.netBalance > 0 ? (s.netBalance / maxSurplus) * 100 : 0;
+        const marketScore = (s.marketCount / maxMarket) * 100;
+        const mealScore = (s.mealCount / maxMeal) * 100;
+        const bhaktiScore = (s.bhaktiPoints / maxBhakti) * 100;
+        const composite = (noDuesScore + extraPayScore + marketScore + mealScore + bhaktiScore) / 5;
+        return { ...s, noDuesScore, extraPayScore, marketScore, mealScore, bhaktiScore, composite };
+      }).sort((a,b) => b.composite - a.composite);
+
+      const medals = ['🥇','🥈','🥉'];
+      container.innerHTML = ranked.map((r, idx) => `
+        <div class="border rounded-xl p-3 bg-slate-50 space-y-2">
+          <div class="flex justify-between items-center">
+            <div class="font-black text-gray-800 text-sm">${medals[idx] || ('#' + (idx+1))} ${r.member.name}</div>
+            <div class="font-bold text-emerald-700 text-sm">${r.composite.toFixed(1)} পয়েন্ট</div>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-gradient-to-r from-emerald-500 to-amber-500 h-2.5 rounded-full" style="width:${Math.min(100, r.composite).toFixed(1)}%"></div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-1 text-[10px] text-gray-600">
+            <div>বকেয়া নেই: ${r.noDuesScore.toFixed(0)}</div>
+            <div>বেশি জমা: ${r.extraPayScore.toFixed(0)}</div>
+            <div>বাজার: ${r.marketCount} বার</div>
+            <div>মিল: ${r.mealCount} টি</div>
+            <div>ভক্তি: ${r.bhaktiPoints.toFixed(1)} পয়েন্ট</div>
+          </div>
+        </div>
+      `).join('');
     };
 
     window.hasMealForMemberDate = function(memberId, date) {
@@ -3153,7 +3940,7 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
       alert('নির্বাচিত সদস্যের জন্য মিল এন্ট্রি রিকোয়েস্ট ইউজার প্যানেলে পাঠানো হয়েছে।');
     };
 
-    window.switchAdminTab=function(tab){const msg=document.getElementById('admin-message-tab'),meal=document.getElementById('admin-meal-tab'),baz=document.getElementById('admin-bazaar-tab'),mb=document.getElementById('admin-tab-message'),meb=document.getElementById('admin-tab-meal'),bb=document.getElementById('admin-tab-bazaar');[msg,meal,baz].forEach(x=>x&&x.classList.add('hidden'));[mb,meb,bb].forEach(x=>x&&(x.className='flex-1 py-2.5 text-center text-gray-400'));if(tab==='meal'){meal.classList.remove('hidden');meb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminMealUserSelector();renderAdminMealRequests();}else if(tab==='bazaar'){baz.classList.remove('hidden');bb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBazaarUserSelector();renderAdminBazaarRequests();}else{msg.classList.remove('hidden');mb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';}applyLanguage();};
+    window.switchAdminTab=function(tab){const msg=document.getElementById('admin-message-tab'),meal=document.getElementById('admin-meal-tab'),baz=document.getElementById('admin-bazaar-tab'),bhk=document.getElementById('admin-bhakti-tab'),mb=document.getElementById('admin-tab-message'),meb=document.getElementById('admin-tab-meal'),bb=document.getElementById('admin-tab-bazaar'),bhb=document.getElementById('admin-tab-bhakti');[msg,meal,baz,bhk].forEach(x=>x&&x.classList.add('hidden'));[mb,meb,bb,bhb].forEach(x=>x&&(x.className='flex-1 py-2.5 text-center text-gray-400'));if(tab==='meal'){meal.classList.remove('hidden');meb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminMealUserSelector();renderAdminMealRequests();}else if(tab==='bazaar'){baz.classList.remove('hidden');bb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBazaarUserSelector();renderAdminBazaarRequests();}else if(tab==='bhakti'){bhk.classList.remove('hidden');bhb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBhaktiUserSelector();renderAdminBhaktiRequests();}else{msg.classList.remove('hidden');mb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';}applyLanguage();};
 
 window.renderAdminMealRequests = function() {
       const box = document.getElementById('admin-meal-request-list');
@@ -3300,13 +4087,18 @@ window.renderAdminMealRequests = function() {
       const meals = scoped.meals;
       renderUserMealRequests();
       renderUserBazaarRequests();
+      renderUserBhaktiRequests();
+      populateMemberTransferUserSelector();
+      renderMemberTransferRequests();
       const membersContainer = document.getElementById('members-cards-container');
       const mealSelect = document.getElementById('meal-member-select');
       const shopperList = document.getElementById('shopper-checkbox-list');
+      const bhaktiSelect = document.getElementById('bhakti-member-select');
 
       membersContainer.innerHTML = '';
       mealSelect.innerHTML = '<option value="">সদস্য নির্বাচন করুন</option>';
       shopperList.innerHTML = '';
+      if (bhaktiSelect) bhaktiSelect.innerHTML = '<option value="">সদস্য নির্বাচন করুন</option>';
 
       const totalMembersCount = members.length || 1;
       const gasUsersCount = members.filter(m => m.useGas === 'yes').length || 1;
@@ -3330,6 +4122,7 @@ window.renderAdminMealRequests = function() {
 
       members.forEach(m => {
         mealSelect.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+        if (bhaktiSelect) bhaktiSelect.innerHTML += `<option value="${m.id}">${m.name}</option>`;
         shopperList.innerHTML += `
           <label class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded border">
             <input type="checkbox" value="${m.name}" class="shopper-chk"> <span>${m.name}</span>
@@ -3464,6 +4257,8 @@ window.renderAdminMealRequests = function() {
           </tr>
         `;
       });
+
+      renderRankingChart();
     };
 
     window.populateMealDateFilter = function() {
@@ -3524,8 +4319,9 @@ window.renderAdminMealRequests = function() {
           <td class="p-2">${f.date}</td>
           <td class="p-2 font-semibold">${f.category}</td>
           <td class="p-2">৳${f.amount}</td>
-          <td class="p-2 text-right">
+          <td class="p-2 text-right space-x-1">
             <button onclick="editTransaction('fixedExpenses', '${f.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="requestDeleteTransaction('fixedExpenses', '${f.id}')" class="text-red-600 hover:underline"><i class="fa-solid fa-trash-can"></i></button>
           </td>
         </tr>
       `).join('');
@@ -3560,6 +4356,32 @@ window.renderAdminMealRequests = function() {
           </td>
         </tr>
       `).join('');
+
+      const sortedBhakti = [...(scoped.bhaktiEntries || [])].sort((a, b) => {
+        const dateDiff = parseDDMMYYYY(a.date) - parseDDMMYYYY(b.date);
+        return dateDiff !== 0 ? dateDiff : (a.timestamp || 0) - (b.timestamp || 0);
+      });
+
+      const bhaktiBody = document.getElementById('bhakti-table-body');
+      if (bhaktiBody) {
+        bhaktiBody.innerHTML = sortedBhakti.length ? sortedBhakti.map(b => {
+          const mem = scoped.members.find(m => m.id === b.memberId);
+          return `
+            <tr class="border-b ${b.isPending ? 'pending-approval' : ''}">
+              <td class="p-2 font-semibold text-emerald-800">${b.date}</td>
+              <td class="p-2 font-bold">${mem ? mem.name : '-'}</td>
+              <td class="p-2 text-[10px] text-gray-600 max-w-xs">${(b.activities||[]).join(', ') || '-'}</td>
+              <td class="p-2">${b.japaRounds || 0}</td>
+              <td class="p-2 font-bold text-emerald-700">${(b.points||0).toFixed(1)}</td>
+              <td class="p-2 text-right">
+                <button onclick="requestDeleteTransaction('bhaktiEntries', '${b.id}')" class="text-red-600 hover:underline"><i class="fa-solid fa-trash-can"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('') : '<tr><td colspan="6" class="p-3 text-center text-gray-500 font-semibold">কোনো ভক্তি চর্চা তথ্য পাওয়া যায়নি</td></tr>';
+        const totalBhaktiEl = document.getElementById('section-total-bhakti');
+        if (totalBhaktiEl) totalBhaktiEl.innerText = sortedBhakti.reduce((a, c) => a + (c.points || 0), 0).toFixed(1);
+      }
 
       populateMealDateFilter();
       renderMealTableByDate(window.selectedMealDateFilter);
@@ -3597,6 +4419,12 @@ window.renderAdminMealRequests = function() {
           x => x.userId !== uid
         );
         window.hostelData.bazaarRequests = (window.hostelData.bazaarRequests || []).filter(
+          x => x.userId !== uid
+        );
+        window.hostelData.bhaktiEntries = (window.hostelData.bhaktiEntries || []).filter(
+          x => !(x.userId === uid || (x.memberId && myMemberIds.has(x.memberId)))
+        );
+        window.hostelData.bhaktiRequests = (window.hostelData.bhaktiRequests || []).filter(
           x => x.userId !== uid
         );
         window.hostelData.pendingEdits = (window.hostelData.pendingEdits || []).filter(
