@@ -947,7 +947,7 @@
   <!-- USER / HOME LIVE CHAT MODAL -->
   <div id="live-chat-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-3 shadow-2xl border-t-8 border-indigo-600 flex flex-col max-h-[92vh]">
-      <div class="flex justify-between items-center border-b pb-2"><h3 class="text-base font-black text-indigo-900 flex items-center gap-2"><i class="fa-solid fa-headset text-indigo-600"></i><span data-bn="ম্যানেজারের সাথে লাইভ চ্যাট" data-en="Live Chat with Manager">ম্যানেজারের সাথে লাইভ চ্যাট</span></h3><button onclick="closeLiveChatModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button></div>
+      <div class="flex justify-between items-center border-b pb-2"><h3 class="text-base font-black text-indigo-900 flex items-center gap-2"><i class="fa-solid fa-headset text-indigo-600"></i><span data-bn="ম্যানেজারের সাথে লাইভ চ্যাট" data-en="Live Chat with Manager">ম্যানেজারের সাথে লাইভ চ্যাট</span></h3><div class="flex items-center gap-3"><button onclick="closeLiveChatModal();openMemberPanelModal();" class="text-gray-400 hover:text-gray-600" title="পিছনে যান"><i class="fa-solid fa-arrow-left text-lg"></i></button><button onclick="closeLiveChatModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button></div></div>
       <div id="live-chat-contact-form" class="space-y-3 bg-indigo-50 p-4 rounded-xl border border-indigo-200">
         <p class="text-xs font-bold text-indigo-900" data-bn="চ্যাট শুরু করতে আপনার নাম ও মোবাইল নম্বর দিন। একই নাম ও নম্বর দিলে আগের চ্যাট হিস্ট্রি দেখা যাবে।" data-en="Enter your name and mobile number to start. Previous chat history will appear when the same name and number are provided.">চ্যাট শুরু করতে আপনার নাম ও মোবাইল নম্বর দিন। একই নাম ও নম্বর দিলে আগের চ্যাট হিস্ট্রি দেখা যাবে।</p>
         <div><label class="block text-xs font-bold text-gray-700 mb-1" data-bn="নাম" data-en="Name">নাম</label><input type="text" id="live-chat-name" required class="w-full px-3 py-2 border rounded-xl text-sm" placeholder="আপনার নাম" data-placeholder-bn="আপনার নাম" data-placeholder-en="Your name"></div>
@@ -990,11 +990,17 @@
         <h3 class="text-base font-black text-slate-800 flex items-center gap-2">
           <i class="fa-solid fa-user-shield text-amber-500"></i> মেম্বার প্যানেল
         </h3>
-        <button onclick="closeMemberPanelModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="closeMemberPanelModalViaX()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="space-y-2">
         <button onclick="closeMemberPanelModal();openViewAccountsModal();" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 rounded-xl font-bold text-xs md:text-sm shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-receipt text-amber-300"></i> নির্দিষ্ট ইউজারের হিসাব দেখুন
+        </button>
+        <button onclick="closeMemberPanelModal();openRankingChartModal();" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-ranking-star text-white"></i> র‍্যাংকিং চার্ট দেখুন
+        </button>
+        <button onclick="closeMemberPanelModal();openDataCollectModal();" class="w-full bg-teal-600 hover:bg-teal-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-clipboard-list text-white"></i> ডাটা কালেক্ট
         </button>
         <button onclick="closeMemberPanelModal();openAdminPanelModal();" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-paper-plane text-amber-400"></i> বার্তা / মিল ও বাজার রিকোয়েস্ট পাঠান
@@ -1185,6 +1191,36 @@
         </div>
       </div>
 
+      <!-- DATA COLLECT FORM MANAGEMENT -->
+      <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 space-y-3">
+        <h4 class="text-xs font-bold text-emerald-900 flex items-center gap-1">
+          <i class="fa-solid fa-clipboard-list text-emerald-600"></i> ডাটা কালেক্ট ফর্ম ম্যানেজমেন্ট
+        </h4>
+        <div id="dc-fields-list" class="flex flex-wrap"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-white p-3 rounded-xl border">
+          <input type="text" id="dc-new-field-label" placeholder="নতুন কলামের নাম" class="px-3 py-2 border rounded-lg text-sm sm:col-span-1">
+          <select id="dc-new-field-type" onchange="document.getElementById('dc-new-field-options-wrap').classList.toggle('hidden', this.value !== 'select')" class="px-3 py-2 border rounded-lg text-sm sm:col-span-1">
+            <option value="text">সাধারণ লেখা</option>
+            <option value="textarea">বড় লেখা (মতামত জাতীয়)</option>
+            <option value="select">তালিকা থেকে নির্বাচন</option>
+          </select>
+          <div id="dc-new-field-options-wrap" class="hidden sm:col-span-1">
+            <input type="text" id="dc-new-field-options" placeholder="অপশন, কমা দিয়ে লিখুন" class="w-full px-3 py-2 border rounded-lg text-sm">
+          </div>
+          <button onclick="addDataCollectField()" class="btn-green-to-red py-2 rounded-lg text-xs font-bold shadow sm:col-span-1"><i class="fa-solid fa-plus mr-1"></i> কলাম যুক্ত করুন</button>
+        </div>
+
+        <div class="flex justify-between items-center pt-2">
+          <h4 class="text-xs font-bold text-emerald-900">সংরক্ষিত ডাটা (সিরিয়াল অনুসারে)</h4>
+        </div>
+        <div class="overflow-x-auto bg-white rounded-xl border">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead id="mgmt-dc-table-head"></thead>
+            <tbody id="mgmt-dc-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="text-right border-t pt-3">
         <button onclick="closeMgmtDashboardModal()" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
           বন্ধ করুন
@@ -1200,7 +1236,10 @@
         <h3 class="text-lg font-black text-emerald-800 flex items-center gap-2">
           <i class="fa-solid fa-calculator text-emerald-600"></i> ইউজার ভিত্তিক একক সম্পূর্ণ হিসাব
         </h3>
-        <button onclick="closeViewAccountsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
+        <div class="flex items-center gap-3">
+          <button onclick="closeViewAccountsModal();openMemberPanelModal();" class="text-gray-400 hover:text-gray-600 text-xl font-bold" title="পিছনে যান"><i class="fa-solid fa-arrow-left"></i></button>
+          <button onclick="closeViewAccountsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
+        </div>
       </div>
 
       <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row items-center gap-3">
@@ -1248,6 +1287,59 @@
     </div>
   </div>
 
+  <!-- RANKING CHART MODAL (accessible from Member Login Panel) -->
+  <div id="ranking-chart-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-t-8 border-amber-500 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-black text-amber-700 flex items-center gap-2">
+          <i class="fa-solid fa-ranking-star text-amber-500"></i> র‍্যাংকিং চার্ট
+        </h3>
+        <div class="flex items-center gap-3">
+          <button onclick="closeRankingChartModal();openMemberPanelModal();" class="text-gray-400 hover:text-gray-600 text-xl font-bold" title="পিছনে যান"><i class="fa-solid fa-arrow-left"></i></button>
+          <button onclick="closeRankingChartModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row items-center gap-3">
+        <label class="text-xs font-bold text-gray-700 whitespace-nowrap">নির্দিষ্ট ইউজার নির্বাচন করুন:</label>
+        <select id="ranking-user-selector" onchange="renderRankingChartForSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm font-bold bg-white text-amber-800 focus:ring-2 focus:ring-amber-500">
+        </select>
+      </div>
+
+      <p class="text-xs text-gray-500">বকেয়া না রাখা, প্রয়োজনের চেয়ে বেশি টাকা জমা দেয়া, বাজার করা, নিয়মিত মিল খাওয়া ও ভক্তি চর্চা — সবকিছু মিলিয়ে এই র‍্যাংকিং তৈরি করা হয়েছে।</p>
+
+      <div id="ranking-chart-modal-container" class="space-y-3"></div>
+
+      <div class="text-right">
+        <button onclick="closeRankingChartModal()" class="bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
+          বন্ধ করুন
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA COLLECT MODAL (submission form, from Member Login Panel) -->
+  <div id="data-collect-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border-t-8 border-teal-600 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-black text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-list text-teal-600"></i> ডাটা কালেক্ট
+        </h3>
+        <div class="flex items-center gap-3">
+          <button onclick="closeDataCollectModal();openMemberPanelModal();" class="text-gray-400 hover:text-gray-600" title="পিছনে যান"><i class="fa-solid fa-arrow-left"></i></button>
+          <button onclick="closeDataCollectModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <form onsubmit="handleSubmitDataCollect(event)" class="space-y-3">
+        <div id="dc-form-fields-container" class="space-y-3"></div>
+        <button type="submit" class="btn-green-to-red w-full py-2.5 rounded-xl text-sm font-bold shadow flex items-center justify-center gap-1">
+          <i class="fa-solid fa-paper-plane"></i> সাবমিট করুন
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- ADMIN PANEL MODAL -->
   <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800 max-h-[90vh] overflow-y-auto">
@@ -1255,7 +1347,10 @@
         <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
           <i class="fa-solid fa-user-shield text-amber-500"></i> Admin Panel
         </h3>
-        <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        <div class="flex items-center gap-3">
+          <button onclick="closeAdminModal();openMemberPanelModal();" class="text-gray-400 hover:text-gray-600 text-lg" title="পিছনে যান"><i class="fa-solid fa-arrow-left"></i></button>
+          <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+        </div>
       </div>
 
       <div class="flex border-b text-sm font-black">
@@ -1437,6 +1532,13 @@
       "হারপিক", "ভিম", "সাবান", "অন্যান্য"
     ];
 
+    window.defaultDataCollectFields = [
+      { key: 'name', label: 'নাম', type: 'text' },
+      { key: 'mobile', label: 'মোবাইল নম্বর', type: 'text' },
+      { key: 'tshirt', label: 'টি শার্ট সাইজ', type: 'select', options: ['S','M','L','XL','XXL'] },
+      { key: 'feedback', label: 'মতামত', type: 'textarea' }
+    ];
+
     window.hostelData = {
       users: [],
       members: [],
@@ -1449,6 +1551,8 @@
       bazaarRequests: [],
       bhaktiEntries: [],
       bhaktiRequests: [],
+      dataCollectFields: window.defaultDataCollectFields,
+      dataCollectEntries: [],
       pendingEdits: [],
       memberTransferRequests: [],
       comments: {},
@@ -1476,6 +1580,8 @@
           bazaarRequests: data.bazaarRequests || [],
           bhaktiEntries: data.bhaktiEntries || [],
           bhaktiRequests: data.bhaktiRequests || [],
+          dataCollectFields: (data.dataCollectFields && data.dataCollectFields.length) ? data.dataCollectFields : window.defaultDataCollectFields,
+          dataCollectEntries: data.dataCollectEntries || [],
           pendingEdits: data.pendingEdits || [],
           memberTransferRequests: data.memberTransferRequests || [],
           comments: data.comments || {},
@@ -1503,6 +1609,8 @@
         renderMgmtLiveChatMessages();
         if (document.getElementById('mgmt-dashboard-modal') && !document.getElementById('mgmt-dashboard-modal').classList.contains('hidden')) {
           renderMgmtSecurityPanel();
+          renderDataCollectFieldsList();
+          renderMgmtDataCollectTable();
         }
         applyLanguage();
       }
@@ -1741,6 +1849,8 @@
       populateMgmtChatUsers();
       renderMgmtLiveChatMessages();
       renderMgmtSecurityPanel();
+      renderDataCollectFieldsList();
+      renderMgmtDataCollectTable();
       applyLanguage();
       initAllDatePickers();
       document.getElementById('mgmt-dashboard-modal').classList.remove('hidden');
@@ -2642,6 +2752,16 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
 
     window.closeMemberPanelModal = function() {
       document.getElementById('member-panel-modal').classList.add('hidden');
+    };
+
+    // Only the square "X" button on the মেম্বার প্যানেল hub itself should log
+    // out. The 5 arrow-linked buttons inside also call closeMemberPanelModal()
+    // to hide the hub before opening their own sub-panel, so logout must NOT
+    // live inside closeMemberPanelModal() itself -- it would fire every time
+    // one of those buttons is used, which is exactly what should not happen.
+    window.closeMemberPanelModalViaX = function() {
+      closeMemberPanelModal();
+      logout();
     };
 
     window.openViewAccountsModal = function() {
@@ -3724,15 +3844,10 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
       </div>`).join('');
     };
 
-    window.renderRankingChart = function() {
-      const container = document.getElementById('ranking-chart-container');
-      if (!container || !window.currentUser) return;
-      const scoped = getUserLedger(window.currentUser);
+    window.computeMemberRanking = function(user) {
+      const scoped = getUserLedger(user);
       const members = scoped.members;
-      if (!members.length) {
-        container.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">কোনো সদস্য পাওয়া যায়নি।</div>';
-        return;
-      }
+      if (!members.length) return [];
 
       const totalMembersCount = members.length || 1;
       const gasUsersCount = members.filter(m => m.useGas === 'yes').length || 1;
@@ -3768,7 +3883,7 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
       const maxMarket = Math.max(1, ...stats.map(s => s.marketCount));
       const maxBhakti = Math.max(1, ...stats.map(s => s.bhaktiPoints));
 
-      const ranked = stats.map(s => {
+      return stats.map(s => {
         const noDuesScore = s.netBalance >= 0 ? 100 : Math.max(0, 100 - (Math.abs(s.netBalance) / maxDeficit) * 100);
         const extraPayScore = s.netBalance > 0 ? (s.netBalance / maxSurplus) * 100 : 0;
         const marketScore = (s.marketCount / maxMarket) * 100;
@@ -3777,7 +3892,15 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
         const composite = (noDuesScore + extraPayScore + marketScore + mealScore + bhaktiScore) / 5;
         return { ...s, noDuesScore, extraPayScore, marketScore, mealScore, bhaktiScore, composite };
       }).sort((a,b) => b.composite - a.composite);
+    };
 
+    window.renderRankingChartInto = function(containerId, ranked) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (!ranked || !ranked.length) {
+        container.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">কোনো সদস্য পাওয়া যায়নি।</div>';
+        return;
+      }
       const medals = ['🥇','🥈','🥉'];
       container.innerHTML = ranked.map((r, idx) => `
         <div class="border rounded-xl p-3 bg-slate-50 space-y-2">
@@ -3797,6 +3920,179 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
           </div>
         </div>
       `).join('');
+    };
+
+    window.renderRankingChart = function() {
+      if (!window.currentUser) return;
+      renderRankingChartInto('ranking-chart-container', computeMemberRanking(window.currentUser));
+    };
+
+    /* RANKING CHART MODAL (Member Login Panel hub) */
+    window.openRankingChartModal = function() {
+      const sel = document.getElementById('ranking-user-selector');
+      const approvedUsers = (window.hostelData.users || []).filter(u => u.status !== 'pending');
+      sel.innerHTML = '<option value="">-- ইউজার নির্বাচন করুন --</option>';
+      approvedUsers.forEach(u => {
+        sel.innerHTML += `<option value="${u.userId}">${u.fullName || u.userId} (@${u.userId})</option>`;
+      });
+      renderRankingChartForSelectedUser(sel.value);
+      document.getElementById('ranking-chart-modal').classList.remove('hidden');
+    };
+
+    window.closeRankingChartModal = function() {
+      document.getElementById('ranking-chart-modal').classList.add('hidden');
+    };
+
+    window.renderRankingChartForSelectedUser = function(userId) {
+      const container = document.getElementById('ranking-chart-modal-container');
+      if (!container) return;
+      const user = (window.hostelData.users || []).find(u => u.userId === userId);
+      if (!user) {
+        container.innerHTML = '<div class="text-center text-xs text-gray-400 bg-slate-50 border rounded-xl p-4">অনুগ্রহ করে প্রথমে একজন ইউজার নির্বাচন করুন।</div>';
+        return;
+      }
+      renderRankingChartInto('ranking-chart-modal-container', computeMemberRanking(user));
+    };
+
+    /* DATA COLLECT WORKFLOW (Member Login Panel form -> Management Panel storage) */
+    window.getDataCollectFields = function() {
+      return (window.hostelData.dataCollectFields && window.hostelData.dataCollectFields.length)
+        ? window.hostelData.dataCollectFields
+        : window.defaultDataCollectFields;
+    };
+
+    window.openDataCollectModal = function() {
+      renderDataCollectForm();
+      document.getElementById('data-collect-modal').classList.remove('hidden');
+    };
+
+    window.closeDataCollectModal = function() {
+      document.getElementById('data-collect-modal').classList.add('hidden');
+    };
+
+    window.renderDataCollectForm = function() {
+      const container = document.getElementById('dc-form-fields-container');
+      if (!container) return;
+      const fields = getDataCollectFields();
+      container.innerHTML = fields.map(f => {
+        if (f.type === 'textarea') {
+          return `<div><label class="block text-xs font-bold text-gray-700 mb-1">${f.label}</label><textarea data-dc-key="${f.key}" rows="3" class="w-full px-3 py-2 border rounded-xl text-sm dc-field-input"></textarea></div>`;
+        } else if (f.type === 'select') {
+          const opts = (f.options || []).map(o => `<option value="${o}">${o}</option>`).join('');
+          return `<div><label class="block text-xs font-bold text-gray-700 mb-1">${f.label}</label><select data-dc-key="${f.key}" class="w-full px-3 py-2 border rounded-xl text-sm dc-field-input">${opts}</select></div>`;
+        }
+        return `<div><label class="block text-xs font-bold text-gray-700 mb-1">${f.label}</label><input type="text" data-dc-key="${f.key}" class="w-full px-3 py-2 border rounded-xl text-sm dc-field-input"></div>`;
+      }).join('');
+    };
+
+    window.handleSubmitDataCollect = function(e) {
+      e.preventDefault();
+      const fields = getDataCollectFields();
+      const values = {};
+      document.querySelectorAll('#dc-form-fields-container .dc-field-input').forEach(el => {
+        const key = el.getAttribute('data-dc-key');
+        values[key] = el.value.trim();
+      });
+      const firstField = fields[0];
+      if (firstField && !values[firstField.key]) {
+        alert(`${firstField.label} আবশ্যক।`);
+        return;
+      }
+      if (!window.hostelData.dataCollectEntries) window.hostelData.dataCollectEntries = [];
+      window.hostelData.dataCollectEntries.push({
+        id: 'DCE_' + Date.now(),
+        values,
+        timestamp: Date.now()
+      });
+      syncMasterData();
+      closeDataCollectModal();
+      alert('তথ্য সফলভাবে সাবমিট করা হয়েছে। ধন্যবাদ!');
+    };
+
+    /* DATA COLLECT: MANAGEMENT PANEL SIDE (form column builder + entries table) */
+    window.addDataCollectField = function() {
+      const labelInput = document.getElementById('dc-new-field-label');
+      const typeSelect = document.getElementById('dc-new-field-type');
+      const optionsInput = document.getElementById('dc-new-field-options');
+      const label = labelInput.value.trim();
+      if (!label) { alert('নতুন কলামের নাম লিখুন।'); return; }
+      const type = typeSelect.value;
+      const field = { key: 'f_' + Date.now(), label, type };
+      if (type === 'select') {
+        const opts = (optionsInput.value || '').split(',').map(s => s.trim()).filter(Boolean);
+        if (!opts.length) { alert('অপশনগুলো কমা দিয়ে লিখুন।'); return; }
+        field.options = opts;
+      }
+      if (!window.hostelData.dataCollectFields || !window.hostelData.dataCollectFields.length) {
+        window.hostelData.dataCollectFields = window.defaultDataCollectFields.slice();
+      }
+      window.hostelData.dataCollectFields.push(field);
+      labelInput.value = '';
+      optionsInput.value = '';
+      typeSelect.value = 'text';
+      document.getElementById('dc-new-field-options-wrap').classList.add('hidden');
+      syncMasterData();
+      renderDataCollectFieldsList();
+      renderMgmtDataCollectTable();
+      alert('নতুন কলাম যুক্ত হয়েছে এবং ফর্ম আপডেট হয়েছে।');
+    };
+
+    window.renderDataCollectFieldsList = function() {
+      const box = document.getElementById('dc-fields-list');
+      if (!box) return;
+      const fields = getDataCollectFields();
+      box.innerHTML = fields.map(f => {
+        const tag = f.type === 'select' ? ' (তালিকা)' : (f.type === 'textarea' ? ' (বড় লেখা)' : '');
+        return `<span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded-full border border-emerald-300 mr-1 mb-1">${f.label}${tag}</span>`;
+      }).join('');
+    };
+
+    window.renderMgmtDataCollectTable = function() {
+      const thead = document.getElementById('mgmt-dc-table-head');
+      const tbody = document.getElementById('mgmt-dc-table-body');
+      if (!thead || !tbody) return;
+      const fields = getDataCollectFields();
+      thead.innerHTML = `<tr class="bg-emerald-800 text-white font-bold">
+        <th class="p-2">সিরিয়াল</th>${fields.map(f => `<th class="p-2">${f.label}</th>`).join('')}<th class="p-2">তারিখ/সময়</th><th class="p-2 text-right">অ্যাকশন</th>
+      </tr>`;
+      const sorted = [...(window.hostelData.dataCollectEntries || [])].sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+      if (!sorted.length) {
+        tbody.innerHTML = `<tr><td colspan="${fields.length + 3}" class="p-3 text-center text-gray-500 font-semibold">কোনো ডাটা পাওয়া যায়নি</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = sorted.map((entry, idx) => {
+        const dt = new Date(entry.timestamp || 0);
+        const dtStr = isNaN(dt.getTime()) ? '-' : dt.toLocaleString('bn-BD');
+        return `<tr class="border-b hover:bg-slate-50">
+          <td class="p-2 font-bold">${idx + 1}</td>
+          ${fields.map(f => `<td class="p-2">${(entry.values && entry.values[f.key]) ? String(entry.values[f.key]) : '-'}</td>`).join('')}
+          <td class="p-2 text-[10px] text-gray-500 whitespace-nowrap">${dtStr}</td>
+          <td class="p-2 text-right space-x-1 whitespace-nowrap">
+            <button onclick="showDataCollectReceipt('${entry.id}')" title="JPG সেভ" class="text-blue-600 hover:underline"><i class="fa-solid fa-image"></i></button>
+            <button onclick="deleteDataCollectEntry('${entry.id}')" title="ডিলিট" class="text-red-600 hover:underline"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>`;
+      }).join('');
+    };
+
+    window.deleteDataCollectEntry = function(id) {
+      if (!confirm('আপনি কি নিশ্চিত এই তথ্যটি ডিলিট করতে চান?')) return;
+      window.hostelData.dataCollectEntries = (window.hostelData.dataCollectEntries || []).filter(e => e.id !== id);
+      syncMasterData();
+      renderMgmtDataCollectTable();
+    };
+
+    window.showDataCollectReceipt = function(id) {
+      const entry = (window.hostelData.dataCollectEntries || []).find(e => e.id === id);
+      if (!entry) return;
+      const fields = getDataCollectFields();
+      const sorted = [...(window.hostelData.dataCollectEntries || [])].sort((a,b) => (a.timestamp||0) - (b.timestamp||0));
+      const serial = sorted.findIndex(e => e.id === id) + 1;
+      const dt = new Date(entry.timestamp || 0);
+      const dtStr = isNaN(dt.getTime()) ? '-' : dt.toLocaleString('bn-BD');
+      const rows = fields.map(f => `<tr><td class="label">${window.escapeReceipt(f.label)}</td><td>${window.escapeReceipt((entry.values && entry.values[f.key]) || '-')}</td></tr>`).join('');
+      const html = `<div class="receipt-paper"><div class="receipt-header text-center">${window.getReceiptBrandingHTML()}<div class="text-2xl font-black tracking-wide">Gour Kishore Das Babaji BACE</div><div class="text-sm font-bold text-gray-500">DATA COLLECTION ENTRY</div><div class="text-xs mt-2">ডাটা কালেক্ট এন্ট্রি</div></div><div class="grid grid-cols-2 gap-2 text-sm mb-4"><div><b>সিরিয়াল নম্বর:</b> ${serial}</div><div class="text-right"><b>তারিখ/সময়:</b> ${window.escapeReceipt(dtStr)}</div></div><table class="w-full receipt-table text-sm">${rows}</table><div class="text-center text-[10px] text-gray-400 mt-8">এই তথ্যটি Gour Kishore Das Babaji BACE-এর ডাটা কালেক্ট ফর্মের মাধ্যমে সংরক্ষিত।</div></div>`;
+      window.openReceipt('ডাটা কালেক্ট এন্ট্রি', html);
     };
 
     window.hasMealForMemberDate = function(memberId, date) {
