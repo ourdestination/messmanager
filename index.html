@@ -190,7 +190,19 @@
   <main class="container mx-auto px-3 md:px-6 py-6 flex-grow">
 
     <!-- HOMEPAGE / AUTHENTICATION PANEL -->
-    <section id="auth-section" class="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border-t-8 border-emerald-600 auth-transition">
+    <section id="auth-section" class="auth-transition">
+      <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+        <!-- PUBLIC NOTICE BOARD (visible to everyone, before login) -->
+        <div class="lg:col-span-1 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-5 border-t-8 border-rose-600 space-y-3">
+          <h3 class="text-base font-black text-rose-700 flex items-center gap-2 border-b pb-2">
+            <i class="fa-solid fa-bullhorn text-rose-600"></i> নোটিশ বোর্ড
+          </h3>
+          <div id="public-notice-board-list" class="space-y-3 max-h-[150px] overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- SIGN IN / SIGN UP CARD -->
+        <div class="lg:col-span-2 max-w-md mx-auto w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border-t-8 border-emerald-600">
       
       <div class="text-center mb-6 cursor-pointer select-none" onclick="triggerHostelLogoClick()" title="প্রেস করে ম্যানেজমেন্ট প্যানেল খুলুন">
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-3 shadow-inner hover:bg-emerald-200 transition overflow-hidden">
@@ -293,6 +305,8 @@
         </button>
       </div>
 
+        </div>
+      </div>
     </section>
 
     <!-- MAIN DASHBOARD PANEL -->
@@ -333,6 +347,12 @@
               <span id="panel-user-status-text" class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check text-[10px] mr-1"></i>সক্রিয়</span>
             </div>
           </div>
+
+          <!-- NOTICE BOARD BUTTON -->
+          <button onclick="openNoticeBoardModal()" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center gap-1 transition relative">
+            <i class="fa-solid fa-bullhorn"></i> নোটিশ বোর্ড
+            <span id="notice-board-badge" class="hidden absolute -top-2 -right-2 bg-amber-400 text-slate-900 text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white"></span>
+          </button>
 
           <!-- PAYMENT BUTTON -->
           <button onclick="openPaymentModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center gap-1 transition">
@@ -962,6 +982,56 @@
     </div>
   </div>
 
+  <!-- NOTICE BOARD MODAL -->
+  <div id="notice-board-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-t-8 border-rose-600 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-black text-rose-700 flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn text-rose-600"></i> নোটিশ বোর্ড
+        </h3>
+        <div class="flex items-center gap-3">
+          <button onclick="closeNoticeBoardModal();openMemberPanelModal();" class="hidden text-gray-400 hover:text-gray-600" title="পিছনে যান"><i class="fa-solid fa-arrow-left"></i></button>
+          <button onclick="closeNoticeBoardModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+      </div>
+
+      <form onsubmit="handleSubmitNotice(event)" class="space-y-3 bg-rose-50 p-4 rounded-xl border border-rose-200">
+        <input type="hidden" id="notice-edit-id" value="">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">নোটিশের শিরোনাম</label>
+          <input type="text" id="notice-title-input" required maxlength="80" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500" placeholder="সংক্ষিপ্ত শিরোনাম লিখুন...">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">নোটিশের লেখা</label>
+          <textarea id="notice-text-input" rows="3" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500" placeholder="আপনার নোটিশ লিখুন..."></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">ছবি যুক্ত করুন (ঐচ্ছিক)</label>
+          <input type="file" id="notice-image-input" accept="image/*" onchange="handleNoticeImageUpload(event)" class="w-full text-xs">
+          <div id="notice-image-preview-wrap" class="hidden mt-2 relative inline-block">
+            <img id="notice-image-preview" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">
+            <button type="button" onclick="removeNoticeImage()" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-[10px] flex items-center justify-center shadow"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">মেয়াদ শেষ হবে (তারিখ ও সময়)</label>
+          <input type="datetime-local" id="notice-expiry-input" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500">
+        </div>
+        <div class="flex gap-2">
+          <button type="submit" id="notice-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl text-sm font-bold shadow flex items-center justify-center gap-1">
+            <i class="fa-solid fa-paper-plane"></i> পাবলিশ করুন
+          </button>
+          <button type="button" id="notice-cancel-edit-btn" onclick="cancelNoticeEdit()" class="hidden bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-xs font-bold">বাতিল</button>
+        </div>
+      </form>
+
+      <div class="space-y-3">
+        <h4 class="text-xs font-bold text-gray-500 uppercase">সকল সচল নোটিশ</h4>
+        <div id="notice-board-list" class="space-y-3 max-h-[150px] overflow-y-auto pr-1"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ADMIN AUTH MODAL -->
   <div id="admin-auth-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800">
@@ -1266,6 +1336,12 @@
         </table>
       </div>
 
+      <!-- PER-MEMBER DETAILED MEAL ACCOUNT -->
+      <div class="border rounded-xl overflow-hidden">
+        <div class="bg-amber-50 px-4 py-3 font-black text-amber-800"><i class="fa-solid fa-utensils mr-1"></i> সদস্য ভিত্তিক মিলের বিস্তারিত হিসাব</div>
+        <div id="accounts-meal-detail-container" class="max-h-72 overflow-y-auto divide-y"></div>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="border rounded-xl overflow-hidden">
           <div class="bg-emerald-50 px-4 py-3 font-black text-emerald-800"><i class="fa-solid fa-cart-shopping mr-1"></i> বাজার খরচের বিস্তারিত</div>
@@ -1560,6 +1636,7 @@
       paymentInfo: { link: '', qrImage: '', instructions: '' },
       siteBranding: { logo: '' },
       liveChats: [],
+      notices: [],
       mgmtAuth: { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' }
     };
 
@@ -1589,12 +1666,14 @@
           paymentInfo: data.paymentInfo || { link: '', qrImage: '', instructions: '' },
           siteBranding: data.siteBranding || { logo: '' },
           liveChats: data.liveChats || [],
+          notices: data.notices || [],
           mgmtAuth: data.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' }
         };
         migrateLiveChats();
         localStorage.setItem('dream_touching_hostel_db', JSON.stringify(window.hostelData));
         applySiteBranding();
         renderFloatingReplies();
+        renderNoticeBoard();
         if (window.currentUser) {
           renderUserProfilePanel();
           renderDashboard();
@@ -1654,6 +1733,191 @@
         alert('প্রোফাইল ছবি সফলভাবে আপডেট করা হয়েছে!');
       };
       reader.readAsDataURL(file);
+    };
+
+    // ===================== NOTICE BOARD =====================
+    window.noticeTempImage = '';
+
+    window.openNoticeBoardModal = function() {
+      window.cancelNoticeEdit();
+      document.getElementById('notice-board-modal').classList.remove('hidden');
+      renderNoticeBoard();
+    };
+
+    window.closeNoticeBoardModal = function() {
+      document.getElementById('notice-board-modal').classList.add('hidden');
+    };
+
+    window.handleNoticeImageUpload = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        window.noticeTempImage = e.target.result;
+        document.getElementById('notice-image-preview').src = window.noticeTempImage;
+        document.getElementById('notice-image-preview-wrap').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.removeNoticeImage = function() {
+      window.noticeTempImage = '';
+      const inp = document.getElementById('notice-image-input');
+      if (inp) inp.value = '';
+      document.getElementById('notice-image-preview-wrap').classList.add('hidden');
+    };
+
+    window.cancelNoticeEdit = function() {
+      const editIdEl = document.getElementById('notice-edit-id');
+      const titleEl = document.getElementById('notice-title-input');
+      const textEl = document.getElementById('notice-text-input');
+      const expEl = document.getElementById('notice-expiry-input');
+      if (editIdEl) editIdEl.value = '';
+      if (titleEl) titleEl.value = '';
+      if (textEl) textEl.value = '';
+      if (expEl) expEl.value = '';
+      window.removeNoticeImage();
+      const submitBtn = document.getElementById('notice-submit-btn');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> পাবলিশ করুন';
+      const cancelBtn = document.getElementById('notice-cancel-edit-btn');
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+    };
+
+    window.handleSubmitNotice = function(event) {
+      event.preventDefault();
+      if (!window.currentUser) return;
+      const editId = document.getElementById('notice-edit-id').value;
+      const title = document.getElementById('notice-title-input').value.trim();
+      const text = document.getElementById('notice-text-input').value.trim();
+      const expiryLocal = document.getElementById('notice-expiry-input').value;
+      if (!title || !text || !expiryLocal) return;
+
+      const expiresAt = new Date(expiryLocal).getTime();
+      if (isNaN(expiresAt) || expiresAt <= Date.now()) {
+        alert('অনুগ্রহ করে ভবিষ্যতের একটি বৈধ মেয়াদ শেষের সময় নির্বাচন করুন।');
+        return;
+      }
+
+      window.hostelData.notices = window.hostelData.notices || [];
+
+      if (editId) {
+        const idx = window.hostelData.notices.findIndex(n => n.id === editId && n.userId === window.currentUser.userId);
+        if (idx === -1) {
+          alert('নোটিশটি পাওয়া যায়নি বা এডিট করার অনুমতি নেই।');
+          return;
+        }
+        window.hostelData.notices[idx].title = title;
+        window.hostelData.notices[idx].text = text;
+        window.hostelData.notices[idx].image = window.noticeTempImage || window.hostelData.notices[idx].image || '';
+        window.hostelData.notices[idx].expiresAt = expiresAt;
+        window.hostelData.notices[idx].updatedAt = Date.now();
+      } else {
+        window.hostelData.notices.push({
+          id: 'NTC_' + Date.now(),
+          userId: window.currentUser.userId,
+          userName: window.currentUser.fullName || window.currentUser.userId,
+          title,
+          text,
+          image: window.noticeTempImage || '',
+          expiresAt,
+          createdAt: Date.now()
+        });
+      }
+
+      syncMasterData();
+      window.cancelNoticeEdit();
+      renderNoticeBoard();
+      alert(editId ? 'নোটিশ সফলভাবে আপডেট হয়েছে!' : 'নোটিশ সফলভাবে পাবলিশ হয়েছে!');
+    };
+
+    window.editNotice = function(id) {
+      const notice = (window.hostelData.notices || []).find(n => n.id === id);
+      if (!notice || !window.currentUser || notice.userId !== window.currentUser.userId) return;
+
+      document.getElementById('notice-edit-id').value = notice.id;
+      document.getElementById('notice-title-input').value = notice.title || '';
+      document.getElementById('notice-text-input').value = notice.text;
+      window.noticeTempImage = notice.image || '';
+      if (notice.image) {
+        document.getElementById('notice-image-preview').src = notice.image;
+        document.getElementById('notice-image-preview-wrap').classList.remove('hidden');
+      } else {
+        document.getElementById('notice-image-preview-wrap').classList.add('hidden');
+      }
+
+      const d = new Date(notice.expiresAt);
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('notice-expiry-input').value =
+        `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+      document.getElementById('notice-submit-btn').innerHTML = '<i class="fa-solid fa-pen"></i> আপডেট করুন';
+      document.getElementById('notice-cancel-edit-btn').classList.remove('hidden');
+      document.getElementById('notice-title-input').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    window.deleteNotice = function(id) {
+      const notice = (window.hostelData.notices || []).find(n => n.id === id);
+      if (!notice || !window.currentUser || notice.userId !== window.currentUser.userId) return;
+      if (!confirm('আপনি কি নিশ্চিতভাবে এই নোটিশটি ডিলিট করতে চান?')) return;
+
+      window.hostelData.notices = window.hostelData.notices.filter(n => n.id !== id);
+      syncMasterData();
+      renderNoticeBoard();
+    };
+
+    window.renderNoticeBoard = function() {
+      const listEl = document.getElementById('notice-board-list');
+      const publicListEl = document.getElementById('public-notice-board-list');
+      const now = Date.now();
+      const active = (window.hostelData.notices || [])
+        .filter(n => n.expiresAt > now)
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      const badge = document.getElementById('notice-board-badge');
+      if (badge) {
+        if (active.length > 0) {
+          badge.textContent = active.length;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+
+      const emptyHtml = '<p class="text-center text-xs text-gray-400 py-4">কোনো সচল নোটিশ নেই।</p>';
+
+      const cardsHtml = active.length ? active.map(n => {
+        const isMine = window.currentUser && n.userId === window.currentUser.userId;
+        const d = new Date(n.expiresAt);
+        const pad = x => String(x).padStart(2, '0');
+        const expiryStr = `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        const safeTitle = (n.title || 'নোটিশ').replace(/</g, '&lt;');
+        return `
+          <details class="bg-white border rounded-xl shadow-sm group overflow-hidden">
+            <summary class="cursor-pointer list-none p-3 flex justify-between items-center gap-2">
+              <span class="text-xs font-black text-rose-700 truncate">${safeTitle}</span>
+              <span class="text-[10px] font-bold text-rose-500 shrink-0 flex items-center gap-1">বিস্তারিত <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i></span>
+            </summary>
+            <div class="p-3 pt-0 border-t space-y-2">
+              <div class="flex justify-between items-start gap-2 pt-2">
+                <div>
+                  <p class="text-xs font-bold text-gray-600">${n.userName || n.userId}</p>
+                  <p class="text-[10px] text-gray-400">মেয়াদ: ${expiryStr} পর্যন্ত</p>
+                </div>
+                ${isMine ? `
+                <div class="flex gap-2 text-xs shrink-0">
+                  <button onclick="editNotice('${n.id}')" class="text-emerald-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button onclick="deleteNotice('${n.id}')" class="text-red-600 hover:underline"><i class="fa-solid fa-trash-can"></i></button>
+                </div>` : ''}
+              </div>
+              <p class="text-xs text-gray-700 whitespace-pre-line">${n.text}</p>
+              ${n.image ? `<img src="${n.image}" class="w-full max-h-56 object-contain rounded-lg border">` : ''}
+            </div>
+          </details>
+        `;
+      }).join('') : emptyHtml;
+
+      if (listEl) listEl.innerHTML = cardsHtml;
+      if (publicListEl) publicListEl.innerHTML = cardsHtml;
     };
 
     window.isUserExpired = function(user) {
@@ -2798,6 +3062,8 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         if (fixBody) fixBody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-gray-400">কোনো ইউজার নির্বাচিত নয়</td></tr>';
         document.getElementById('accounts-bazaar-detail-total').innerText = '0';
         document.getElementById('accounts-fixed-detail-total').innerText = '0';
+        const mealBox = document.getElementById('accounts-meal-detail-container');
+        if (mealBox) mealBox.innerHTML = '<p class="text-center text-xs text-gray-400 p-4">কোনো ইউজার নির্বাচিত নয়</p>';
         return;
       }
 
@@ -2859,6 +3125,59 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
         document.getElementById('accounts-bazaar-detail-total').innerText = totBazaar;
         document.getElementById('accounts-fixed-detail-total').innerText = totFixed;
       }
+
+      renderAccountsMealDetails(members, ledger.meals);
+    };
+
+    // Renders a per-member, date-wise breakdown (সকাল/দুপুর/রাত/মোট) of every meal
+    // entry belonging to the members under the currently selected user in the
+    // "নির্দিষ্ট ইউজারের হিসাব দেখুন" modal. Uses a native <details> disclosure per
+    // member so the list stays compact until the user wants to inspect one.
+    window.renderAccountsMealDetails = function(members, allMeals) {
+      const box = document.getElementById('accounts-meal-detail-container');
+      if (!box) return;
+
+      if (!members || !members.length) {
+        box.innerHTML = '<p class="text-center text-xs text-gray-400 p-4">কোনো সদস্য পাওয়া যায়নি।</p>';
+        return;
+      }
+
+      box.innerHTML = members.map(m => {
+        const mealsOfMember = (allMeals || [])
+          .filter(ml => ml.memberId === m.id)
+          .sort((a, b) => parseDDMMYYYY(a.date) - parseDDMMYYYY(b.date) || (a.timestamp || 0) - (b.timestamp || 0));
+
+        const totalMeals = mealsOfMember.reduce((a, c) => a + (c.total || 0), 0);
+
+        const rows = mealsOfMember.length
+          ? mealsOfMember.map(ml => `
+              <tr class="border-b">
+                <td class="p-2 font-semibold text-emerald-800">${ml.date}</td>
+                <td class="p-2 text-center">${ml.morning || 0}</td>
+                <td class="p-2 text-center">${ml.noon || 0}</td>
+                <td class="p-2 text-center">${ml.night || 0}</td>
+                <td class="p-2 text-center font-bold text-emerald-700">${ml.total || 0}</td>
+              </tr>
+            `).join('')
+          : `<tr><td colspan="5" class="p-3 text-center text-gray-400">কোনো মিল এন্ট্রি নেই</td></tr>`;
+
+        return `
+          <details class="group">
+            <summary class="cursor-pointer list-none p-3 flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition">
+              <span class="font-bold text-sm text-gray-800"><i class="fa-solid fa-user text-amber-600 mr-1"></i>${m.name}</span>
+              <span class="text-xs font-bold text-emerald-700">মোট মিল: ${totalMeals} টি <i class="fa-solid fa-chevron-down ml-1 group-open:rotate-180 transition-transform"></i></span>
+            </summary>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-100">
+                  <tr><th class="p-2">তারিখ</th><th class="p-2 text-center">সকাল</th><th class="p-2 text-center">দুপুর</th><th class="p-2 text-center">রাত</th><th class="p-2 text-center">মোট</th></tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          </details>
+        `;
+      }).join('');
     };
 
 
@@ -4374,6 +4693,7 @@ window.renderAdminMealRequests = function() {
     };
 
     window.renderDashboard = function() {
+      if (typeof renderNoticeBoard === 'function') renderNoticeBoard();
       const scoped = getUserLedger(window.currentUser);
       const members = scoped.members;
       const deposits = scoped.deposits;
