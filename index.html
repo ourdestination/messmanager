@@ -202,6 +202,10 @@
         <i class="fa-solid fa-language"></i> <span id="lang-btn-text">English</span>
       </button>
 
+      <button onclick="openAppDownloadModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
+        <i class="fa-solid fa-mobile-screen-button"></i> <span data-bn="অ্যাপ ডাউনলোড" data-en="Download App">অ্যাপ ডাউনলোড</span>
+      </button>
+
       <button onclick="openNoticeBoardModal()" class="relative bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
         <i class="fa-solid fa-bullhorn"></i> <span data-bn="নোটিশ" data-en="Notice">নোটিশ</span>
         <span id="header-notice-badge" class="hidden absolute -top-2 -right-2 bg-amber-400 text-slate-900 text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white"></span>
@@ -999,6 +1003,28 @@
         <div class="flex justify-between items-center bg-slate-50 p-2 rounded-xl border text-xs"><div><b id="live-chat-contact-display">-</b><span id="live-chat-phone-display" class="text-gray-500 ml-1"></span></div><button onclick="changeLiveChatContact()" class="text-indigo-600 font-bold hover:underline" data-bn="পরিবর্তন" data-en="Change">পরিবর্তন</button></div>
         <div id="live-chat-messages" class="flex-grow min-h-40 overflow-y-auto space-y-2 bg-slate-50 p-3 rounded-xl border"></div>
         <div class="flex gap-2 pt-1"><input type="text" id="live-chat-input" placeholder="মেসেজ লিখুন..." data-placeholder-bn="মেসেজ লিখুন..." data-placeholder-en="Type a message..." class="flex-grow px-3 py-2 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" onkeydown="if(event.key==='Enter'){event.preventDefault();sendLiveChatMessage();}"><button onclick="sendLiveChatMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane"></i></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP DOWNLOAD MODAL -->
+  <div id="app-download-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print" onclick="if(event.target===this)closeAppDownloadModal()">
+    <div class="relative bg-white rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl text-center" style="animation:pop-in .25s ease-out">
+      <button type="button" onclick="closeAppDownloadModal()" class="absolute top-4 right-5 text-gray-400 hover:text-gray-600 text-xl leading-none" aria-label="Close">&times;</button>
+      <div class="mx-auto w-16 h-16 rounded-full bg-slate-700 flex items-center justify-center mb-4">
+        <i class="fa-solid fa-shield-halved text-white text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-black text-slate-800 mb-3" data-bn="ইন্সটলের আগে একটি কথা" data-en="A quick note before installing">ইন্সটলের আগে একটি কথা</h3>
+      <p class="text-sm text-gray-600 leading-relaxed mb-4" data-bn="ইন্সটলের সময় আপনার ফোন হয়তো দেখাতে পারে যে &quot;এই অ্যাপটি ক্ষতিকর হতে পারে&quot; — এতে ঘাবড়ে যাবেন না। Google Play Store-এ প্রকাশ ও লাইসেন্স করা না থাকার কারণেই ফোন এই সতর্কবার্তা দেখায়, আপনার কোনো সমস্যা থাকার কারণে নয়।" data-en="During installation your phone may warn that &quot;this app may be harmful&quot; — please don't worry. Your phone shows this warning only because the app is not published or licensed on the Google Play Store, not because of any problem on your side.">ইন্সটলের সময় আপনার ফোন হয়তো দেখাতে পারে যে "এই অ্যাপটি ক্ষতিকর হতে পারে" — এতে ঘাবড়ে যাবেন না। Google Play Store-এ প্রকাশ ও লাইসেন্স করা না থাকার কারণেই ফোন এই সতর্কবার্তা দেখায়, আপনার কোনো সমস্যা থাকার কারণে নয়।</p>
+      <div class="flex items-start gap-2 bg-emerald-50 rounded-xl p-3 mb-5 text-left">
+        <i class="fa-solid fa-circle-check text-emerald-500 text-lg mt-0.5"></i>
+        <span class="text-sm font-bold text-emerald-800" data-bn="এই অ্যাপটি সম্পূর্ণভাবে আমাদের নিজস্ব তৈরি — নিরাপদ, নির্ভরযোগ্য ও নিশ্চিত ব্যবহারযোগ্য।" data-en="This app is built entirely by us — safe, reliable and ready to use.">এই অ্যাপটি সম্পূর্ণভাবে আমাদের নিজস্ব তৈরি — নিরাপদ, নির্ভরযোগ্য ও নিশ্চিত ব্যবহারযোগ্য।</span>
+      </div>
+      <div class="flex gap-3">
+        <button type="button" onclick="closeAppDownloadModal()" class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-800 font-bold text-sm hover:bg-slate-50 transition" data-bn="বাতিল" data-en="Cancel">বাতিল</button>
+        <a href="https://github.com/ourdestination/messmanager/releases/download/v1.0.0/GKDB-BACE.apk" target="_blank" rel="noopener" download onclick="closeAppDownloadModal()" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-sm flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-download"></i> <span data-bn="ডাউনলোড করুন" data-en="Download">ডাউনলোড করুন</span>
+        </a>
       </div>
     </div>
   </div>
@@ -5139,6 +5165,11 @@ window.renderAdminMealRequests = function() {
       },250);
     });
   })();
+  </script>
+  <script>
+  function openAppDownloadModal(){ var m=document.getElementById('app-download-modal'); if(m) m.classList.remove('hidden'); }
+  function closeAppDownloadModal(){ var m=document.getElementById('app-download-modal'); if(m) m.classList.add('hidden'); }
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeAppDownloadModal(); });
   </script>
 </body>
 </html>
