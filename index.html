@@ -138,6 +138,28 @@
       body { background: #ffffff !important; color: #000000 !important; }
       .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
     }
+    /* ===== OPTION TILES (all screens) ===== */
+    .app-tile { color:#fff; border-radius: 20px; padding: 16px 10px; min-height: 104px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; font-weight:800; font-size:12px; line-height:1.3; box-shadow: 0 8px 18px rgba(0,0,0,.18); transition: transform .12s; }
+    .app-tile i { font-size: 26px; }
+    .col-span-2 { grid-column: span 2 / span 2; }
+    .app-tile:active { transform: scale(.96); }
+
+    /* ===== MOBILE APP STYLE (phones only; desktop keeps the normal layout) ===== */
+    @media (max-width: 768px) {
+      html { -webkit-tap-highlight-color: transparent; }
+      body { font-size: 15px; padding-bottom: env(safe-area-inset-bottom); }
+      .container { max-width: 100% !important; padding-left: 12px !important; padding-right: 12px !important; }
+      header.no-print { position: sticky; top: 0; z-index: 40; padding-top: calc(10px + env(safe-area-inset-top)); border-radius: 0 0 20px 20px; }
+      #auth-section > div, #dashboard-section > div { grid-template-columns: 1fr !important; }
+      #auth-section > div { display: flex; flex-direction: column-reverse; gap: 16px; }
+      input, select, textarea { font-size: 16px !important; min-height: 46px; border-radius: 14px !important; }
+      button { touch-action: manipulation; }
+      button:active { transform: scale(.96); }
+      div.fixed.inset-0.flex.items-center { align-items: center !important; justify-content: center !important; padding: 12px !important; }
+      div.fixed.inset-0.flex.items-center > div { width: 100% !important; max-width: 100% !important; border-radius: 24px !important; max-height: 90vh; overflow-y: auto; animation: pop-in .22s ease-out; }
+      .overflow-x-auto, table { -webkit-overflow-scrolling: touch; }
+    }
+    @keyframes pop-in { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
   </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between text-gray-800 relative">
@@ -180,6 +202,11 @@
         <i class="fa-solid fa-language"></i> <span id="lang-btn-text">English</span>
       </button>
 
+      <button onclick="openNoticeBoardModal()" class="relative bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
+        <i class="fa-solid fa-bullhorn"></i> <span data-bn="নোটিশ" data-en="Notice">নোটিশ</span>
+        <span id="header-notice-badge" class="hidden absolute -top-2 -right-2 bg-amber-400 text-slate-900 text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white"></span>
+      </button>
+
       <button id="header-logout-btn" onclick="logout()" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
         <i class="fa-solid fa-right-from-bracket"></i> <span data-bn="লগ আউট" data-en="Log Out">লগ আউট</span>
       </button>
@@ -191,15 +218,7 @@
 
     <!-- HOMEPAGE / AUTHENTICATION PANEL -->
     <section id="auth-section" class="auth-transition">
-      <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-
-        <!-- PUBLIC NOTICE BOARD (visible to everyone, before login) -->
-        <div class="lg:col-span-1 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-5 border-t-8 border-rose-600 space-y-3">
-          <h3 class="text-base font-black text-rose-700 flex items-center gap-2 border-b pb-2">
-            <i class="fa-solid fa-bullhorn text-rose-600"></i> নোটিশ বোর্ড
-          </h3>
-          <div id="public-notice-board-list" class="space-y-3 max-h-[150px] overflow-y-auto pr-1"></div>
-        </div>
+      <div class="max-w-xl mx-auto grid grid-cols-1 gap-6 items-start">
 
         <!-- SIGN IN / SIGN UP CARD -->
         <div class="lg:col-span-2 max-w-md mx-auto w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border-t-8 border-emerald-600">
@@ -298,11 +317,13 @@
 
       <hr class="my-6 border-gray-200">
 
-      <div class="space-y-2">
-        <button onclick="triggerAdminAuth('member_login')" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-3 rounded-xl font-bold text-xs md:text-sm shadow-md flex items-center justify-center gap-2 transition">
-          <i class="fa-solid fa-user-shield text-amber-400"></i>
-          <span data-bn="মেম্বার লগইন" data-en="Member Login">মেম্বার লগইন</span>
-        </button>
+      <div class="text-xs font-black text-slate-500 mb-3 flex items-center gap-2"><i class="fa-solid fa-grid-2 text-amber-500"></i> দ্রুত অপশন</div>
+      <div class="grid grid-cols-2 gap-3 app-tiles">
+        <button onclick="openViewAccountsModal()" class="app-tile bg-emerald-700"><i class="fa-solid fa-receipt"></i><span>নির্দিষ্ট ইউজারের হিসাব দেখুন</span></button>
+        <button onclick="openRankingChartModal()" class="app-tile bg-amber-600"><i class="fa-solid fa-ranking-star"></i><span>র‍্যাংকিং চার্ট দেখুন</span></button>
+        <button onclick="openDataCollectModal()" class="app-tile bg-teal-600"><i class="fa-solid fa-clipboard-list"></i><span>ডাটা কালেক্ট</span></button>
+        <button onclick="openAdminPanelModal()" class="app-tile bg-slate-800"><i class="fa-solid fa-paper-plane"></i><span>বার্তা / মিল ও বাজার রিকোয়েস্ট পাঠান</span></button>
+        <button onclick="openLiveChatModal()" class="app-tile bg-indigo-600 col-span-2"><i class="fa-solid fa-headset"></i><span>ম্যানেজারের সাথে লাইভ চ্যাট</span></button>
       </div>
 
         </div>
@@ -995,7 +1016,7 @@
         </div>
       </div>
 
-      <form onsubmit="handleSubmitNotice(event)" class="space-y-3 bg-rose-50 p-4 rounded-xl border border-rose-200">
+      <form id="notice-post-form" onsubmit="handleSubmitNotice(event)" class="space-y-3 bg-rose-50 p-4 rounded-xl border border-rose-200">
         <input type="hidden" id="notice-edit-id" value="">
         <div>
           <label class="block text-xs font-bold text-gray-700 mb-1">নোটিশের শিরোনাম</label>
@@ -1741,6 +1762,8 @@
     window.openNoticeBoardModal = function() {
       window.cancelNoticeEdit();
       document.getElementById('notice-board-modal').classList.remove('hidden');
+      const nf = document.getElementById('notice-post-form');
+      if (nf) nf.classList.toggle('hidden', !window.currentUser);
       renderNoticeBoard();
     };
 
@@ -1873,6 +1896,8 @@
         .filter(n => n.expiresAt > now)
         .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
+      const hBadge = document.getElementById('header-notice-badge');
+      if (hBadge) { hBadge.textContent = active.length; hBadge.classList.toggle('hidden', active.length === 0); }
       const badge = document.getElementById('notice-board-badge');
       if (badge) {
         if (active.length > 0) {
@@ -3011,7 +3036,8 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
     };
 
     window.openMemberPanelModal = function() {
-      document.getElementById('member-panel-modal').classList.remove('hidden');
+      // No password / no hub popup any more: the options live on the login page.
+      document.getElementById('member-panel-modal').classList.add('hidden');
     };
 
     window.closeMemberPanelModal = function() {
@@ -5055,6 +5081,64 @@ window.renderAdminMealRequests = function() {
         alert(window.currentLang === 'bn' ? 'ভুল পাসওয়ার্ড!' : 'Wrong password!');
       }
     };
+  </script>
+  <script>
+  /* Keep the open popup panel (and its inner tab / selected user) after a page reload */
+  (function(){
+    var KEY='gk_open_panel', IDS=['view-accounts-modal','ranking-chart-modal','data-collect-modal','admin-modal','live-chat-modal','notice-board-modal'];
+    var OPENERS={'view-accounts-modal':'openViewAccountsModal','ranking-chart-modal':'openRankingChartModal','data-collect-modal':'openDataCollectModal','admin-modal':'openAdminPanelModal','live-chat-modal':'openLiveChatModal','notice-board-modal':'openNoticeBoardModal'};
+    var restoring=true;
+    function load(){ try{ return JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){ return null; } }
+    function save(o){ try{ if(o) sessionStorage.setItem(KEY,JSON.stringify(o)); else sessionStorage.removeItem(KEY); }catch(e){} }
+    function visible(el){ return el && !el.classList.contains('hidden'); }
+    function current(){ for(var i=0;i<IDS.length;i++){ if(visible(document.getElementById(IDS[i]))) return IDS[i]; } return null; }
+    function snapshot(){
+      if(restoring) return;
+      var id=current();
+      if(!id){ save(null); return; }
+      var st={id:id};
+      var a=document.getElementById('accounts-user-selector'), r=document.getElementById('ranking-user-selector');
+      if(id==='view-accounts-modal'&&a) st.sel=a.value;
+      if(id==='ranking-chart-modal'&&r) st.sel=r.value;
+      if(id==='admin-modal') st.tab=window.__adminTab||'message';
+      save(st);
+    }
+    function watch(){
+      IDS.forEach(function(id){
+        var el=document.getElementById(id); if(!el) return;
+        new MutationObserver(snapshot).observe(el,{attributes:true,attributeFilter:['class']});
+      });
+      ['accounts-user-selector','ranking-user-selector'].forEach(function(id){
+        var el=document.getElementById(id); if(el) el.addEventListener('change',snapshot);
+      });
+    }
+    function restore(){
+      var st=load();
+      if(!st||!OPENERS[st.id]||typeof window[OPENERS[st.id]]!=='function'){ restoring=false; return; }
+      try{
+        window[OPENERS[st.id]]();
+        if(st.sel){
+          var sel=document.getElementById(st.id==='view-accounts-modal'?'accounts-user-selector':'ranking-user-selector');
+          if(sel){ sel.value=st.sel; sel.dispatchEvent(new Event('change')); }
+        }
+        if(st.tab && typeof window.switchAdminTab==='function') window.switchAdminTab(st.tab);
+      }catch(e){}
+      restoring=false; snapshot();
+    }
+    window.addEventListener('load',function(){
+      watch();
+      // wrap switchAdminTab so the inner admin tab is remembered too
+      var t0=Date.now(), iv=setInterval(function(){
+        if(typeof window.switchAdminTab==='function' && !window.switchAdminTab.__w){
+          var orig=window.switchAdminTab;
+          window.switchAdminTab=function(tab){ window.__adminTab=tab; var r=orig.apply(this,arguments); snapshot(); return r; };
+          window.switchAdminTab.__w=true;
+        }
+        var ready=window.hostelData && window.hostelData.users && window.hostelData.users.length>0;
+        if((ready && window.switchAdminTab && window.switchAdminTab.__w) || Date.now()-t0>7000){ clearInterval(iv); restore(); }
+      },250);
+    });
+  })();
   </script>
 </body>
 </html>
