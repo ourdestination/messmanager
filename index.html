@@ -203,7 +203,7 @@
       </button>
 
       <button onclick="openAppDownloadModal()" class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
-        <i class="fa-solid fa-mobile-screen-button"></i> <span data-bn="অ্যাপ" data-en="App">অ্যাপ</span>
+        <i class="fa-solid fa-mobile-screen-button"></i> <span data-bn="App" data-en="App">App</span>
       </button>
 
       <button onclick="openNoticeBoardModal()" class="relative bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold flex items-center gap-1 shadow transition">
@@ -1140,9 +1140,8 @@
       </div>
 
       <div class="space-y-3">
-        <p class="text-xs text-gray-500 font-semibold">ম্যানেজমেন্ট প্যানেলে প্রবেশের তথ্য দিন:</p>
-        <input type="text" id="mgmt-auth-id" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
-        <div class="relative"><input type="password" id="mgmt-auth-pass" class="w-full pr-10 px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"><button type="button" onclick="togglePasswordVisibility('mgmt-auth-pass','mgmt-auth-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-auth-pass-eye" class="fa-solid fa-eye"></i></button></div>
+        <p class="text-xs text-gray-500 font-semibold">ম্যানেজমেন্ট প্যানেলে প্রবেশ করতে PIN দিন:</p>
+        <div class="relative"><input type="password" id="mgmt-auth-pass" inputmode="numeric" autocomplete="off" placeholder="PIN" onkeydown="if(event.key==='Enter')verifyMgmtAuth()" class="w-full pr-10 px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"><button type="button" onclick="togglePasswordVisibility('mgmt-auth-pass','mgmt-auth-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-auth-pass-eye" class="fa-solid fa-eye"></i></button></div>
         <button onclick="verifyMgmtAuth()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white py-2.5 rounded-xl font-bold text-sm shadow">
           প্যানেলে প্রবেশ করুন
         </button>
@@ -1165,16 +1164,10 @@
         <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1">
           <i class="fa-solid fa-shield-halved text-amber-600"></i> ম্যানেজমেন্ট প্যানেল নিরাপত্তা সেটিংস
         </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <form onsubmit="handleMgmtChangePassword(event)" class="space-y-2 bg-white p-3 rounded-xl border">
-            <label class="text-[11px] font-bold text-gray-600 block">পাসওয়ার্ড পরিবর্তন করুন</label>
-            <div class="relative"><input type="password" id="mgmt-old-pass-input" placeholder="বর্তমান পাসওয়ার্ড" required class="w-full pr-10 px-3 py-2 border rounded-xl text-sm"><button type="button" onclick="togglePasswordVisibility('mgmt-old-pass-input','mgmt-old-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-old-pass-eye" class="fa-solid fa-eye"></i></button></div>
-            <div class="relative"><input type="password" id="mgmt-new-pass-input" placeholder="নতুন পাসওয়ার্ড" required class="w-full pr-10 px-3 py-2 border rounded-xl text-sm"><button type="button" onclick="togglePasswordVisibility('mgmt-new-pass-input','mgmt-new-pass-eye')" class="absolute right-3 top-2.5 text-gray-500"><i id="mgmt-new-pass-eye" class="fa-solid fa-eye"></i></button></div>
-            <button type="submit" class="btn-green-to-red w-full py-2 rounded-xl text-xs font-bold shadow">পাসওয়ার্ড সেভ করুন</button>
-          </form>
+        <div class="grid grid-cols-1 gap-4">
           <div class="bg-white p-3 rounded-xl border flex flex-col justify-center items-center text-center gap-2">
             <label class="text-[11px] font-bold text-gray-600 block">ফিঙ্গার লক (এই ডিভাইসের জন্য)</label>
-            <p class="text-[10px] text-gray-400">চালু করলে আইডি ও পাসওয়ার্ড এই ডিভাইসে সেভ থাকবে এবং ফিঙ্গারপ্রিন্ট দিয়ে দ্রুত প্রবেশ করা যাবে।</p>
+            <p class="text-[10px] text-gray-400">চালু করলে PIN দেওয়ার পর ফিঙ্গারপ্রিন্ট দিয়ে যাচাই করতে হবে।</p>
             <button id="mgmt-fp-lock-btn" onclick="toggleMgmtFingerprintLock()" class="w-full sm:w-auto bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold shadow flex items-center justify-center gap-1 transition">
               <i class="fa-solid fa-fingerprint"></i> <span id="mgmt-fp-lock-btn-text">ম্যানেজমেন্ট ফিঙ্গার লক চালু করুন</span>
             </button>
@@ -2120,18 +2113,9 @@
         logoIcon.classList.remove('spin-icon');
       }, 800);
 
-      let savedId = '', savedPass = '';
-      const savedMgmt = localStorage.getItem('dream_touching_hostel_mgmt_saved_login');
-      if (savedMgmt) {
-        try {
-          const o = JSON.parse(savedMgmt);
-          savedId = o.id || '';
-          savedPass = o.pass || '';
-        } catch (e) { /* ignore corrupt saved login */ }
-      }
-      document.getElementById('mgmt-auth-id').value = savedId;
-      document.getElementById('mgmt-auth-pass').value = savedPass;
+      document.getElementById('mgmt-auth-pass').value = '';
       document.getElementById('mgmt-login-modal').classList.remove('hidden');
+      setTimeout(() => { const el = document.getElementById('mgmt-auth-pass'); if (el) el.focus(); }, 50);
     };
 
     window.closeMgmtLoginModal = function() {
@@ -2139,20 +2123,19 @@
     };
 
     window.verifyMgmtAuth = async function() {
-      const id = document.getElementById('mgmt-auth-id').value.trim();
-      const pass = document.getElementById('mgmt-auth-pass').value.trim();
-      const mgmtAuth = window.hostelData.mgmtAuth || { id: 'SMP076', pass: '01518411872', fpEnabled: false, fpCredId: '' };
+      const pin = document.getElementById('mgmt-auth-pass').value.trim();
+      const mgmtAuth = window.hostelData.mgmtAuth || { fpEnabled: false, fpCredId: '' };
 
-      if (id === mgmtAuth.id && pass === mgmtAuth.pass) {
+      if (pin === '2580') {
         if (mgmtAuth.fpEnabled) {
           const fpOk = await window.verifyDeviceFingerprint(mgmtAuth);
           if (!fpOk) return;
-          localStorage.setItem('dream_touching_hostel_mgmt_saved_login', JSON.stringify({ id, pass }));
         }
+        document.getElementById('mgmt-auth-pass').value = '';
         closeMgmtLoginModal();
         openMgmtDashboardModal();
       } else {
-        alert('ভুল আইডি বা পাসওয়ার্ড!');
+        alert('ভুল PIN!');
       }
     };
 
