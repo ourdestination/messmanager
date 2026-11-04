@@ -211,6 +211,12 @@
     @keyframes splash-spin { to { transform: rotate(360deg); } }
     @keyframes splash-fade-up { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform:none; } }
 </style>
+
+<style>
+#splash-screen {gap:0;transition:none!important;animation:none!important;}
+#splash-screen .splash-img-wrap,#splash-screen .splash-img-wrap>img,#splash-screen .splash-img-wrap>svg {animation:none!important;}
+#splash-screen .splash-img-wrap::before,#splash-screen .splash-img-wrap::after {display:none!important;}
+</style>
 </head>
 <body class="font-sans min-h-screen flex flex-col justify-between text-gray-800 relative">
   <!-- SPLASH SCREEN -->
@@ -227,12 +233,6 @@
         <path d="M112 50 Q122 24 130 36 Q120 34 116 50Z" fill="#34d399"/>
         <rect x="64" y="86" width="72" height="5" rx="2.5" fill="#92400e" transform="rotate(-12 100 88)"/>
       </svg>
-    </div>
-    <div class="splash-welcome">Welcome</div>
-    <div class="splash-loading-text">Loading... Please wait</div>
-    <div class="fc-wrap">
-      <div class="fc-group"><div class="fc-digits" id="splash-sec"></div><div class="fc-label">Seconds</div></div>
-      <div class="fc-group"><div class="fc-digits" id="splash-ms"></div><div class="fc-label">MS</div></div>
     </div>
     <script>
     (function(){
@@ -413,7 +413,8 @@
         <button onclick="openViewAccountsModal()" class="app-tile bg-emerald-700"><i class="fa-solid fa-receipt"></i><span>নির্দিষ্ট ইউজারের হিসাব দেখুন</span></button>
         <button onclick="openRankingChartModal()" class="app-tile bg-amber-600"><i class="fa-solid fa-ranking-star"></i><span>র‍্যাংকিং চার্ট দেখুন</span></button>
         <button onclick="openDataCollectModal()" class="app-tile bg-teal-600"><i class="fa-solid fa-clipboard-list"></i><span>ডাটা কালেক্ট</span></button>
-        <button onclick="openAdminPanelModal()" class="app-tile bg-slate-800"><i class="fa-solid fa-paper-plane"></i><span>বার্তা / মিল ও বাজার রিকোয়েস্ট পাঠান</span></button>
+        <button onclick="openAdminPanelModal()" class="app-tile bg-slate-800"><i class="fa-solid fa-money-bill-transfer"></i><span>টাকা জমা / মিল ও বাজার রিকোয়েস্ট পাঠান</span></button>
+        <button onclick="openBkashPaymentModal()" class="app-tile bg-pink-600 col-span-2"><i class="fa-solid fa-wallet"></i><span>পেমেন্ট — ম্যানেজারের বিকাশ নম্বর</span></button>
         <button onclick="openLiveChatModal()" class="app-tile bg-indigo-600 col-span-2"><i class="fa-solid fa-headset"></i><span>ম্যানেজারের সাথে লাইভ চ্যাট</span></button>
       </div>
 
@@ -443,6 +444,10 @@
             <h3 id="panel-user-name" class="mt-3 font-black text-gray-800 text-base">ইউজার নাম</h3>
             <p id="panel-user-id" class="text-xs text-emerald-700 font-bold">@userid</p>
             <p id="panel-user-mobile" class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-phone text-[10px] mr-1"></i>--</p>
+            <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
+              <span class="text-xs font-bold text-pink-700"><i class="fa-solid fa-wallet mr-1"></i>বিকাশ: <span id="panel-user-bkash">যুক্ত করা হয়নি</span></span>
+              <button type="button" onclick="openProfileBkashEditor()" class="rounded-lg bg-pink-600 px-3 py-2 text-white text-xs font-bold" aria-label="বিকাশ নম্বর যোগ বা পরিবর্তন করুন"><i class="fa-solid fa-pen mr-1"></i>যোগ / পরিবর্তন</button>
+            </div>
           </div>
 
           <div class="space-y-2 text-xs font-semibold">
@@ -839,6 +844,7 @@
               </div>
             </form>
 
+            <div class="bg-pink-50 rounded-xl border border-pink-200 p-4 space-y-3"><h4 class="text-sm font-black text-pink-900"><i class="fa-solid fa-money-bill-transfer mr-1"></i> টাকা জমার অনুমোদন রিকোয়েস্ট</h4><div id="user-deposit-request-list" class="space-y-2"></div></div>
             <div id="user-meal-request-section" class="bg-amber-50 rounded-xl border border-amber-200 p-4 space-y-3">
               <div class="flex justify-between items-center border-b border-amber-200 pb-2">
                 <h4 class="text-sm font-black text-amber-800"><i class="fa-solid fa-inbox text-amber-600 mr-1"></i> মিল এন্ট্রি রিকোয়েস্ট</h4>
@@ -1218,7 +1224,7 @@
           <i class="fa-solid fa-clipboard-list text-white"></i> ডাটা কালেক্ট
         </button>
         <button onclick="closeMemberPanelModal();openAdminPanelModal();" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
-          <i class="fa-solid fa-paper-plane text-amber-400"></i> বার্তা / মিল ও বাজার রিকোয়েস্ট পাঠান
+          <i class="fa-solid fa-paper-plane text-amber-400"></i> টাকা জমা / মিল ও বাজার রিকোয়েস্ট পাঠান
         </button>
         <button onclick="closeMemberPanelModal();openLiveChatModal();" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center justify-center gap-2 transition">
           <i class="fa-solid fa-headset"></i> ম্যানেজারের সাথে লাইভ চ্যাট
@@ -1327,6 +1333,8 @@
           <i class="fa-solid fa-gear"></i> পেমেন্ট ও সাবস্ক্রিপশন সেটিংস
         </h4>
         <div class="space-y-2">
+          <label for="mgmt-manager-bkash" class="block text-xs font-bold text-pink-800">ম্যানেজারের বিকাশ নম্বর (সব সদস্যের পেমেন্ট পেজে দেখাবে)</label>
+          <input type="tel" inputmode="numeric" maxlength="11" id="mgmt-manager-bkash" placeholder="01XXXXXXXXX" class="w-full px-3 py-2 border border-pink-300 rounded-lg text-sm font-bold">
           <input type="text" id="mgmt-pay-link" placeholder="পেমেন্ট লিংক (http://...)" class="w-full px-3 py-1.5 border rounded-lg text-xs">
           <div>
             <label class="text-[11px] font-bold text-gray-600">QR কোড ফাইল আপলোড (JPG):</label>
@@ -1554,8 +1562,27 @@
     </div>
   </div>
 
+
+<div id="profile-bkash-modal" class="hidden fixed inset-0 z-[10001] bg-black/70 flex items-center justify-center p-4 no-print">
+  <div class="w-full max-w-sm rounded-2xl bg-white p-5 space-y-4 shadow-xl">
+    <div class="flex justify-between items-center"><h3 class="font-black text-lg text-pink-700">নিজের বিকাশ নম্বর</h3><button type="button" onclick="closeProfileBkashEditor()" class="text-2xl" aria-label="বন্ধ করুন">&times;</button></div>
+    <label for="profile-bkash-input" class="block text-sm font-bold">বিকাশ নম্বর (১১ সংখ্যা)</label>
+    <input id="profile-bkash-input" type="tel" inputmode="numeric" maxlength="11" autocomplete="tel" placeholder="01XXXXXXXXX" class="w-full border rounded-xl p-3" />
+    <p class="text-xs text-gray-500">এই নম্বরটি আপনার প্রোফাইলে সংরক্ষিত থাকবে। এটি ম্যানেজারের পেমেন্ট নম্বর পরিবর্তন করবে না।</p>
+    <button type="button" onclick="saveProfileBkashNumber()" class="w-full bg-pink-600 text-white font-bold rounded-xl py-3">নম্বর সেভ করুন</button>
+  </div>
+</div>
   <!-- ADMIN PANEL MODAL -->
-  <div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
+  <div id="bkash-payment-modal" class="hidden fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-4">
+ <div class="bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+  <div class="flex justify-between items-center"><h3 class="text-xl font-black text-pink-700"><i class="fa-solid fa-wallet mr-2"></i>বিকাশ পেমেন্ট</h3><button onclick="closeBkashPaymentModal()" class="text-2xl text-gray-500" aria-label="বন্ধ করুন">&times;</button></div>
+  <p class="text-sm font-bold text-gray-700">ম্যানেজারের বিকাশ নম্বর</p>
+  <div class="flex gap-2"><input id="manager-bkash-display" readonly class="flex-1 min-w-0 border rounded-xl p-3 font-black text-lg" value="নম্বর এখনো সেট করা হয়নি"><button onclick="copyManagerBkash()" class="bg-pink-600 text-white rounded-xl px-4 font-bold">কপি</button></div>
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm leading-7"><b>নির্দেশনা:</b> উক্ত বিকাশ নম্বরে <b>ক্যাশ আউট/সেন্ড মানি খরচসহ</b> টাকা পাঠাবেন। টাকা পাঠানোর পরে <b>অবশ্যই পেমেন্টের স্ক্রিনশট গ্রুপে জমা দেবেন।</b> শুধু টাকা পাঠালে জমা স্বয়ংক্রিয়ভাবে অনুমোদিত হবে না।</div>
+  <button onclick="closeBkashPaymentModal()" class="w-full bg-slate-800 text-white rounded-xl py-3 font-bold">বন্ধ করুন</button>
+ </div>
+</div>
+<div id="admin-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-4 z-50 no-print">
     <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl border-t-8 border-slate-800 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
@@ -1568,21 +1595,25 @@
       </div>
 
       <div class="flex border-b text-sm font-black">
-        <button id="admin-tab-message" onclick="switchAdminTab('message')" class="flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600"><i class="fa-solid fa-envelope mr-1"></i> <span data-bn="বার্তা" data-en="Message">বার্তা</span></button>
+        <button id="admin-tab-message" onclick="switchAdminTab('message')" class="flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600"><i class="fa-solid fa-money-bill-transfer mr-1"></i> <span data-bn="টাকা জমা" data-en="Deposit Request">টাকা জমা</span></button>
         <button id="admin-tab-meal" onclick="switchAdminTab('meal')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-utensils mr-1"></i> <span data-bn="মিল এন্ট্রি" data-en="Meal Entry">মিল এন্ট্রি</span></button>
         <button id="admin-tab-bazaar" onclick="switchAdminTab('bazaar')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-cart-shopping mr-1"></i> <span data-bn="বাজার রিকোয়েস্ট" data-en="Bazaar Request">বাজার রিকোয়েস্ট</span></button>
         <button id="admin-tab-bhakti" onclick="switchAdminTab('bhakti')" class="flex-1 py-2.5 text-center text-gray-400"><i class="fa-solid fa-om mr-1"></i> <span data-bn="ভক্তি চর্চা" data-en="Devotional Practice">ভক্তি চর্চা</span></button>
       </div>
       <div id="admin-message-tab" class="space-y-4 pt-1">
-        <div><label class="block text-xs font-bold text-gray-700 mb-1">বার্তাকারী ইউজার নির্বাচন করুন:</label><select id="admin-user-selector" onchange="loadAdminSelectedUser(this.value)" class="w-full px-3 py-2 border rounded-xl text-sm bg-slate-50 font-bold"><option value="">-- মেসের অর্ন্তভূক্ত সদস্য নির্বাচন করুন --</option></select></div>
-        <div id="admin-user-data-preview" class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1"><p class="font-bold text-emerald-800">ইউজার প্রোফাইল তথ্য:</p><div id="admin-user-details-content">ইউজার নির্বাচন করুন...</div></div>
-        <div class="space-y-2">
-          <label class="block text-xs font-bold text-gray-700 mb-1">প্রেরকের নাম:</label>
-          <select id="admin-commenter-dropdown" class="w-full p-2 border rounded-xl text-xs font-bold bg-slate-50"><option value="">-- প্রেরকের নাম নির্বাচন করুন --</option></select>
-          <label class="block text-xs font-bold text-gray-700 mb-1">বার্তার বিষয়বস্তু:</label>
-          <textarea id="admin-comment-text" rows="3" placeholder="বার্তা লিখুন..." class="w-full p-2 border rounded-xl text-sm"></textarea>
-          <button onclick="sendAdminComment()" class="btn-green-to-red w-full py-2.5 rounded-xl text-xs font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i> বার্তা পাঠাও</button>
-        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">ইউজার ও সদস্য নির্বাচন করে টাকা জমার রিকোয়েস্ট পাঠান। নির্বাচিত ইউজার অনুমোদন করলে সংশ্লিষ্ট সদস্যের জমা হিসাবে টাকা যুক্ত হবে।</div>
+        <label class="block text-xs font-bold">ইউজার নির্বাচন করুন</label>
+        <select id="deposit-request-user" onchange="populateDepositRequestMembers()" class="w-full p-3 border rounded-xl text-sm bg-white"></select>
+        <label class="block text-xs font-bold">সদস্য নির্বাচন করুন</label>
+        <select id="deposit-request-member" class="w-full p-3 border rounded-xl text-sm bg-white"></select>
+        <label class="block text-xs font-bold">টাকার পরিমাণ (৳)</label>
+        <input id="deposit-request-amount" type="number" min="1" step="0.01" placeholder="টাকার পরিমাণ" class="w-full p-3 border rounded-xl text-sm">
+        <label class="block text-xs font-bold">ট্রানজেকশন আইডি (ঐচ্ছিক)</label>
+        <input id="deposit-request-txid" maxlength="80" placeholder="বিকাশ ট্রানজেকশন আইডি" class="w-full p-3 border rounded-xl text-sm">
+        <label class="block text-xs font-bold">তারিখ</label>
+        <input id="deposit-request-date" placeholder="DD-MM-YYYY" class="w-full p-3 border rounded-xl text-sm">
+        <button onclick="sendDepositRequest()" class="btn-green-to-red w-full py-3 rounded-xl font-bold text-sm"><i class="fa-solid fa-paper-plane mr-1"></i> টাকা জমার রিকোয়েস্ট পাঠান</button>
+        <div class="font-bold text-xs">পাঠানো রিকোয়েস্ট</div><div id="admin-deposit-request-list" class="space-y-2"></div>
       </div>
       <div id="admin-bazaar-tab" class="hidden space-y-4 pt-1">
         <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-xs text-blue-900" data-bn="Meal Request-এর মতো এখান থেকে নির্দিষ্ট ইউজারের কাছে বাজার খরচ রিকোয়েস্ট পাঠানো যাবে। ইউজার অনুমোদন করলে বাজার খরচ হিসাবের সাথে যুক্ত হবে; বাতিল করলে রিকোয়েস্টটি মুছে যাবে।" data-en="Like a Meal Request, send a Bazaar Expense Request to a selected user. It is added to the ledger only after the user approves it; rejecting removes the request.">Meal Request-এর মতো এখান থেকে নির্দিষ্ট ইউজারের কাছে বাজার খরচ রিকোয়েস্ট পাঠানো যাবে। ইউজার অনুমোদন করলে বাজার খরচ হিসাবের সাথে যুক্ত হবে; বাতিল করলে রিকোয়েস্টটি মুছে যাবে।</div>
@@ -1714,6 +1745,42 @@
   </div>
 
   <!-- JAVASCRIPT APP LOGIC & FIREBASE INTEGRATION -->
+  <script>
+  // Make the request panel accessible even when Firebase ES modules cannot load
+  // (for example, Android content:// previews). Online data actions still require hosting.
+  (function () {
+    function openRequestPanel() {
+      var modal = document.getElementById('admin-modal');
+      if (!modal) { alert('রিকোয়েস্ট প্যানেল পাওয়া যায়নি।'); return; }
+      modal.classList.remove('hidden');
+      var tabs = ['message','meal','bazaar','bhakti'];
+      tabs.forEach(function(tab) {
+        var pane = document.getElementById('admin-' + tab + '-tab');
+        var button = document.getElementById('admin-tab-' + tab);
+        if(pane) pane.classList.toggle('hidden',tab!=='message');
+        if(button) button.className = tab==='message'
+          ? 'flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600'
+          : 'flex-1 py-2.5 text-center text-gray-400';
+      });
+      if (typeof window.populateDepositRequestUsers === 'function') {
+        try { window.populateDepositRequestUsers(); window.renderAdminDepositRequests(); } catch(e) { console.error(e); }
+      }
+      if (!window.hostelData) {
+        var warning = document.getElementById('gk-offline-warning');
+        if (!warning) {
+          warning = document.createElement('div');
+          warning.id = 'gk-offline-warning';
+          warning.style.cssText = 'background:#fff7ed;color:#9a3412;padding:12px;border-radius:12px;margin:10px 0;font-size:14px;font-weight:600';
+          warning.textContent = 'ডাটাবেস সংযোগ হয়নি। ফোনের ডাউনলোড প্রিভিউতে রিকোয়েস্ট জমা হবে না। GitHub Pages/HTTPS লিংক থেকে খুলুন।';
+          var pane = document.getElementById('admin-message-tab');
+          if (pane) pane.prepend(warning);
+        }
+      }
+    }
+    window.openAdminPanelModal = openRequestPanel;
+    window.addEventListener('error',function(e){ if(e.message) console.error('GKDB:',e.message); });
+  })();
+  </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -1757,6 +1824,8 @@
       users: [],
       members: [],
       deposits: [],
+      depositRequests: [],
+      managerBkashNumber: "",
       fixedExpenses: [],
       gasExpenses: [],
       bazaarExpenses: [],
@@ -1787,6 +1856,8 @@
           users: data.users || [],
           members: data.members || [],
           deposits: data.deposits || [],
+          depositRequests: data.depositRequests || [],
+          managerBkashNumber: data.managerBkashNumber || "",
           fixedExpenses: data.fixedExpenses || [],
           gasExpenses: data.gasExpenses || [],
           bazaarExpenses: data.bazaarExpenses || [],
@@ -2081,6 +2152,7 @@
       document.getElementById('panel-user-name').innerText = window.currentUser.fullName || window.currentUser.userId;
       document.getElementById('panel-user-id').innerText = `@${window.currentUser.userId}`;
       document.getElementById('panel-user-mobile').innerText = window.currentUser.mobile || '--';
+      document.getElementById('panel-user-bkash').innerText = window.currentUser.bkashNumber || 'যুক্ত করা হয়নি';
       document.getElementById('panel-user-dob').innerText = window.currentUser.dob || '--';
 
       const isExpired = window.isUserExpired(window.currentUser);
@@ -2345,6 +2417,7 @@
 
     window.loadMgmtPaymentFields = function() {
       const p = window.hostelData.paymentInfo || {};
+      document.getElementById('mgmt-manager-bkash').value = window.hostelData.managerBkashNumber || '';
       document.getElementById('mgmt-pay-link').value = p.link || '';
       document.getElementById('mgmt-pay-instructions').value = p.instructions || '';
     };
@@ -2361,6 +2434,9 @@
     };
 
     window.savePaymentSettings = function() {
+      const bkash = document.getElementById('mgmt-manager-bkash').value.replace(/[\s-]/g, '');
+      if (bkash && !/^01[0-9]{9}$/.test(bkash)) { alert('ম্যানেজারের সঠিক ১১ সংখ্যার বিকাশ নম্বর লিখুন।'); return; }
+      window.hostelData.managerBkashNumber = bkash;
       if (!window.hostelData.paymentInfo) window.hostelData.paymentInfo = {};
       window.hostelData.paymentInfo.link = document.getElementById('mgmt-pay-link').value.trim();
       window.hostelData.paymentInfo.instructions = document.getElementById('mgmt-pay-instructions').value.trim();
@@ -3331,13 +3407,19 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
     };
 
     window.openAdminPanelModal = function() {
-      cleanupOrphanMembers();
-      populateAdminUserSelector();
-      populateAdminCommenterDropdown();
-      switchAdminTab('message');
-      renderAdminMealRequests();
-      renderAdminBhaktiRequests();
-      document.getElementById('admin-modal').classList.remove('hidden');
+      // Open first: an optional request renderer must never block the modal.
+      const modal = document.getElementById('admin-modal');
+      if (!modal) { alert('রিকোয়েস্ট প্যানেল পাওয়া যায়নি।'); return; }
+      modal.classList.remove('hidden');
+      const steps = [
+        () => cleanupOrphanMembers(),
+        () => populateAdminUserSelector(),
+        () => switchAdminTab('message'),
+        () => renderAdminDepositRequests(),
+        () => renderAdminMealRequests(),
+        () => renderAdminBhaktiRequests()
+      ];
+      steps.forEach(fn => { try { fn(); } catch(err) { console.error('Admin panel:', err); } });
     };
 
     window.closeAdminModal = function() {
@@ -3354,6 +3436,7 @@ window.toggleLanguage=function(){window.currentLang=window.currentLang==='bn'?'e
 
     window.populateAdminCommenterDropdown = function() {
       const commenterSel = document.getElementById('admin-commenter-dropdown');
+      if (!commenterSel) return;
       commenterSel.innerHTML = '<option value="">-- প্রেরকের নাম নির্বাচন করুন --</option>';
       commenterSel.innerHTML += '<option value="Admin (Hredoy Roy)">Admin (Hredoy Roy)</option>';
       // FIX: only list members who still belong to a currently existing user.
@@ -4732,7 +4815,7 @@ window.renderAdminBazaarRequests=function(){const box=document.getElementById('a
       alert('নির্বাচিত সদস্যের জন্য মিল এন্ট্রি রিকোয়েস্ট ইউজার প্যানেলে পাঠানো হয়েছে।');
     };
 
-    window.switchAdminTab=function(tab){const msg=document.getElementById('admin-message-tab'),meal=document.getElementById('admin-meal-tab'),baz=document.getElementById('admin-bazaar-tab'),bhk=document.getElementById('admin-bhakti-tab'),mb=document.getElementById('admin-tab-message'),meb=document.getElementById('admin-tab-meal'),bb=document.getElementById('admin-tab-bazaar'),bhb=document.getElementById('admin-tab-bhakti');[msg,meal,baz,bhk].forEach(x=>x&&x.classList.add('hidden'));[mb,meb,bb,bhb].forEach(x=>x&&(x.className='flex-1 py-2.5 text-center text-gray-400'));if(tab==='meal'){meal.classList.remove('hidden');meb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminMealUserSelector();renderAdminMealRequests();}else if(tab==='bazaar'){baz.classList.remove('hidden');bb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBazaarUserSelector();renderAdminBazaarRequests();}else if(tab==='bhakti'){bhk.classList.remove('hidden');bhb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBhaktiUserSelector();renderAdminBhaktiRequests();}else{msg.classList.remove('hidden');mb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';}applyLanguage();};
+    window.switchAdminTab=function(tab){const msg=document.getElementById('admin-message-tab'),meal=document.getElementById('admin-meal-tab'),baz=document.getElementById('admin-bazaar-tab'),bhk=document.getElementById('admin-bhakti-tab'),mb=document.getElementById('admin-tab-message'),meb=document.getElementById('admin-tab-meal'),bb=document.getElementById('admin-tab-bazaar'),bhb=document.getElementById('admin-tab-bhakti');[msg,meal,baz,bhk].forEach(x=>x&&x.classList.add('hidden'));[mb,meb,bb,bhb].forEach(x=>x&&(x.className='flex-1 py-2.5 text-center text-gray-400'));if(tab==='meal'){meal.classList.remove('hidden');meb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminMealUserSelector();renderAdminMealRequests();}else if(tab==='bazaar'){baz.classList.remove('hidden');bb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBazaarUserSelector();renderAdminBazaarRequests();}else if(tab==='bhakti'){bhk.classList.remove('hidden');bhb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateAdminBhaktiUserSelector();renderAdminBhaktiRequests();}else{msg.classList.remove('hidden');mb.className='flex-1 py-2.5 text-center text-emerald-700 border-b-2 border-emerald-600';populateDepositRequestUsers();renderAdminDepositRequests();}applyLanguage();};
 
 window.renderAdminMealRequests = function() {
       const box = document.getElementById('admin-meal-request-list');
@@ -4954,6 +5037,7 @@ window.renderAdminMealRequests = function() {
       const meals = scoped.meals;
       renderUserMealRequests();
       renderUserBazaarRequests();
+      renderUserDepositRequests();
       renderUserBhaktiRequests();
       populateMemberTransferUserSelector();
       renderMemberTransferRequests();
@@ -5380,46 +5464,48 @@ window.renderAdminMealRequests = function() {
 
 <script>
 (function(){
-  var TOTAL = 5000, splash = document.getElementById('splash-screen');
-  if(!splash) return;
-  var secEl = document.getElementById('splash-sec'), msEl = document.getElementById('splash-ms');
-  function build(el, n){
-    var cards = [];
-    for(var i = 0; i < n; i++){
-      var c = document.createElement('div'); c.className = 'fc-card';
-      var sp = document.createElement('span'); sp.textContent = '0'; c.appendChild(sp);
-      el.appendChild(c); cards.push(c);
-    }
-    return cards;
-  }
-  var secCards = build(secEl, 2), msCards = build(msEl, 3);
-  function setDigits(cards, str, animate){
-    for(var i = 0; i < cards.length; i++){
-      var sp = cards[i].firstChild;
-      if(sp.textContent !== str.charAt(i)){
-        sp.textContent = str.charAt(i);
-        if(animate){ cards[i].classList.remove('fc-flip'); void cards[i].offsetWidth; cards[i].classList.add('fc-flip'); }
-      }
-    }
-  }
-  document.documentElement.style.overflow = 'hidden';
-  var start = performance.now(), done = false;
-  function finish(){
-    if(done) return; done = true;
-    setDigits(secCards, '00', false); setDigits(msCards, '000', false);
-    splash.classList.add('splash-hide');
-    document.documentElement.style.overflow = '';
-    setTimeout(function(){ if(splash.parentNode) splash.parentNode.removeChild(splash); }, 800);
-  }
-  function tick(now){
-    var left = Math.max(0, TOTAL - (now - start));
-    setDigits(secCards, String(Math.floor(left / 1000)).padStart(2, '0'), true);
-    setDigits(msCards, String(Math.floor(left % 1000)).padStart(3, '0'), false);
-    if(left <= 0) finish(); else requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-  setTimeout(finish, TOTAL + 300); // safety if tab is in background
+  var splash=document.getElementById('splash-screen');
+  if(!splash)return;
+  // Display only the existing photograph for one second, without countdown or animation.
+  var remove=function(){if(splash.parentNode)splash.parentNode.removeChild(splash);};
+  setTimeout(remove,1000);
 })();
+</script>
+<script>
+(function(){
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+window.openBkashPaymentModal=function(){let n=String(window.hostelData?.managerBkashNumber||'').trim();const el=document.getElementById('manager-bkash-display');el.value=n||'নম্বর এখনো সেট করা হয়নি';el.dataset.number=n;document.getElementById('bkash-payment-modal').classList.remove('hidden')};
+window.closeBkashPaymentModal=function(){document.getElementById('bkash-payment-modal').classList.add('hidden')};
+window.copyManagerBkash=async function(){const n=document.getElementById('manager-bkash-display').dataset.number;if(!n){alert('ম্যানেজারের বিকাশ নম্বর এখনো দেওয়া হয়নি।');return;}try{await navigator.clipboard.writeText(n);alert('বিকাশ নম্বর কপি হয়েছে।')}catch(e){const el=document.getElementById('manager-bkash-display');el.select();document.execCommand('copy');alert('নম্বর কপি করার চেষ্টা করা হয়েছে।')}};
+window.populateDepositRequestUsers=function(){const el=document.getElementById('deposit-request-user');if(!el)return;const previous=el.value;el.replaceChildren(new Option('-- ইউজার নির্বাচন করুন --',''));(window.hostelData?.users||[]).forEach(u=>el.add(new Option((u.fullName||u.userId)+' ('+u.userId+')',u.userId)));el.value=previous;populateDepositRequestMembers();const dt=document.getElementById('deposit-request-date');if(dt&&!dt.value)dt.value=window.getTodayDDMMYYYY()};
+window.populateDepositRequestMembers=function(){const el=document.getElementById('deposit-request-member');if(!el)return;const uid=document.getElementById('deposit-request-user').value;el.replaceChildren(new Option('-- সদস্য নির্বাচন করুন --',''));(window.hostelData?.members||[]).filter(m=>m.userId===uid).forEach(m=>el.add(new Option(m.name,m.id)))};
+window.sendDepositRequest=function(){const uid=document.getElementById('deposit-request-user').value,mid=document.getElementById('deposit-request-member').value,amount=Number(document.getElementById('deposit-request-amount').value),date=document.getElementById('deposit-request-date').value.trim(),txid=document.getElementById('deposit-request-txid').value.trim(),member=(window.hostelData.members||[]).find(m=>m.id===mid&&m.userId===uid);if(!member||!Number.isFinite(amount)||amount<=0||!/^\d{2}-\d{2}-\d{4}$/.test(date)){alert('ইউজার, সদস্য, সঠিক টাকার পরিমাণ ও DD-MM-YYYY তারিখ দিন।');return;}window.hostelData.depositRequests=window.hostelData.depositRequests||[];window.hostelData.depositRequests.push({id:'DRQ_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),userId:uid,memberId:mid,memberName:member.name,amount,date,txid,status:'pending',createdAt:Date.now()});window.syncMasterData();document.getElementById('deposit-request-amount').value='';document.getElementById('deposit-request-txid').value='';renderAdminDepositRequests();renderUserDepositRequests();alert('টাকা জমার রিকোয়েস্ট পাঠানো হয়েছে। অনুমোদন না হওয়া পর্যন্ত জমা হিসাবে যোগ হবে না।')};
+window.renderAdminDepositRequests=function(){const el=document.getElementById('admin-deposit-request-list');if(!el)return;const rs=[...(window.hostelData?.depositRequests||[])].sort((a,b)=>b.createdAt-a.createdAt).slice(0,30);el.innerHTML=rs.length?rs.map(r=>`<div class="p-3 border rounded-xl text-xs bg-slate-50"><b>${esc(r.memberName)}</b> — ৳${esc(r.amount)} (${esc(r.date)})<div class="mt-1">${r.status==='pending'?'⏳ অপেক্ষমান':r.status==='approved'?'✅ অনুমোদিত':'❌ বাতিল'}</div></div>`).join(''):'<p class="text-xs text-gray-500">কোনো রিকোয়েস্ট নেই।</p>'};
+window.renderUserDepositRequests=function(){const el=document.getElementById('user-deposit-request-list');if(!el||!window.currentUser)return;const rs=(window.hostelData?.depositRequests||[]).filter(r=>r.status==='pending'&&r.userId===window.currentUser.userId);el.innerHTML=rs.length?rs.map(r=>`<div class="bg-white border rounded-xl p-3 text-xs"><b>${esc(r.memberName)}</b> — ৳${esc(r.amount)}<div>${esc(r.date)} ${r.txid?'| TxID: '+esc(r.txid):''}</div><div class="mt-2 flex gap-2"><button onclick="approveDepositRequest('${r.id}')" class="bg-emerald-600 text-white rounded-lg px-3 py-2 font-bold">অনুমোদন</button><button onclick="rejectDepositRequest('${r.id}')" class="bg-red-600 text-white rounded-lg px-3 py-2 font-bold">বাতিল</button></div></div>`).join(''):'<p class="text-xs text-gray-500">কোনো অপেক্ষমান টাকা জমার রিকোয়েস্ট নেই।</p>'};
+window.approveDepositRequest=function(id){const r=(window.hostelData?.depositRequests||[]).find(x=>x.id===id);if(!r||r.status!=='pending'||!window.currentUser||window.currentUser.userId!==r.userId)return;const member=(window.hostelData.members||[]).find(m=>m.id===r.memberId&&m.userId===r.userId);if(!member){alert('সদস্য পাওয়া যায়নি।');return;}if(!confirm('টাকা পাওয়া নিশ্চিত করে ৳'+r.amount+' জমা অনুমোদন করবেন?'))return;const already=(window.hostelData.deposits||[]).some(d=>d.requestId===r.id);if(already){alert('এই রিকোয়েস্টের টাকা আগে জমা হয়েছে।');return;}window.hostelData.deposits.push({id:'DEP_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),receiptNo:'DEP-'+Date.now(),memberId:r.memberId,userId:r.userId,amount:Number(r.amount),date:r.date,timestamp:Date.now(),editCount:0,source:'approved_deposit_request',requestId:r.id,txid:r.txid||''});r.status='approved';r.approvedAt=Date.now();window.syncMasterData();renderUserDepositRequests();renderAdminDepositRequests();alert('টাকা সদস্যের জমা হিসাবে যুক্ত হয়েছে।')};
+window.rejectDepositRequest=function(id){const r=(window.hostelData?.depositRequests||[]).find(x=>x.id===id);if(!r||r.status!=='pending'||!window.currentUser||window.currentUser.userId!==r.userId)return;if(!confirm('রিকোয়েস্ট বাতিল করবেন?'))return;r.status='rejected';r.rejectedAt=Date.now();window.syncMasterData();renderUserDepositRequests();renderAdminDepositRequests()};
+})();
+</script>
+
+<script>
+window.openProfileBkashEditor=function(){
+  if(!window.currentUser){alert('আগে সাইন ইন করুন।');return;}
+  document.getElementById('profile-bkash-input').value=window.currentUser.bkashNumber||'';
+  document.getElementById('profile-bkash-modal').classList.remove('hidden');
+};
+window.closeProfileBkashEditor=function(){document.getElementById('profile-bkash-modal').classList.add('hidden');};
+window.saveProfileBkashNumber=function(){
+  if(!window.currentUser){alert('আগে সাইন ইন করুন।');return;}
+  const number=document.getElementById('profile-bkash-input').value.replace(/[\s-]/g,'');
+  if(!/^01[0-9]{9}$/.test(number)){alert('সঠিক ১১ সংখ্যার বাংলাদেশি বিকাশ নম্বর লিখুন।');return;}
+  const users=window.hostelData?.users||[];
+  const user=users.find(u=>u.userId===window.currentUser.userId);
+  if(!user){alert('ইউজার তথ্য পাওয়া যায়নি।');return;}
+  user.bkashNumber=number;
+  window.currentUser.bkashNumber=number;
+  try{window.syncMasterData();window.renderUserProfilePanel();window.closeProfileBkashEditor();alert('বিকাশ নম্বর সেভ হয়েছে।');}
+  catch(e){console.error('Bkash save failed',e);alert('নম্বর সংরক্ষণে সমস্যা হয়েছে। আবার চেষ্টা করুন।');}
+};
 </script>
 </body>
 </html>
